@@ -6,8 +6,8 @@ WORKDIR /usr/src/app
 ENV PORT=80
 ENV NODE_ENV=production
 
-COPY package*.json ./
-COPY . .
+COPY build/package*.json ./
+COPY build/ .
 
 RUN npm install
 RUN npm install db --save
