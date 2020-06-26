@@ -9,9 +9,6 @@ Build:
     - ls -la 
     - ls -la build    
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
-    - docker tag  "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_IMAGE":"$CI_COMMIT_BRANCH"-"$CI_COMMIT_SHORT_SHA"
-    - (if [ "$CI_COMMIT_BRANCH" == "master" ]; then docker tag  "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_IMAGE":latest; fi);
-    - docker push "$CI_REGISTRY_IMAGE"
+    - chmod +x script_staging.sh script_master.sh
+    - if [ "$CI_COMMIT_BRANCH" == "master" ]; then ./script_master.sh ; else ./script_staging.sh ; fi    
 
- 
