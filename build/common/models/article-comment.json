@@ -1,0 +1,38 @@
+{
+  "name": "ArticleComment",
+  "plural": "article-comments",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "required": false,
+      "validateUpsert": true,
+      "silenceWarnings": true
+    }
+  },
+  "properties": {
+    "body": {
+      "type": "string",
+      "required": true,
+      "dataType": "text"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "article": {
+      "type": "belongsTo",
+      "model": "Article",
+      "foreignKey": "articleId"
+    },
+    "user": {
+      "type": "belongsTo",
+      "model": "User",
+      "foreignKey": "userId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

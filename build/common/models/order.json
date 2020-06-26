@@ -1,0 +1,113 @@
+{
+  "name": "Order",
+  "plural": "orders",
+  "base": "PersistedModel",
+  "idInjection": false,
+  "forceId": false,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "required": false,
+      "validateUpsert": true,
+      "silenceWarnings": true
+    }
+  },
+  "properties": {
+    "uuid": {
+      "type": "string",
+      "required": true,
+      "defaultFn": "uuid"
+    },
+    "total": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "subtotal": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "taxes": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "totalService": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "delivery": {
+      "type": "string",
+      "required": true,
+      "default": 0
+    },
+    "priceDelivery": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "sendDate": {
+      "type": "date"
+    },
+    "incadeaOrderId": {
+      "type": "string",
+      "default": 0
+    },
+    "transactionCode": {
+      "type": "string",
+      "default": 0
+    }
+  },
+  "validations": [],
+  "relations": {
+    "user": {
+      "type": "belongsTo",
+      "model": "MyUser",
+      "foreignKey": "userId"
+    },
+    "store": {
+      "type": "belongsTo",
+      "model": "Store",
+      "foreignKey": "storeId"
+    },
+    "orderStatus": {
+      "type": "belongsTo",
+      "model": "OrderStatus",
+      "foreignKey": "orderStatusId"
+    },
+    "address": {
+      "type": "belongsTo",
+      "model": "Address",
+      "foreignKey": "addressId"
+    },
+    "codeCoupon": {
+      "type": "belongsTo",
+      "model": "CodeCoupon",
+      "foreignKey": "codeCouponId"
+    },
+    "orderDetails": {
+      "type": "hasMany",
+      "model": "OrderDetail"
+    },
+    "brand": {
+      "type": "belongsTo",
+      "model": "Brand",
+      "foreignKey": "brandId"
+    },
+    "returns": {
+      "type": "hasMany",
+      "model": "Return",
+      "foreignKey": "orderId"
+    },
+    "payments": {
+      "type": "hasMany",
+      "model": "Payment"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

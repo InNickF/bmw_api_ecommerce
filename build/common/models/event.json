@@ -1,0 +1,87 @@
+{
+  "name": "Event",
+  "plural": "events",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "required": false,
+      "validateUpsert": true,
+      "silenceWarnings": true
+    }
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "required": true,
+      "dataType": "text"
+    },
+    "intro": {
+      "type": "string",
+      "required": true,
+      "dataType": "text"
+    },
+    "place": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "startAt": {
+      "type": "date"
+    },
+    "endAt": {
+      "type": "date"
+    },
+    "latitude": {
+      "type": "number",
+      "dataType": "decimal",
+      "precision": 10,
+      "scale": 8
+    },
+    "longitude": {
+      "type": "number",
+      "dataType": "decimal",
+      "precision": 11,
+      "scale": 8
+    },
+    "active": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "image": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "eventComments": {
+      "type": "hasMany",
+      "model": "EventComment"
+    },
+    "eventAssistants": {
+      "type": "hasMany",
+      "model": "EventAssistant"
+    },
+    "brand": {
+      "type": "belongsTo",
+      "model": "Brand",
+      "foreignKey": "brandId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

@@ -1,0 +1,48 @@
+{
+  "name": "Store",
+  "plural": "stores",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "required": false,
+      "validateUpsert": true,
+      "silenceWarnings": true
+    }
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "dataType": "text"
+    },
+    "phone": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "city": {
+      "type": "belongsTo",
+      "model": "City",
+      "foreignKey": "cityId"
+    },
+    "storeProducts": {
+      "type": "hasMany",
+      "model": "StoreProduct"
+    },
+    "brand": {
+      "type": "belongsTo",
+      "model": "Brand",
+      "foreignKey": "brandId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

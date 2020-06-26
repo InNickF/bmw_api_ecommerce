@@ -1,0 +1,74 @@
+{
+  "name": "ProductCategory",
+  "plural": "product-categories",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "required": false,
+      "validateUpsert": true,
+      "silenceWarnings": true
+    }
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "string",
+      "required": true
+    },
+    "isMotivator": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "image": {
+      "type": "string"
+    },
+    "cover": {
+      "type": "string"
+    },
+    "level": {
+      "type": "number"
+    },
+    "parentId" : {
+      "type": "number"
+    },
+    "metaTitle": {
+      "type": "string"
+    },
+    "metaDescription": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "products": {
+      "type": "hasMany",
+      "model": "Product",
+      "foreignKey": "productCategoryId"
+    },
+    "brand": {
+      "type": "belongsTo",
+      "model": "Brand",
+      "foreignKey": "brandId"
+    },
+    "childrenCategories": {
+      "type": "hasMany",
+      "model": "ProductCategory",
+      "foreignKey": "parentId"
+    },
+    "parentCategory": {
+      "type": "hasMany",
+      "model": "ProductCategory",
+      "foreignKey": "parentId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

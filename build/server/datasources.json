@@ -1,0 +1,11 @@
+{
+  "db": {
+    "connector": "postgresql"
+  },
+  "storage": {
+    "name": "storage",
+    "connector": "loopback-component-storage",
+    "root": "./files",
+    "provider": "filesystem"
+  }
+}

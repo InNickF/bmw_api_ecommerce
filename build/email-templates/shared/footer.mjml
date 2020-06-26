@@ -1,0 +1,27 @@
+<mj-section background-color="#FFF" padding-top="0" padding-bottom="0">
+  <mj-column>
+    <mj-text padding-bottom="0">
+      Cordialmente,
+    </mj-text>
+    <mj-text>
+      <p>Autogermana</p>
+      <p>servicioalcliente@autogermana.com</p>
+    </mj-text>
+  </mj-column>
+</mj-section>
+<mj-section background-color="#FFF" padding-top="0">
+  <mj-column vertical-align="middle">
+    <mj-social icon-size="30px" mode="horizontal" inner-padding="15px">
+      <mj-social-element src="https://i.imgur.com/zy8HKDi.jpg" href="{{instagram}}"></mj-social-element>
+
+      <mj-social-element src="https://i.imgur.com/csGjMO6.jpg" href="{{twitter}}"></mj-social-element>
+
+      <mj-social-element src="https://i.imgur.com/diIXQzM.jpg" href="{{facebook}}"></mj-social-element>
+    </mj-social>
+  </mj-column>
+  <mj-column vertical-align="middle">
+    <mj-button font-weight="bold" font-size="16px" width="180px" background-color="#1C69D3" color="#FFF">
+      Ir a sitio
+    </mj-button>
+  </mj-column>
+</mj-section>

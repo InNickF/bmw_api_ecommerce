@@ -1,0 +1,66 @@
+{
+  "name": "Vehicle",
+  "plural": "vehicles",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "required": false,
+      "validateUpsert": true,
+      "silenceWarnings": true
+    }
+  },
+  "properties": {
+    "plate": {
+      "type": "string"
+    },
+    "chassis": {
+      "type": "string",
+      "required": true
+    },
+    "model": {
+      "type": "number"
+    },
+    "version": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "vehicleType": {
+      "type": "belongsTo",
+      "model": "VehicleType",
+      "foreignKey": "vehicleTypeId"
+    },
+    "vehicleBrand": {
+      "type": "belongsTo",
+      "model": "VehicleBrand",
+      "foreignKey": "vehicleBrandId"
+    },
+    "vehicleSerie": {
+      "type": "belongsTo",
+      "model": "VehicleSerie",
+      "foreignKey": "vehicleSerieId"
+    },
+    "vehicleModel": {
+      "type": "belongsTo",
+      "model": "VehicleModel",
+      "foreignKey": "vehicleModelId"
+    },
+    "user": {
+      "type": "belongsTo",
+      "model": "MyUser",
+      "foreignKey": "userId"
+    },
+    "brand": {
+      "type": "belongsTo",
+      "model": "Brand",
+      "foreignKey": "brandId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

@@ -1,0 +1,41 @@
+{
+  "name": "City",
+  "plural": "cities",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "required": false,
+      "validateUpsert": true,
+      "silenceWarnings": true
+    }
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "code": {
+      "type": "string",
+      "required": true
+    },
+    "hasStore": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "state": {
+      "type": "belongsTo",
+      "model": "State",
+      "foreignKey": "stateId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

@@ -1,0 +1,42 @@
+{
+  "name": "PqrDetail",
+  "plural": "pqr-details",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "required": false,
+      "validateUpsert": true,
+      "silenceWarnings": true
+    }
+  },
+  "properties": {
+    "comment": {
+      "type": "string",
+      "dataType": "text"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "orderDetail": {
+      "type": "belongsTo",
+      "model": "OrderDetail",
+      "foreignKey": "orderDetailId"
+    },
+    "reason": {
+      "type": "belongsTo",
+      "model": "Reason",
+      "foreignKey": "reasonId"
+    },
+    "pqr": {
+      "type": "belongsTo",
+      "model": "Pqr",
+      "foreignKey": "pqrId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

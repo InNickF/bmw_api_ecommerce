@@ -1,0 +1,41 @@
+{
+  "name": "StoreProduct",
+  "plural": "store-products",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "required": false,
+      "validateUpsert": true,
+      "silenceWarnings": true
+    }
+  },
+  "properties": {
+    "stock": {
+      "type": "number",
+      "required": true
+    },
+    "price": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "product": {
+      "type": "belongsTo",
+      "model": "Product",
+      "foreignKey": "productId"
+    },
+    "store": {
+      "type": "belongsTo",
+      "model": "Store",
+      "foreignKey": "storeId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

@@ -1,0 +1,32 @@
+{
+  "name": "CategoryBrand",
+  "plural": "category-brands",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "required": false,
+      "validateUpsert": true,
+      "silenceWarnings": true
+    }
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {
+    "brand": {
+      "type": "belongsTo",
+      "model": "Brand",
+      "foreignKey": "brandId"
+    },
+    "product-category": {
+      "type": "belongsTo",
+      "model": "ProductCategory",
+      "foreignKey": "productCategoryId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

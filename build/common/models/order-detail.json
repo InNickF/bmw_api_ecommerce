@@ -1,0 +1,86 @@
+{
+  "name": "OrderDetail",
+  "plural": "order-details",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "required": false,
+      "validateUpsert": true,
+      "silenceWarnings": true
+    }
+  },
+  "properties": {
+    "quantity": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "price": {
+      "type": "number",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "dataType": "text"
+    },
+    "image": {
+      "type": "string",
+      "required": true
+    },
+    "taxes": {
+      "type": "number",
+      "required": true
+    },
+    "sku": {
+      "type": "string",
+      "required": true
+    },
+    "requiredInstalation": {
+      "type": "boolean",
+      "required": true,
+      "default": false
+    },
+    "total": {
+      "type": "number"
+    },
+    "productStock": {
+      "type": "number"
+    },
+    "discountPercentage": {
+      "type": "number"
+    },
+    "initDateDiscount": {
+      "type": "date"
+    },
+    "endDateDiscount": {
+      "type": "date"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "order": {
+      "type": "belongsTo",
+      "model": "Order",
+      "foreignKey": "orderId"
+    },
+    "product": {
+      "type": "belongsTo",
+      "model": "Product",
+      "foreignKey": "productId"
+    },
+    "instalation": {
+      "type": "hasOne",
+      "model": "Instalation"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

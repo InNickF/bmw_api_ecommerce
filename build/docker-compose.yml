@@ -1,0 +1,59 @@
+version: "3.3"
+services:
+  api:
+    container_name: api
+    restart: always
+    image: autogermana/api:beta
+    environment:
+      AUTO_APP_API_URL: https://apps.autogermana.com.co:15027
+      ACCESS_KEY: 7f963687fe5dd540bef36d44ce94a1847cf35be892b6129d8abe4c40cca72318
+      URL_TCC: http://clientes.tcc.com.co/servicios/
+      URL_TCCB_OLD: https://clientes.tcc.com.co:4043/api/clientes
+      URL_TCCB: http://clientes.tcc.com.co:4080/api/clientes
+      PASSW_TCC: BOGAUTOGERMANA
+      BUCKET_NAME: la14-app
+      ACCESSKEY_ID_AWS: AKIAJVSYYHSL4Z3JDIJA
+      SECRETACCESSKEY_AWS: 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
+      ZONA_VIRTUAL_API_URL: https://www.zonapagos.com/
+      ZONA_VIRTUAL_API_RUTA: t_Autogermana2pas
+      ZONA_VIRTUAL_API_ID_TIENDA: 22851
+      ZONA_VIRTUAL_API_CLAVE: Autogermana22851*
+      FIREBASE_TYPE: service_account
+      FIREBASE_PROJECT_ID: autogermana-dev
+      FIREBASE_PROJECT_KEY_ID: e80572485d4b4f9d293fe898f4b75f3563a5b6ae
+      FIREBASE_PRIVATE_KEY: "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCocO8MhTX1DcPG\neiSr9wiBVijRbFZNPwerZABurqefp/2oiz8VQ3WtJUyh4uUMyfdoHIEQyVg4kGLN\nF3Olm2AaqVjhQf7EyzEP0fdozUHgzh3P6HEAoI0X4YEGC/N9GaKfKIfN+zDPzwb0\nc4/ODpCQAvraemXfbsUpytQmASBvyYvw7tZRW/HrbHsE0QMuTFvPt8QrTn0m6tyO\nWB8R9jbwRmz3fArfOQE6n6RNfJojBob1rgWV1BNSpPmmoCp80azwjpQeF3a32Dfg\n8PI4E3zkybfU7MqH8lj0TFpxFU0FTD6SWZzw3s2qwCfFrNSERUF/V2DlW6Z5HlKM\n0YrQNMyvAgMBAAECggEAKzK3Y98f/OZYUKUPlZinsj/N/ROLOIlTJrXhVIFvVMdJ\nCvoXJhVkbxDTS+s8MeD0FdvFj/ALM4p4BEAg9RZZecz3keGSfJbd0MBY8qQ9YnGJ\n/MGQhYgnVzoKlGnpOqqh5a6H0aA7nvfpwTSH62EZ2w0gl3pvePNYFkVBzjNYxcIf\nvxdtPji2afsRoiQwymP+za9v4Tkh6diOUa5Kn4B+Axn3M7PJBCqWkH/AfGMFyzzT\nbKd/CkjA0Yx5+6Di4pZz2MdTqaUAKAITyFYzSRhSfh5GhpAEqhPlMPEEKOCc5kVB\nTXyWZuyrl/M68wmxJc7ktcXwa2gg0GI3gr0WocSn2QKBgQDsPLzrm4kpv4naYvdz\nUqNlx+21E19GZEuHfzNrgKyInEShE9BVXl90kMR60taBxP8P+EGlHM8lTFHhMLgT\nqV05cFl2dBnuKjB5iEoyKb0JNlI049NFkKVZS5OKVINpVktcWubJRWk4KnEdUJmE\nI+ph+GP86Ws9eEWW4HOmzoj3uQKBgQC2iEXdX3xGEgPiHbDJ7wmX0nX7MP1ei3KO\nruMzxcID/sH+27pR8ddxrBz2Id2OpFe1WtKm67qy0OlcAoBFvxPwZsqatK4ksHCh\n3XX+M+tWIjpsl6NUJfQNKgJ2Wu4mFB8lqioq6hjPVSVcqBNF56V15UStUz6BWbC2\n6BZQKohLpwKBgHQQ12UOstJPJ+SjMR544IzWMKUBkpLcHfvBdDsCKkKoPFPDj10S\nE+YKZm5N/lQdvI9VErOTtvaFS8lPDXGjiYj5+QpouoC4O77KRmHk/dpz1OnlcVzB\nV2vK5P9WzIXJfxcuFiuXLb4JpC+Z9QLmPnbJ+h49dJHr8IzTVB8FZGgJAoGAQ7Xj\nbM459GhEZoGrDg2NGnOo7mhq5MKH2WQIxjDK2t6LKjZqNHGpAPLev3Mqk/pkytKJ\nKABz/lc+6bHH0ZejFt+asq7plpSZA4J6fbTWzNnfoF7T6Kg3kxaNWUg75YY7U6Z/\nA/JZB7hHJsr2c00N9OD6i+1AV41k30TS2iQc8SsCgYACJJ8JXE/zAU6GOSb8H9sT\n/wqHqPX6Z7RPNReerQDDPX8wfeeZ6k+YN2qS9qCtxZvV3A+EfTQtUz2E44el83E1\n0/K7fq8WoIw8YiOwYcIuy0u9e04QhbGXIv/WE0vg9L+HE7HmeilneuhK2HitG7zq\nP7jfoVfXmrS35/ymji/nkQ==\n-----END PRIVATE KEY-----\n"
+      FIREBASE_CLIENT_EMAIL: firebase-adminsdk-vnloo@autogermana-dev.iam.gserviceaccount.com
+      FIREBASE_CLIENT_ID: 116556540343838867109
+      FIREBASE_AUTH_URI: https://accounts.google.com/o/oauth2/auth
+      FIREBASE_TOKEN_URI: https://oauth2.googleapis.com/token
+      FIREBASE_AUTH_PROVIDER_CERT_URL: https://www.googleapis.com/oauth2/v1/certs
+      FIREBASE_CLIENT_CERT_URL: https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-vnloo%40autogermana-dev.iam.gserviceaccount.com
+      STORE_HOME: AUTOGERMANA
+      AWS_REGION: us-west-1
+      AWS_ACCESS_KEY_ID: AKIAJJ2U7LJ6TBDLVDPQ
+      AWS_SECRET_ACCESS_KEY: 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
+      AWS_SQS_ACCESS_KEY_ID: AKIAI53U25VIIIIL6FSA
+      AWS_SQS_SECRET_ACCESS_KEY: tphNW6HOjza6k4jPjFf9Byw4i0SleRWIC3KXBTcw528
+      AWS_QUEUE_NAME: autogermanapro
+      BASE_URL_IMAGES: https://s3-us-west-1.amazonaws.com/autogermana/
+      SMTP_HOST: smtp.sendgrid.net
+      SMTP_PORT: 587
+      SMTP_USER_VI: Autogermanaonline
+      SMTP_PW_VI: 4ut0g3r.2019
+      SMTP_USER: Autogermana
+      SMTP_PW: 4ut0g3r.2019ecm
+      EMAIL_AUTOGERMANA: soporteenlinea@autogermana.com.co
+      EMAIL_INCADEA_ERROR: ecommerce@autogermana.com.co
+      DATABASE: postgres
+      DB_HOST: ecommerce-ag.cf58ckidnxh6.us-east-2.rds.amazonaws.com
+      DB_NAME: db
+      DB_PASSWORD: RZTpUQIbmoKX2fVKGVO4
+      DB_PORT: 5432
+      DB_USER: devpostgres
+      DATABASE_URL: postgres://uitlkhrxexcmkv:c96b87f105c2291ec497dc7b739299e7a3e8da07637911f8e9786c7308a05a2d@ec2-23-21-87-183.compute-1.amazonaws.com:5432/d9ea2bjh1lqtpb
+      BUCKET_NAME: autogermana
+      MERCADO_PAGO_PUBLIC_KEY: TEST-2421343a-d689-4af0-ac48-bc94e7386723
+      MERCADO_PAGO_ACCES_TOKEN: TEST-8292419608772510-103116-c01db5d086900f67db1214a0659579c1-484964422
+      MERCADOPAGO_HOOKS: https://api.arepa.site
+    ports:
+      - 8004:80

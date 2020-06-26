@@ -1,0 +1,89 @@
+{
+  "name": "@autogermana/api",
+  "version": "0.10.83",
+  "description": "Autogermana",
+  "main": "server/server.js",
+  "engines": {
+    "node": ">=4 <=9"
+  },
+  "scripts": {
+    "lint": "../../node_modules/.bin/standard --verbose | ../../node_modules/.bin/snazzy",
+    "lint:fix": "../../node_modules/.bin/standard --fix --verbose | ../../node_modules/.bin/snazzy",
+    "start:api": "babel-node --max_old_space_size=2000 .",
+    "start": "npm-run-all --parallel start:**",
+    "test:full": "npm run lint && NODE_ENV=test ../../node_modules/.bin/mocha --no-deprecation --compilers js:babel-core/register test/**/*.js",
+    "test": "npm run lint",
+    "dev": "./node_modules/.bin/nodemon ./server/server.js --config ./nodemon.json",
+    "seed": "babel-node ./server/seeder.js",
+    "migrate": "babel-node ./server/migrate.js",
+    "migrate:seed": "yarn migrate && yarn seed"
+  },
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "6.26.0",
+    "babel-plugin-transform-async-to-generator": "6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "6.26.0",
+    "babel-plugin-transform-runtime": "6.23.0",
+    "babel-preset-es2015": "6.24.1",
+    "babel-preset-stage-0": "6.24.1",
+    "babel-runtime": "6.26.0",
+    "compression": "^1.0.3",
+    "cors": "^2.5.2",
+    "db": "^2.0.0",
+    "dotenv": "6.0.0",
+    "firebase": "5.5.3",
+    "firebase-admin": "^6.0.0",
+    "formidable": "^1.2.1",
+    "handlebars": "^4.0.12",
+    "helmet": "^3.10.0",
+    "lint": "1.1.2",
+    "loopback": "^3.0.0",
+    "loopback-boot": "^2.6.5",
+    "loopback-component-explorer": "^5.0.0",
+    "loopback-component-passport": "^3.10.0",
+    "loopback-component-storage": "^3.4.0",
+    "loopback-connector-mysql": "^5.3.0",
+    "loopback-connector-postgresql": "^3.4.0",
+    "loopback-ds-timestamp-mixin": "^3.4.1",
+    "loopback3-xtotalcount": "0.1.2",
+    "md5": "^2.2.1",
+    "mjml": "^4.2.1",
+    "moment": "^2.22.2",
+    "moment-timezone": "^0.5.25",
+    "multer": "^1.3.1",
+    "node-soap-api": "^0.5.1",
+    "npm-run-all": "^4.1.5",
+    "passport-facebook": "^2.1.1",
+    "request-ip": "^2.1.3",
+    "request-promise": "^4.2.2",
+    "s3-tree": "^2.0.0",
+    "serve-favicon": "^2.0.1",
+    "slug": "0.9.3",
+    "soap": "^0.24.0",
+    "socket.io": "^2.2.0",
+    "socketio-auth": "^0.1.1",
+    "sqs-consumer": "^3.8.0",
+    "strong-error-handler": "^2.0.0",
+    "throat": "^4.1.0",
+    "yiwn-slug": "0.0.1"
+  },
+  "devDependencies": {
+    "eslint-config-loopback": "10.0.0",
+    "nodemon": "^1.19.4",
+    "nsp": "^2.1.0",
+    "supertest": "3.1.0"
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "plugins": [
+      "flowtype"
+    ],
+    "globals": [
+      "__DEV__",
+      "fetch",
+      "URL",
+      "Event",
+      "Date"
+    ]
+  }
+}

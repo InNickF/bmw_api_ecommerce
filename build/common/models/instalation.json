@@ -1,0 +1,42 @@
+{
+  "name": "Instalation",
+  "plural": "instalations",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "required": false,
+      "validateUpsert": true,
+      "silenceWarnings": true
+    }
+  },
+  "properties": {
+    "cost": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "orderDetail": {
+      "type": "belongsTo",
+      "model": "OrderDetail",
+      "foreignKey": "orderDetailId"
+    },
+    "Order": {
+      "type": "belongsTo",
+      "model": "Order",
+      "foreignKey": "orderId"
+    },
+    "brand": {
+      "type": "belongsTo",
+      "model": "Brand",
+      "foreignKey": "brandId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
