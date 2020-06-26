@@ -1,15 +1,35 @@
-Build:
-  image: docker:latest
-  stage: build
-  services:
-    - docker:dind
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-    - echo $CI_ENV >> build/.env    
+#Build:
+#  image: docker:latest
+#  stage: build
+#  services:
+#    - docker:dind
+#  before_script:
+#    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
+#    - echo $CI_ENV >> build/.env    
 #    - ls -la 
 #    - ls -la build    
 #    - cat build/.env    
+#  script:
+#    - chmod +x script_staging.sh script_master.sh
+#    - if [ "$CI_COMMIT_BRANCH" == "master" ]; then ./script_master.sh ; else ./script_staging.sh ; fi    
+
+Deploy:
+  image: alpine:3.7
+  stage: deploy
+  environment:
+    name: deploy
+  only:
+    - /^release.*$/
+    - master
+    - staging
   script:
-    - chmod +x script_staging.sh script_master.sh
-    - if [ "$CI_COMMIT_BRANCH" == "master" ]; then ./script_master.sh ; else ./script_staging.sh ; fi    
-#
+    - apk update  && apk add --no-cache curl grep
+    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+    - chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+    - mkdir -p ${HOME}/.kube
+    - cat ${KUBECONFIG} > $HOME/.kube/config
+
+    - CONTAINER_IMAGE=ccjjss\\/mini:stg-"$CI_COMMIT_SHORT_SHA"
+#    - sed -i "s/image:.*/&$CONTAINER_IMAGE/g" deploy/02-deployment.yaml
+#    - cat deploy/02-deployment.yaml    
+#    - kubectl apply -f deploy/02-deployment.yaml    
