@@ -9,5 +9,7 @@ Build:
     - ls -la 
     - ls -la build    
   script:
-    - docker build --pull -t "$CI_REGISTRY_IMAGE":pro-"$CI_COMMIT_SHORT_SHA" .
-    - docker push "$CI_REGISTRY_IMAGE"
+    - echo $CI_COMMIT_BRANCH
+#    - export
+#    - docker build --pull -t "$CI_REGISTRY_IMAGE":pro-"$CI_COMMIT_SHORT_SHA" .
+#    - docker push "$CI_REGISTRY_IMAGE"
