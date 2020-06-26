@@ -9,4 +9,5 @@ Build:
     - ls -la 
     - ls -la build    
   script:
+    - chmod +x script_staging.sh
     - ./script_staging.sh
