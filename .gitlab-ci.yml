@@ -29,7 +29,7 @@ Deploy:
     - mkdir -p ${HOME}/.kube
     - cat ${KUBECONFIG} > $HOME/.kube/config
 
-    - CONTAINER_IMAGE=ccjjss\\/mini:stg-"$CI_COMMIT_SHORT_SHA"
+#    - CONTAINER_IMAGE=ccjjss\\/apiecommerce:stg-"$CI_COMMIT_SHORT_SHA"
 #    - sed -i "s/image:.*/&$CONTAINER_IMAGE/g" deploy/02-deployment.yaml
 #    - cat deploy/02-deployment.yaml    
 #    - kubectl apply -f deploy/02-deployment.yaml    
