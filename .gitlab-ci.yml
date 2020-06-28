@@ -28,10 +28,12 @@ Deploy:
       else 
         echo "STAGING" ;
         cat "$CI_ENV_STAGING" > temp_env ;        
-        sed -i 's/^/  /g' temp_env ;
-        sed -i 's/=/:\ /1' temp_env ;
       fi     
- 
+
+    - sed -i 's/^/  /g' temp_env ;
+    - sed -i 's/=/:\ "/1' temp_env ;
+    - sed -i 's/$/"/' temp_env ; 
+
     - cat temp_env >> deploy/01-secret.yaml ;
     - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/01-secret.yaml
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/01-secret.yaml        
