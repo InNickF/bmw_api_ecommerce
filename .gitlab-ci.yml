@@ -30,8 +30,6 @@ Deploy:
         echo "staging"
         echo "STAGING"      
       fi      
-  
-  
     - echo $CI_ENV_STAGING >> deploy/.env    
 #    - ls -la 
     - ls -la deploy    
