@@ -8,8 +8,8 @@ Build:
     - echo $CI_ENV_STAGING >> build/.env    
     - ls -la 
     - ls -la build    
-    - cat build/.env    
-  script:
+    - cat build/.env  
+  before_script:    
     - chmod +x script_staging.sh script_master.sh
 
     - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
@@ -22,8 +22,8 @@ Build:
         docker build --pull -t "$CI_REGISTRY_IMAGE":"$CI_COMMIT_BRANCH"-"$CI_COMMIT_SHORT_SHA" . ;
         docker push "$CI_REGISTRY_IMAGE" ;              
       fi
-
-
+  script:
+    docker push "$CI_REGISTRY_IMAGE" ; 
 
 Deploy:
   image: alpine:3.7
