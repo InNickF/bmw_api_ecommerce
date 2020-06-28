@@ -28,7 +28,7 @@ Deploy:
 #        echo "MASTER"
       else
         echo "staging"
-3        echo "STAGING"      
+#        echo "STAGING"      
       fi      
     - echo $CI_ENV_STAGING >> deploy/.env    
 #    - ls -la 
