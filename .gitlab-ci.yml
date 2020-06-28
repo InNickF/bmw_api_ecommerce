@@ -27,6 +27,7 @@ Deploy:
         echo "MASTER" ; 
       else 
         echo "STAGING" ;
+        cat "$CI_ENV_STAGING" > temp_env ;        
       fi     
       
 #        cat $CI_ENV_STAGING > temp_env ;
