@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: apiecommerce
-        image: ccjjss/apiautogermana
+        image: 
         ports:
         - containerPort: 80
         - containerPort: 5432
