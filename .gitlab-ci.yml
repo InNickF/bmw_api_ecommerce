@@ -34,11 +34,11 @@ Deploy:
 #    - ls -la 
     - ls -la deploy    
     - cat deploy/.env 
-#  script:
+  script:
 #    - apk update  && apk add --no-cache curl grep
 #    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 #    - chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
-#    - mkdir -p ${HOME}/.kube
+    - mkdir -p ${HOME}/.kube
 #    - cat ${KUBECONFIG} > $HOME/.kube/config
 
 #    - CONTAINER_IMAGE=ccjjss\\/apiecommerce:stg-"$CI_COMMIT_SHORT_SHA"
