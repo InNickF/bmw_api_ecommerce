@@ -31,7 +31,7 @@ Deploy:
         echo $CI_ENV_STAGING >> deploy/01-secret.yaml ;
       fi           
       
-    - sed -i "s/=/:/1" deploy/01-secret.yaml
+    - sed -i "s/ /\n/1" deploy/01-secret.yaml
 
 #    - echo $CI_ENV_STAGING >> deploy/.env    
 
