@@ -37,7 +37,7 @@ Deploy:
 #    - sed -i "s/ /--------------------/1" deploy/01-secret.yaml
 
   script:
-    - sed '4 s/name:\ /&staging/g' deploy/01-secret.yaml ;
+    - sed '4 s/name:\ /&"$CI_COMMIT_BRANCH"/g' deploy/01-secret.yaml ;
     - ls -la deploy    
     - cat deploy/01-secret.yaml        
         
