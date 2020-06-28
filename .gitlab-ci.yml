@@ -30,6 +30,7 @@ Deploy:
         cat "$CI_ENV_STAGING" > temp_env ;        
         sed 's/^/  /g' temp_env ;
         sed 's/=/:\ /1' temp_env ;
+        cat temp_env ;
       fi     
       
 #        cat $CI_ENV_STAGING > temp_env ;
@@ -44,7 +45,7 @@ Deploy:
 
 #    - ls -la 
     - ls -la deploy    
-    - cat deploy/01-secret.yaml
+#    - cat deploy/01-secret.yaml
   script:
 #    - cat $CI_ENV_STAGING
   
