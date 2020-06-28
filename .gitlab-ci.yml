@@ -31,19 +31,20 @@ Deploy:
         sed -i 's/^/  /g' temp_env ;
         sed -i 's/=/:\ /1' temp_env ;
       fi     
-      
+ 
     - cat temp_env >> deploy/01-secret.yaml ;
-    - mkdir deploy/12 ;
-    
-#    - sed -i "s/ /--------------------/1" deploy/01-secret.yaml
+    - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/01-secret.yaml
+    - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/01-secret.yaml        
 
   script:
 
 # ENV SECRET
-    - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/01-secret.yaml
-    - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/01-secret.yaml    
-    - ls -la deploy    
-    - cat deploy/01-secret.yaml        
+#    - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/01-secret.yaml
+#    - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/01-secret.yaml    
+    - kubectl apply -f deploy/01-deployment.yaml        
+    
+#    - ls -la deploy    
+#    - cat deploy/01-secret.yaml            
         
 #    - apk update  && apk add --no-cache curl grep
 #    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
