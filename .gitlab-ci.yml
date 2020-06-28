@@ -18,11 +18,12 @@ Deploy:
   stage: deploy
   environment:
     name: deploy
-    file_yaml_secret: "01-secret.yaml"
   only:
     - /^release.*$/
     - master
     - staging
+  variables:
+    file_yaml_secret: 01-secret.yaml  
   before_script:
   
 # SELECT master or staging
