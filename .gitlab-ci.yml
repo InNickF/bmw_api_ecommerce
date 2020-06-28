@@ -23,7 +23,8 @@ Deploy:
     - master
     - staging
   variables:
-    file_yaml_secret: 01-secret.yaml  
+    file_yaml_secret: 01-secret.yaml
+    file_yaml_deployment: 02-deployment.yaml      
   before_script:
   
 # SELECT master or staging
@@ -34,13 +35,13 @@ Deploy:
         cat "$CI_ENV_STAGING" > temp_env ;        
       fi
       
-# ENV SECRET 01-secret.yaml
+# ENV SECRET ${file_yaml_secret}
     - sed -i 's/^/  /g' temp_env ;
     - sed -i 's/=/:\ "/1' temp_env ;
     - sed -i 's/$/"/' temp_env ; 
-    - cat temp_env >> deploy/01-secret.yaml ;
-    - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/01-secret.yaml
-    - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/01-secret.yaml
+    - cat temp_env >> deploy/${file_yaml_secret} ;
+    - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/${file_yaml_secret} ;
+    - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_secret} ;
 
 # ENV SECRET 02-deployment.yaml
     - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/02-deployment.yaml
@@ -49,8 +50,8 @@ Deploy:
 
   script:
 #    - ls -la deploy    
-#    - cat deploy/01-secret.yaml            
-    - cat deploy/02-deployment.yaml            
+    - cat deploy/${file_yaml_secret}
+#    - cat deploy/02-deployment.yaml            
 
 
     - apk update  && apk add --no-cache curl grep
