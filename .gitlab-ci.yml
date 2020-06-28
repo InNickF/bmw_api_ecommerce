@@ -41,7 +41,7 @@ Deploy:
 
 #    - ls -la 
   script:
-    - sed '4 s/name:\: /&staging/g' 01-secret.yaml ;
+    - sed '4 s/name:\: /&staging/g' deploy/01-secret.yaml ;
     - ls -la deploy    
     - cat deploy/01-secret.yaml        
         
