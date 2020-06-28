@@ -9,7 +9,6 @@ Build:
     - ls -la 
     - ls -la build    
     - cat build/.env  
-  before_script:    
     - chmod +x script_staging.sh script_master.sh
 
     - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
