@@ -5,7 +5,7 @@
 #    - docker:dind
 #  before_script:
 #    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-#    - echo $CI_ENV >> build/.env    
+#    - echo $CI_ENV_STAGING >> build/.env    
 #    - ls -la 
 #    - ls -la build    
 #    - cat build/.env    
@@ -23,16 +23,25 @@ Deploy:
     - master
     - staging
   before_script:
-    - echo $CI_ENV >> deploy/.env    
+    - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
+        echo "master"
+        echo "MASTER"
+      else
+        echo "staging"
+        echo "STAGING"      
+      fi      
+  
+  
+    - echo $CI_ENV_STAGING >> deploy/.env    
 #    - ls -la 
     - ls -la deploy    
     - cat deploy/.env 
-  script:
-    - apk update  && apk add --no-cache curl grep
-    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-    - chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
-    - mkdir -p ${HOME}/.kube
-    - cat ${KUBECONFIG} > $HOME/.kube/config
+#  script:
+#    - apk update  && apk add --no-cache curl grep
+#    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
+#    - chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
+#    - mkdir -p ${HOME}/.kube
+#    - cat ${KUBECONFIG} > $HOME/.kube/config
 
 #    - CONTAINER_IMAGE=ccjjss\\/apiecommerce:stg-"$CI_COMMIT_SHORT_SHA"
 #    - sed -i "s/image:.*/&$CONTAINER_IMAGE/g" deploy/02-deployment.yaml
