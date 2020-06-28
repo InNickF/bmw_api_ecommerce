@@ -1,4 +1,3 @@
-
 Deploy:
   image: alpine:3.7
   stage: deploy
@@ -11,7 +10,7 @@ Deploy:
   before_script:
     - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
         echo "MASTER" ;
-        echo $CI_ENV_MASTER >> deploy/01-secret.yaml ;
+#        echo $CI_ENV_MASTER >> deploy/01-secret.yaml ;
       else 
         echo "STAGING" ;
 #        echo $CI_ENV_STAGING >> deploy/01-secret.yaml ;
