@@ -30,7 +30,7 @@ Deploy:
         cat $CI_ENV_STAGING > temp_env ;
         sed 's/^/  /g' temp_env ;
         sed 's/=/: /1' temp_env ;        
-        cat temp_env >> deploy/01-secret.yaml
+        cat temp_env >> deploy/01-secret.yaml ;
       fi     
       
 #    - sed -i "s/ /--------------------/1" deploy/01-secret.yaml
