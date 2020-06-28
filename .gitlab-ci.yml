@@ -43,16 +43,15 @@ Deploy:
     - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/${file_yaml_secret} ;
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_secret} ;
 
-# ENV SECRET 02-deployment.yaml
-    - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/02-deployment.yaml
-    - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/02-deployment.yaml            
+# DEPLOYMENT ${file_yaml_deployment}
+    - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/${file_yaml_deployment}
+    - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_deployment}
 #         image: ccjjss/apiautogermana    
 
   script:
 #    - ls -la deploy    
-    - cat deploy/${file_yaml_secret}
-#    - cat deploy/02-deployment.yaml            
-
+#    - cat deploy/${file_yaml_secret}
+#    - cat deploy/${file_yaml_deployment}
 
     - apk update  && apk add --no-cache curl grep
     - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
@@ -61,12 +60,16 @@ Deploy:
     - cat ${KUBECONFIG} > $HOME/.kube/config
     
 # ENV SECRET
-#    - kubectl apply -f deploy/01-secret.yaml
-    - echo $file_yaml_secret
+#    - echo $file_yaml_secret
     - kubectl apply -f deploy/${file_yaml_secret}
+    
+    
+# DEPLOYMENT
+#    - echo $file_yaml_secret
+    - kubectl apply -f deploy/${file_yaml_deployment}    
     
 
 #    - CONTAINER_IMAGE=ccjjss\\/apiecommerce:stg-"$CI_COMMIT_SHORT_SHA"
-#    - sed -i "s/image:.*/&$CONTAINER_IMAGE/g" deploy/02-deployment.yaml
-#    - cat deploy/02-deployment.yaml    
-#    - kubectl apply -f deploy/02-deployment.yaml    
+#    - sed -i "s/image:.*/&$CONTAINER_IMAGE/g" deploy/${file_yaml_deployment}
+#    - cat deploy/${file_yaml_deployment}
+#    - kubectl apply -f deploy/${file_yaml_deployment}
