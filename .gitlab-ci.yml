@@ -29,8 +29,8 @@ Deploy:
         echo "STAGING" ;
         cat "$CI_ENV_STAGING" > temp_env ;        
         sed -i 's/^/  /g' temp_env ;
-        sed -i 's/=/:\ /1' temp_env ;
-        cat temp_env ;
+        sed -i 's/=/:\ /1' temp_env 
+#        cat temp_env ;
       fi     
       
 #        cat $CI_ENV_STAGING > temp_env ;
