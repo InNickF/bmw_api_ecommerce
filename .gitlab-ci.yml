@@ -18,6 +18,7 @@ Deploy:
   stage: deploy
   environment:
     name: deploy
+    file_yaml_secret: 01-secret.yaml
   only:
     - /^release.*$/
     - master
@@ -43,6 +44,7 @@ Deploy:
 # ENV SECRET 02-deployment.yaml
     - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/02-deployment.yaml
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/02-deployment.yaml            
+#         image: ccjjss/apiautogermana    
 
   script:
 #    - ls -la deploy    
