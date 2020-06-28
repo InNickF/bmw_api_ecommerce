@@ -25,17 +25,17 @@ Deploy:
   before_script:
     - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
         echo "MASTER" ;
-        echo $CI_ENV_MASTER >> deploy/.env ;
+        echo $CI_ENV_MASTER >> deploy/01-secret.yaml ;
       else 
         echo "STAGING" ;
-        echo $CI_ENV_STAGING >> deploy/.env ;
+        echo $CI_ENV_STAGING >> deploy/01-secret.yaml ;
       fi           
 
 #    - echo $CI_ENV_STAGING >> deploy/.env    
 
 #    - ls -la 
     - ls -la deploy    
-    - cat deploy/.env 
+    - cat deploy/01-secret.yaml
   script:
 #    - apk update  && apk add --no-cache curl grep
 #    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
