@@ -29,7 +29,7 @@ Deploy:
       else 
         echo "STAGING" ;
 #        echo $CI_ENV_STAGING >> deploy/01-secret.yaml ;
-        cat $CI_ENV_STAGING >> deploy/01-secret.yaml ;
+#        cat $CI_ENV_STAGING >> deploy/01-secret.yaml ;
       fi           
       
     - sed -i "s/ /--------------------/1" deploy/01-secret.yaml
