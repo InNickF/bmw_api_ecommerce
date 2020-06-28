@@ -41,7 +41,7 @@ Deploy:
 # ENV SECRET
 #    - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/01-secret.yaml
 #    - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/01-secret.yaml    
-    - kubectl apply -f deploy/01-deployment.yaml        
+    - kubectl apply -f deploy/01-secret.yaml        
     
 #    - ls -la deploy    
 #    - cat deploy/01-secret.yaml            
