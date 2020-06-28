@@ -11,14 +11,7 @@ Build:
     - cat build/.env    
   script:
     - chmod +x script_staging.sh script_master.sh
-    - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
-        echo "MASTER" ; 
-      else 
-        echo "STAGING" ;
-        docker build --pull -t "$CI_REGISTRY_IMAGE":"$CI_COMMIT_BRANCH"-"$CI_COMMIT_SHORT_SHA" . ;
-      fi
 
-    docker push "$CI_REGISTRY_IMAGE" ;      
 
 
 
