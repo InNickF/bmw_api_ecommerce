@@ -24,11 +24,11 @@ Deploy:
     - staging
   before_script:
     - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
-        - echo "master"
-        - echo "MASTER"
+        echo "master"
+#        echo "MASTER"
       else
-        - echo "staging"
-        - echo "STAGING"      
+        echo "staging"
+3        echo "STAGING"      
       fi      
     - echo $CI_ENV_STAGING >> deploy/.env    
 #    - ls -la 
