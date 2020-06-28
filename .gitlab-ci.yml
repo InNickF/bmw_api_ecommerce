@@ -38,12 +38,13 @@ Deploy:
 #    - sed -i "s/ /--------------------/1" deploy/01-secret.yaml
 
   script:
+
+# ENV SECRET
     - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/01-secret.yaml
+    - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/01-secret.yaml    
     - ls -la deploy    
     - cat deploy/01-secret.yaml        
         
-#    - cat $CI_ENV_STAGING
-  
 #    - apk update  && apk add --no-cache curl grep
 #    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
 #    - chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
