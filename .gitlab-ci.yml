@@ -61,7 +61,7 @@ Deploy:
     
 # ENV SECRET
 #    - kubectl apply -f deploy/01-secret.yaml
-    - echo {file_yaml_secret
+    - echo $file_yaml_secret
     - kubectl apply -f deploy/${file_yaml_secret}
     
 
