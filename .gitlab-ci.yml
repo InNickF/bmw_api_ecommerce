@@ -38,7 +38,7 @@ Deploy:
 
   script:
 #    - ls -la deploy    
-#    - cat deploy/01-secret.yaml            
+    - cat deploy/01-secret.yaml            
 
 
     - apk update  && apk add --no-cache curl grep
