@@ -46,8 +46,8 @@ Deploy:
 # DEPLOYMENT ${file_yaml_deployment}
     - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/${file_yaml_deployment}
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_deployment}
-#         image: ccjjss/apiautogermana    
-
+    - sed -i '20 s/image:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_deployment}    
+#CI_REGISTRY_IMAGE
   script:
 #    - ls -la deploy    
 #    - cat deploy/${file_yaml_secret}
