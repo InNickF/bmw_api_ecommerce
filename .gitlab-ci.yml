@@ -32,17 +32,19 @@ Deploy:
         sed -i 's/=/:\ /1' temp_env ;
       fi     
       
-    - cat temp_env >> deploy/01-secret.yaml ;      
-      
+    - cat temp_env >> deploy/01-secret.yaml ;
+    
 #    - sed -i "s/ /--------------------/1" deploy/01-secret.yaml
 
 #sed 's/^/  /g' prueba_variables > prueba_variables2
 #    - echo $CI_ENV_STAGING >> deploy/.env    
 
 #    - ls -la 
-    - ls -la deploy    
-    - cat deploy/01-secret.yaml
   script:
+    - sed '4 s/name: /&"$CI_COMMIT_BRANCH"/g' 01-secret.yaml ;
+    - ls -la deploy    
+    - cat deploy/01-secret.yaml        
+        
 #    - cat $CI_ENV_STAGING
   
 #    - apk update  && apk add --no-cache curl grep
