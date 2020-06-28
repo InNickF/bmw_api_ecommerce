@@ -23,24 +23,31 @@ Deploy:
     - master
     - staging
   before_script:
+  
+# SELECT master or staging
     - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
         echo "MASTER" ; 
       else 
         echo "STAGING" ;
         cat "$CI_ENV_STAGING" > temp_env ;        
-      fi     
-
+      fi
+      
+# ENV SECRET 01-secret.yaml
     - sed -i 's/^/  /g' temp_env ;
     - sed -i 's/=/:\ "/1' temp_env ;
     - sed -i 's/$/"/' temp_env ; 
-
     - cat temp_env >> deploy/01-secret.yaml ;
     - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/01-secret.yaml
-    - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/01-secret.yaml        
+    - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/01-secret.yaml
+
+# ENV SECRET 02-deployment.yaml
+    - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/02-deployment.yaml
+    - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/02-deployment.yaml            
 
   script:
 #    - ls -la deploy    
-    - cat deploy/01-secret.yaml            
+#    - cat deploy/01-secret.yaml            
+    - cat deploy/02-deployment.yaml            
 
 
     - apk update  && apk add --no-cache curl grep
