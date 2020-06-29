@@ -46,10 +46,9 @@ Deploy:
     - echo $imagen_docker ;
  
 # URL
-    - echo ${echo "$CI_REGISTRY_USER"} ;
     - url="URL_""$CI_PROJECT_NAME""_""$CI_COMMIT_BRANCH" ;
     - echo $url;        
-    - url= eval echo $(echo '$'$url) ;
+    - url= 'eval echo $(echo '$'$url)' ;
     - echo $url;    
 
 # SELECT master or staging ENV
