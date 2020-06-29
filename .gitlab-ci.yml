@@ -1,30 +1,30 @@
-Build:
-  image: docker:latest
-  stage: build
-  services:
-    - docker:dind
-  before_script:
-    - imagen_docker="$CI_REGISTRY_IMAGE":"$CI_COMMIT_BRANCH"-"$CI_COMMIT_SHORT_SHA"  
-    - echo $imagen_docker  
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-    - echo $CI_ENV_STAGING >> build/.env    
-    - ls -la 
-    - ls -la build    
-    - cat build/.env  
-    - chmod +x script_staging.sh script_master.sh
+#Build:
+#  image: docker:latest
+#  stage: build
+#  services:
+#    - docker:dind
+#  before_script:
+#    - imagen_docker="$CI_REGISTRY_IMAGE":"$CI_COMMIT_BRANCH"-"$CI_COMMIT_SHORT_SHA"  
+#    - echo $imagen_docker  
+#    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
+#    - echo $CI_ENV_STAGING >> build/.env    
+#    - ls -la 
+#    - ls -la build    
+#    - cat build/.env  
+#    - chmod +x script_staging.sh script_master.sh
 
-    - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
-        echo "MASTER" ; 
-        docker build --pull -t "$CI_REGISTRY_IMAGE" . ;
-        docker tag  "$CI_REGISTRY_IMAGE" "$imagen_docker" ;        
-        docker tag  "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_IMAGE":latest ;        
-      else 
-        echo "STAGING" ;
-        docker build --pull -t "$imagen_docker" . ;
-      fi
+#    - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
+#        echo "MASTER" ; 
+#        docker build --pull -t "$CI_REGISTRY_IMAGE" . ;
+#        docker tag  "$CI_REGISTRY_IMAGE" "$imagen_docker" ;        
+#        docker tag  "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_IMAGE":latest ;        
+#      else 
+#        echo "STAGING" ;
+#        docker build --pull -t "$imagen_docker" . ;
+#      fi
       
-  script:
-    docker push "$CI_REGISTRY_IMAGE" ; 
+#  script:
+#    docker push "$CI_REGISTRY_IMAGE" ; 
 
 Deploy:
   image: alpine:3.7
@@ -39,7 +39,7 @@ Deploy:
     file_yaml_secret: 01-secret.yaml
     file_yaml_deployment: 02-deployment.yaml      
   before_script:
-    - imagen_docker="$CI_REGISTRY_IMAGE":"$CI_COMMIT_BRANCH"-"$CI_COMMIT_SHORT_SHA"    
+    - imagen_docker="$CI_REGISTRY_IMAGE""$CI_COMMIT_BRANCH""$CI_COMMIT_SHORT_SHA"    
     - echo $imagen_docker
   
 # SELECT master or staging
