@@ -40,7 +40,7 @@ Deploy:
     file_yaml_deployment: 02-deployment.yaml      
   before_script:
     - imagen_docker=$(echo "$CI_REGISTRY_IMAGE" | sed 's/\//\\\//g')  
-    - imagen_docker="$imagen_docker"
+    - imagen_docker="$imagen_docker""$imagen_docker"
 #    - imagen_docker=$(echo "$CI_REGISTRY_IMAGE" | sed 's/\//\\\//g')  
 #    $(echo "$CI_REGISTRY_IMAGE" | sed 's/\//-/g')  
 #    echo '${CI_REGISTRY_IMAGE/\//-}'
