@@ -102,3 +102,4 @@ Deploy:
 #    - sed -i "s/image:.*/&$CONTAINER_IMAGE/g" deploy/${file_yaml_deployment}
 #    - cat deploy/${file_yaml_deployment}
 #    - kubectl apply -f deploy/${file_yaml_deployment}
+#
