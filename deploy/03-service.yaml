@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: campo_gitlab_ci-svc
+  namespace:   
+spec:
+  selector:
+    app: campo_gitlab_ci
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
