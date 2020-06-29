@@ -42,8 +42,8 @@ Deploy:
   before_script:
   
 #    - URL= "URL_""$CI_PROJECT_NAME""_""$CI_COMMIT_BRANCH"
-    - url = "URL_APIECOMMERCE_STAGING"
-    - echo ${URL}
+    - url = "URL_APIECOMMERCE_STAGING" ;
+    - echo ${URL} ;
   
     - imagen_docker=$(echo "$CI_REGISTRY_IMAGE" | sed 's/\//\\\//g')  
     - imagen_docker="$imagen_docker"$(echo ":")"$CI_COMMIT_BRANCH"$(echo "-")"$CI_COMMIT_SHORT_SHA"
