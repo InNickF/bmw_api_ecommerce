@@ -1,29 +1,29 @@
-#Build:
-#  image: docker:latest
-#  stage: build
-#  services:
-#    - docker:dind
-#  before_script:
-#    - imagen_docker="$CI_REGISTRY_IMAGE":"$CI_COMMIT_BRANCH"-"$CI_COMMIT_SHORT_SHA"  
-#    - echo $imagen_docker  
-#    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-#    - echo $CI_ENV_STAGING >> build/.env    
+Build:
+  image: docker:latest
+  stage: build
+  services:
+    - docker:dind
+  before_script:
+    - imagen_docker="$CI_REGISTRY_IMAGE":"$CI_COMMIT_BRANCH"-"$CI_COMMIT_SHORT_SHA"  
+    - echo $imagen_docker  
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
+    - echo $CI_ENV_STAGING >> build/.env    
 #    - ls -la 
 #    - ls -la build    
 #    - cat build/.env  
 #    - chmod +x script_staging.sh script_master.sh
 #
-#    - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
-#        echo "MASTER" ; 
-#        docker build --pull -t "$CI_REGISTRY_IMAGE" . ;
-#        docker tag  "$CI_REGISTRY_IMAGE" "$imagen_docker" ;        
-#        docker tag  "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_IMAGE":latest ;        
-#      else 
-#        echo "STAGING" ;
-#        docker build --pull -t "$imagen_docker" . ;
-#      fi
-#  script:
-#    docker push "$CI_REGISTRY_IMAGE" ; 
+    - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
+        echo "MASTER" ; 
+        docker build --pull -t "$CI_REGISTRY_IMAGE" . ;
+        docker tag  "$CI_REGISTRY_IMAGE" "$imagen_docker" ;        
+        docker tag  "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_IMAGE":latest ;        
+      else 
+        echo "STAGING" ;
+        docker build --pull -t "$imagen_docker" . ;
+      fi
+  script:
+    docker push "$CI_REGISTRY_IMAGE" ; 
 
 Deploy:
   image: alpine:3.7
@@ -91,7 +91,7 @@ Deploy:
 
   script:
 #    - ls -la deploy    
-
+#Ejecutable Kubectl
     - apk update  && apk add --no-cache curl grep
     - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
     - chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
