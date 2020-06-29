@@ -61,11 +61,11 @@ Deploy:
     - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/${file_yaml_deployment}
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_deployment}
     - sed -i '20 s/image:\ /&'"$imagen_docker"'/g' deploy/${file_yaml_deployment}    
-#CI_REGISTRY_IMAGE
+
   script:
 #    - ls -la deploy    
 #    - cat deploy/${file_yaml_secret}
-#    - cat deploy/${file_yaml_deployment}
+    - cat deploy/${file_yaml_deployment}
 
     - apk update  && apk add --no-cache curl grep
     - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
