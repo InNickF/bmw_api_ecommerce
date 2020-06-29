@@ -20,7 +20,7 @@
 #        docker tag  "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_IMAGE":latest ;        
 #      else 
 #        echo "STAGING" ;
-#        docker build --pull -t "$imagen_docker" . ;
+#        docker build --pull -t "$imagen_docker" ":\" ;
 #      fi
       
 #  script:
