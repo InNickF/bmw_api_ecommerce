@@ -38,7 +38,7 @@ Deploy:
   variables:
     file_yaml_secret: 01-secret.yaml
     file_yaml_deployment: 02-deployment.yaml      
-    imagen_docker:  "$CI_REGISTRY_IMAGE"    
+    imagen_docker:  "$(echo "casa")"    
 #    $(echo "casa" )    
   before_script:
 
