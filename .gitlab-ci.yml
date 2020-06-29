@@ -20,7 +20,7 @@
 #        docker tag  "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_IMAGE":latest ;        
 #      else 
 #        echo "STAGING" ;
-#        docker build --pull -t "$imagen_docker" ":\" ;
+#        docker build --pull -t "$imagen_docker" . ;
 #      fi
       
 #  script:
@@ -40,7 +40,7 @@ Deploy:
     file_yaml_deployment: 02-deployment.yaml      
   before_script:
     - imagen_docker=$(echo "$CI_REGISTRY_IMAGE" | sed 's/\//\\\//g')  
-    - imagen_docker=imagen_docker."casa"
+    - imagen_docker=imagen_docker":\"
 #    - imagen_docker=$(echo "$CI_REGISTRY_IMAGE" | sed 's/\//\\\//g')  
 #    $(echo "$CI_REGISTRY_IMAGE" | sed 's/\//-/g')  
 #    echo '${CI_REGISTRY_IMAGE/\//-}'
