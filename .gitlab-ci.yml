@@ -38,7 +38,7 @@ Deploy:
     file_yaml_secret: 01-secret.yaml
     file_yaml_deployment: 02-deployment.yaml
     file_yaml_service: 03-service.yaml      
-    file_yaml_ingress: 04-ingressTLS.yaml          
+    file_yaml_ingress: 04-ingress.yaml          
   before_script:
 # IMAGEN DOCKER
     - imagen_docker=$(echo "$CI_REGISTRY_IMAGE" | sed 's/\//\\\//g') ; 
