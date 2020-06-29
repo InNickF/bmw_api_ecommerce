@@ -8,10 +8,10 @@ Build:
     - echo $imagen_docker  
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
     - echo $CI_ENV_STAGING >> build/.env    
-    - ls -la 
-    - ls -la build    
-    - cat build/.env  
-    - chmod +x script_staging.sh script_master.sh
+#    - ls -la 
+#    - ls -la build    
+#    - cat build/.env  
+#    - chmod +x script_staging.sh script_master.sh
 
     - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
         echo "MASTER" ; 
@@ -66,11 +66,11 @@ Deploy:
 # DEPLOYMENT ${file_yaml_deployment}
     - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
         echo "DEPLOYMENT MASTER" ; 
+        sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/${file_yaml_deployment} ;
       else 
         echo "DEPLOYMENT STAGING" ;
-        sed -i 's/apiecommerce/staging-apiecommerce/g' deploy/${file_yaml_deployment} ;
+        sed -i 's/apiecommerce/'"$CI_COMMIT_BRANCH"'-apiecommerce/g' deploy/${file_yaml_deployment} ;
       fi
-    - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/${file_yaml_deployment}
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_deployment}
     - sed -i '20 s/image:\ /&'"$imagen_docker"'/g' deploy/${file_yaml_deployment}    
 
