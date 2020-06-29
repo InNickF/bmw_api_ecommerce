@@ -50,6 +50,7 @@ Deploy:
 # SELECT master or staging ENV
     - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
         echo "MASTER" ; 
+        cat "$CI_ENV_MASTER" > temp_env ;            
       else 
         echo "STAGING" ;
         cat "$CI_ENV_STAGING" > temp_env ;        
