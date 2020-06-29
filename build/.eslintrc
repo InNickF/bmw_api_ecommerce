@@ -1,0 +1,10 @@
+{
+  "extends": "loopback",
+  "rules": {
+    "no-unused-vars": "off",
+    "space-before-function-paren": "off",
+    "semi": [2, "never"],
+    "object-curly-spacing": [2, "never"],
+    "comma-dangle": ["error", "never"]
+  }
+}

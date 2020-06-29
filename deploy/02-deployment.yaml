@@ -1,0 +1,274 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+   name: apiecommerce
+   namespace: 
+   labels:
+     app: apiecommerce
+spec:
+  replicas: 1
+  selector:
+     matchLabels:
+       app: apiecommerce
+  template: 
+    metadata:
+      labels:
+        app: apiecommerce
+    spec:
+      containers:
+      - name: apiecommerce
+        image: 
+        ports:
+        - containerPort: 80
+        - containerPort: 5432
+        env:
+          - name: REACT_APP_API_URL
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: REACT_APP_API_URL
+          - name: REACT_APP_API_URLN
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: REACT_APP_API_URLN
+          - name: ID_ADMIN
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: ID_ADMIN
+          - name: ID_USER
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: ID_USER
+          - name: AUTO_APP_API_URL
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: AUTO_APP_API_URL
+          - name: ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: ACCESS_KEY
+          - name: URL_TCC
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: URL_TCC
+          - name: URL_TCCB_OLD
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: URL_TCCB_OLD
+          - name: URL_TCCB
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: URL_TCCB
+          - name: PASSW_TCC
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: PASSW_TCC
+          - name: BUCKET_NAME
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: BUCKET_NAME
+          - name: ACCESSKEY_ID_AWS
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: ACCESSKEY_ID_AWS
+          - name: SECRETACCESSKEY_AWS
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: SECRETACCESSKEY_AWS
+          - name: FIREBASE_TYPE
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: FIREBASE_TYPE
+          - name: FIREBASE_PROJECT_ID
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: FIREBASE_PROJECT_ID
+          - name: FIREBASE_PROJECT_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: FIREBASE_PROJECT_KEY_ID
+          - name: FIREBASE_PRIVATE_KEY
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: FIREBASE_PRIVATE_KEY
+          - name: FIREBASE_CLIENT_EMAIL
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: FIREBASE_CLIENT_EMAIL
+          - name: FIREBASE_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: FIREBASE_CLIENT_ID
+          - name: FIREBASE_AUTH_URI
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: FIREBASE_AUTH_URI
+          - name: FIREBASE_TOKEN_URI
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: FIREBASE_TOKEN_URI
+          - name: FIREBASE_AUTH_PROVIDER_CERT_URL
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: FIREBASE_AUTH_PROVIDER_CERT_URL
+          - name: FIREBASE_CLIENT_CERT_URL
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: FIREBASE_CLIENT_CERT_URL
+          - name: STORE_HOME
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: STORE_HOME
+          - name: AWS_REGION
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: AWS_REGION
+          - name: AWS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: AWS_ACCESS_KEY_ID
+          - name: AWS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: AWS_SECRET_ACCESS_KEY
+          - name: AWS_SQS_ACCESS_KEY_ID
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: AWS_SQS_ACCESS_KEY_ID
+          - name: AWS_SQS_SECRET_ACCESS_KEY
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: AWS_SQS_SECRET_ACCESS_KEY
+          - name: AWS_QUEUE_NAME
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: AWS_QUEUE_NAME
+          - name: BASE_URL_IMAGES
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: BASE_URL_IMAGES
+          - name: SMTP_HOST
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: SMTP_HOST
+          - name: SMTP_PORT
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: SMTP_PORT
+          - name: SMTP_USER_VI
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: SMTP_USER_VI
+          - name: SMTP_PW_VI
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: SMTP_PW_VI
+          - name: SMTP_USER
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: SMTP_USER
+          - name: SMTP_PW
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: SMTP_PW
+          - name: EMAIL_AUTOGERMANA
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: EMAIL_AUTOGERMANA
+          - name: EMAIL_INCADEA_ERROR
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: EMAIL_INCADEA_ERROR
+          - name: MERCADO_PAGO_PUBLIC_KEY
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: MERCADO_PAGO_PUBLIC_KEY
+          - name: MERCADO_PAGO_ACCES_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: MERCADO_PAGO_ACCES_TOKEN
+          - name: MERCADOPAGO_HOOKS
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: MERCADOPAGO_HOOKS
+          - name: DB_CONNECTOR
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: DB_CONNECTOR
+          - name: DATABASE
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: DATABASE
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: DB_HOST
+          - name: DB_NAME
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: DB_NAME
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: DB_PASSWORD
+          - name: DB_PORT
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: DB_PORT
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: DB_USER
+          - name: NODE_ENV
+            valueFrom:
+              secretKeyRef:
+                name: apiecommerce-env
+                key: NODE_ENV

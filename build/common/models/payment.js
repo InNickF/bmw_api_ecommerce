@@ -96,22 +96,22 @@ module.exports = function (Payment) {
       back_urls: {
         success:
           orderInstace.brandId == 3
-            ? "https://staging.bmwshop.com.co/payment-confirmation"
+            ? "https://bmwshop-autogermana.herokuapp.com/payment-confirmation"
             : orderInstace.brandId == 2
-              ? "https://staging.minishop.com.co/payment-confirmation"
-              : "https://staging.bmwmotorradshop.com.co/payment-confirmation",
+              ? "https://minishop-autogermana.herokuapp.com/payment-confirmation"
+              : "https://motorrad.arepa.site/payment-confirmation",
         pending:
           orderInstace.brandId == 3
-            ? "https://staging.bmwshop.com.co/payment-confirmation"
+            ? "https://bmwshop-autogermana.herokuapp.com/payment-confirmation"
             : orderInstace.brandId == 2
-              ? "https://staging.minishop.com.co/payment-confirmation"
-              : "https://staging.bmwmotorradshop.com.co/confirmacion-pago",
+              ? "https://minishop-autogermana.herokuapp.com/payment-confirmation"
+              : "https://bmwmotorradshop.autogermana.com.co/confirmacion-pago",
         failure:
           orderInstace.brandId == 3
-            ? "https://staging.bmwshop.com.co/payment-confimation?state=failed"
+            ? "https://bmwshop-autogermana.herokuapp.com/payment-confimation?state=failed"
             : orderInstace.brandId == 2
-              ? "https://staging.minishop.com.co/payment-confimation?state=failed"
-              : "https://staging.bmwmotorradshop.com.co/payment-confimation?state=failed",
+              ? "https://minishop-autogermana.herokuapp.com/payment-confimation?state=failed"
+              : "https://bmwmotorradshop.autogermana.com.co/payment-confimation?state=failed",
       },
       items: [
         {
