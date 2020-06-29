@@ -61,7 +61,7 @@ Deploy:
 # DEPLOYMENT ${file_yaml_deployment}
     - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/${file_yaml_deployment}
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_deployment}
-    - sed -i '20 s/image:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_deployment}
+    - sed -i '20 s/image:\ /&'"$imagen_docker"'/g' deploy/${file_yaml_deployment}
 
   script:
 #    - ls -la deploy    
