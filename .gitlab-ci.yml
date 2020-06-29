@@ -8,9 +8,9 @@ Build:
     - echo $imagen_docker  
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
     - echo $CI_ENV_STAGING >> build/.env    
-#    - ls -la 
-#    - ls -la build    
-#    - cat build/.env  
+    - ls -la 
+    - ls -la build    
+    - cat build/.env  
     - chmod +x script_staging.sh script_master.sh
 
     - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
