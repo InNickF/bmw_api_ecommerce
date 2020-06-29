@@ -64,13 +64,13 @@ Deploy:
 
 # DEPLOYMENT ${file_yaml_deployment}
     - echo "before_script:\ DEPLOYMENT" ;
-    - sed -i 's/apiecommerce/'"$CI_COMMIT_BRANCH"'-apiecommerce/g' deploy/${file_yaml_deployment} ;      
+    - sed -i 's/"$CI_PROJECT_NAME"/'"$CI_COMMIT_BRANCH"'-"$CI_PROJECT_NAME"/g' deploy/${file_yaml_deployment} ;      
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_deployment}
     - sed -i '20 s/image:\ /&'"$imagen_docker"'/g' deploy/${file_yaml_deployment}
     
 # SERVICE ${file_yaml_service}
     - echo "before_script:\ SERVICE" ;
-    - sed -i 's/campo_gitlab_ci/'"$CI_COMMIT_BRANCH"'-apiecommerce/g' deploy/${file_yaml_service} ;      
+    - sed -i 's/campo_gitlab_ci/'"$CI_COMMIT_BRANCH"'-"$CI_PROJECT_NAME"/g' deploy/${file_yaml_service} ;      
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_service}
 
 
