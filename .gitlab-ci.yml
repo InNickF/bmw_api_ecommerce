@@ -95,7 +95,7 @@ Deploy:
     - echo $file_yaml_deployment
     - kubectl apply -f deploy/${file_yaml_deployment}    
     
-
+#
 #    - CONTAINER_IMAGE=ccjjss\\/apiecommerce:stg-"$CI_COMMIT_SHORT_SHA"
 #    - sed -i "s/image:.*/&$CONTAINER_IMAGE/g" deploy/${file_yaml_deployment}
 #    - cat deploy/${file_yaml_deployment}
