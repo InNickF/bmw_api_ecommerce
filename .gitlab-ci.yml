@@ -114,3 +114,9 @@ Deploy:
 #    - echo $file_yaml_service    
 #    - cat deploy/${file_yaml_service}    
     - kubectl apply -f deploy/${file_yaml_service}        
+
+# INGRESS
+    - echo "script - INGRESS"
+#    - echo $file_yaml_service    
+    - cat deploy/${file_yaml_ingress}    
+    - kubectl apply -f deploy/${file_yaml_ingress}     
