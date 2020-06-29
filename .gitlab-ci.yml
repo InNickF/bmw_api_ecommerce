@@ -44,7 +44,7 @@ Deploy:
     - imagen_docker="$imagen_docker"$(echo ":")"$CI_COMMIT_BRANCH"$(echo "-")"$CI_COMMIT_SHORT_SHA" ;
     - echo $imagen_docker ;
  
-    - url=echo "$CI_PROJECT_NAME" | tr '[:lower:]' '[:upper:]' ;
+    - url=eval echo "$CI_PROJECT_NAME" | tr '[:lower:]' '[:upper:]' ;
 #    - url=echo $("URL_""$CI_PROJECT_NAME""_""$CI_COMMIT_BRANCH") | tr '[:lower:]' '[:upper:]' ;
     - echo $url;        
     - url= eval echo $(echo '$'$url) ;
