@@ -47,7 +47,7 @@ Deploy:
 #    :"$CI_COMMIT_BRANCH"-"$CI_COMMIT_SHORT_SHA"  
     - echo $imagen_docker
   
-# SELECT master or staging
+# SELECT master or staging ENV
     - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
         echo "MASTER" ; 
       else 
@@ -64,10 +64,15 @@ Deploy:
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_secret} ;
 
 # DEPLOYMENT ${file_yaml_deployment}
+    - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
+        echo "DEPLOYMENT MASTER" ; 
+      else 
+        echo "DEPLOYMENT STAGING" ;
+        sed -i 's/apiecommerce/staging-apiecommerce/g' deploy/${file_yaml_deployment} ;
+      fi
     - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/${file_yaml_deployment}
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_deployment}
     - sed -i '20 s/image:\ /&'"$imagen_docker"'/g' deploy/${file_yaml_deployment}    
-
 
   script:
 #    - ls -la deploy    
