@@ -46,9 +46,9 @@ Deploy:
 #    - url= eval echo $(echo '$'$url) ;
 #    - echo $url;
     
-    - imagen_docker=$(echo "$CI_REGISTRY_IMAGE" | sed 's/\//\\\//g')  
-    - imagen_docker="$imagen_docker"$(echo ":")"$CI_COMMIT_BRANCH"$(echo "-")"$CI_COMMIT_SHORT_SHA"
-    - echo $imagen_docker
+    - imagen_docker=$(echo "$CI_REGISTRY_IMAGE" | sed 's/\//\\\//g') ; 
+    - imagen_docker="$imagen_docker"$(echo ":")"$CI_COMMIT_BRANCH"$(echo "-")"$CI_COMMIT_SHORT_SHA" ;
+    - echo $imagen_docker ;
 
 # SELECT master or staging ENV
     - echo "before_script - SELECT master or staging ENV" ;
