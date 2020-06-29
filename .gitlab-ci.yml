@@ -37,8 +37,12 @@ Deploy:
   variables:
     file_yaml_secret: 01-secret.yaml
     file_yaml_deployment: 02-deployment.yaml
-    file_yaml_service: 03-service.yaml          
+    file_yaml_service: 03-service.yaml      
+    file_yaml_ingress: 04-ingressTLS.yaml          
   before_script:
+  
+    - echo ${URL_APIECOMMERCE_STAGING}
+  
     - imagen_docker=$(echo "$CI_REGISTRY_IMAGE" | sed 's/\//\\\//g')  
     - imagen_docker="$imagen_docker"$(echo ":")"$CI_COMMIT_BRANCH"$(echo "-")"$CI_COMMIT_SHORT_SHA"
     - echo $imagen_docker
@@ -73,6 +77,12 @@ Deploy:
     - echo "before_script - SERVICE" ;
     - sed -i 's/campo_gitlab_ci/'"$CI_COMMIT_BRANCH"'-'"$CI_PROJECT_NAME"'/g' deploy/${file_yaml_service} ;      
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_service}
+    
+# INGRESS ${file_yaml_ingress}
+    - echo "before_script - INGRESS" ;
+    - sed -i 's/campo_gitlab_ci/'"$CI_COMMIT_BRANCH"'-'"$CI_PROJECT_NAME"'/g' deploy/${file_yaml_ingress} ;      
+    - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_ingress}    
+    - sed -i 's/URL/'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_ingress} ;          
 
   script:
 #    - ls -la deploy    
@@ -86,7 +96,7 @@ Deploy:
 # ENV SECRET
     - echo "script - ENV SECRET"
 #    - echo $file_yaml_secret    
-    - cat deploy/${file_yaml_secret}    
+#    - cat deploy/${file_yaml_secret}    
     - kubectl apply -f deploy/${file_yaml_secret}
     
 # DEPLOYMENT
