@@ -46,8 +46,8 @@ Deploy:
     
 #    - URL= "URL_""$CI_PROJECT_NAME""_""$CI_COMMIT_BRANCH"
     - url="URL_APIECOMMERCE_STAGING" ;
-#    - url= eval echo $(echo '$'$url) ;
-#    - echo $url;    
+    - url= eval echo $(echo '$'$url) ;
+    - echo $url;    
 
 # SELECT master or staging ENV
     - echo "before_script - SELECT master or staging ENV" ;
