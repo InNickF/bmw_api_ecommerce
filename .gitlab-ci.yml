@@ -3,8 +3,9 @@ Build:
   stage: build
   services:
     - docker:dind
+  variables:
+    imagen_docker: "TEXTO"
   before_script:
-    - imagen_docker: "TEXTO"
     - echo $imagen_docker      
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
     - echo $CI_ENV_STAGING >> build/.env    
