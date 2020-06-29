@@ -40,7 +40,7 @@ Deploy:
     file_yaml_deployment: 02-deployment.yaml      
 #    $(echo "casa" )    
   before_script:
-    - imagen_docker:  $(echo 'casa')
+    - imagen_docker:  echo 'casa'
 #    $(echo "$CI_REGISTRY_IMAGE" | sed 's/\//-/g')  
 #    echo '${CI_REGISTRY_IMAGE/\//-}'
 #    :"$CI_COMMIT_BRANCH"-"$CI_COMMIT_SHORT_SHA"  
