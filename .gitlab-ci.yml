@@ -41,7 +41,7 @@ Deploy:
     file_yaml_ingress: 04-ingressTLS.yaml          
   before_script:
   
-    - echo ${URL_APIECOMMERCE_STAGING}
+    - echo ${URL_APIECOMMERCE_"$CI_COMMIT_BRANCH"}
   
     - imagen_docker=$(echo "$CI_REGISTRY_IMAGE" | sed 's/\//\\\//g')  
     - imagen_docker="$imagen_docker"$(echo ":")"$CI_COMMIT_BRANCH"$(echo "-")"$CI_COMMIT_SHORT_SHA"
