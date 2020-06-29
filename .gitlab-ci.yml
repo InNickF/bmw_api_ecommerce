@@ -1,4 +1,4 @@
-#Build:
+0#Build:
 #  image: docker:latest
 #  stage: build
 #  services:
@@ -59,7 +59,8 @@ Deploy:
     - sed -i 's/=/:\ "/1' temp_env ;
     - sed -i 's/$/"/' temp_env ; 
     - cat temp_env >> deploy/${file_yaml_secret} ;
-    - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/${file_yaml_secret} ;
+#    - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/${file_yaml_secret} ;
+    - sed -i 's/campo_gitlab_ci/'"$CI_COMMIT_BRANCH"'-'"$CI_PROJECT_NAME"'/g' deploy/${file_yaml_secret} ;      
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_secret} ;
 
 # DEPLOYMENT ${file_yaml_deployment}
