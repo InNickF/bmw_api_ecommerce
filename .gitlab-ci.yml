@@ -46,7 +46,7 @@ Deploy:
     - echo $imagen_docker ;
  
 # URL
-    - echo ${"URL_""$CI_PROJECT_NAME""_""$CI_COMMIT_BRANCH"} ;
+    - echo ${"$CI_REGISTRY_USER"} ;
     - url="URL_""$CI_PROJECT_NAME""_""$CI_COMMIT_BRANCH" ;
     - echo $url;        
     - url= eval echo $(echo '$'$url) ;
