@@ -1,0 +1,113 @@
+<mjml>
+
+  <mj-head>
+
+    <mj-attributes>
+      <mj-text align="left" color="#555"  font-size="13px" />
+      <mj-section background-color="#fff" />
+    </mj-attributes>
+
+    <mj-style inline="inline">
+      a { color: #1C69D3 }
+   </mj-style>
+    
+  </mj-head>
+
+  <mj-body background-color="white">
+    
+    <mj-section>
+  <mj-column>
+  <mj-image padding="0px"   
+src="https://s3-us-west-1.amazonaws.com/autogermana/assets/Banner+Mail+AG.jpg" 
+alt="Autogermana"></mj-image>
+      </mj-column>
+      
+</mj-section>
+    
+    <mj-section padding="0">
+    <mj-column>
+    <mj-text padding-left="5px">
+      <b>Error creación pedido</b>
+      </mj-text>
+      
+  
+      </mj-column>
+      </mj-section>
+      
+    <mj-section padding-top="5px">
+      <mj-column>
+      <mj-text padding-left="5px" color="#9B9B9B">
+          Verifique el campo IncadeaOrderId en el administrador para visualizar el evento.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+    
+    
+ <mj-group width="20%">
+    <mj-column  background-color="white" padding="0"vertical-align="middle">
+       <mj-image  align="left" width="100px" src="{{product.imageUrl}}">
+        </mj-image>
+      
+      </mj-column>
+      
+    </mj-group>
+    
+<mj-group width="60%" vertical-align="middle">
+    
+  <mj-column background-color="white" width="100%">
+  <mj-text align="left">
+   <b> Nº de compra: </b> {{order.id}}
+      </mj-text>
+     </mj-column>
+
+  <mj-column background-color="white" width="100%">
+  <mj-text align="left">
+   <b> Id order incadea: </b> {{order.incadeaOrderId}}
+      </mj-text>
+     </mj-column>
+    
+    <mj-section padding-top="30px">
+     <mj-column>
+  <mj-text padding-left="5px">
+    Si tiene alguna duda o sugerencia no dude en contactarnos.
+    </mj-text>
+  </mj-column>
+    </mj-section>
+    
+  <mj-section padding-bottom="0">
+    
+    <mj-column width="100%" padding-bottom="0">
+       <mj-text  color="#9B9B9B" padding-left="5px" padding-bottom="0" font-size="14px">
+         <b>Equipo Autogermana</b>
+     </mj-text>
+      <mj-image padding-left="5px" padding-top="0" padding-bottom="0" width="140px" align="left" src="https://s3-us-west-1.amazonaws.com/autogermana/assets/Line+Firma.png">
+      
+      </mj-image>
+      <mj-text  color="#9B9B9B" padding-left="5px" padding-bottom="0">
+         soporteenlinea@autogermana.com.co
+     </mj-text>
+  </mj-column>
+    </mj-section>
+ 
+    
+    <mj-section padding="0">
+       <mj-column >
+      <mj-social padding-top="0px" icon-size="14px"  align="left"  padding-left="0px" mode="horizontal" inner-padding="5px">
+     <mj-social-element  color="#9B9B9B" src="https://s3-us-west-1.amazonaws.com/autogermana/assets/whats.png" href="{{whatsapp}}">3202572769
+        </mj-social-element>
+   </mj-social>
+     </mj-column>
+     </mj-section>
+    
+    <mj-section>
+    <mj-column>
+      <mj-image src="https://s3-us-west-1.amazonaws.com/autogermana/assets/Logo+AG.png">
+      </mj-image>
+      </mj-column>
+    </mj-section>
+
+    </mj-column>
+    </mj-section>   
+    
+  </mj-body>
+</mjml>

@@ -1,0 +1,49 @@
+{
+  "name": "VehicleSerie",
+  "plural": "vehicle-series",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "required": false,
+      "validateUpsert": true,
+      "silenceWarnings": true
+    }
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string",
+      "dataType": "text"
+    },
+    "brandId": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "productVariations": {
+      "type": "hasMany",
+      "model": "ProductVariation",
+      "foreignKey": "vehicleSerieId"
+    },
+    "brand": {
+      "type": "belongsTo",
+      "model": "Brand",
+      "foreignKey": "brandId"
+    },
+    "vehicleModels": {
+      "type": "hasMany",
+      "model": "VehicleModel",
+      "foreignKey": "vehicleSerieId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

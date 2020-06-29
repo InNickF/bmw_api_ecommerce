@@ -1,0 +1,105 @@
+<mjml>
+
+  <mj-head>
+
+    <mj-attributes>
+      <mj-text align="left" color="#555"  font-size="13px" />
+      <mj-section background-color="#fff" />
+    </mj-attributes>
+
+    <mj-style inline="inline">
+      a { color: #1C69D3 }
+   </mj-style>
+
+  </mj-head>
+
+  <mj-body background-color="white">
+
+    <mj-section>
+  <mj-column>
+  <mj-image padding="0px"
+src="https://s3-us-west-1.amazonaws.com/autogermana/assets/Banner+Mail+AG.jpg"></mj-image>
+      </mj-column>
+
+</mj-section>
+
+    <mj-section padding="0">
+    <mj-column>
+    <mj-text padding-left="5px">
+      <b> Señor (a) {{user.firstName}} {{user.lastName}}</b>
+      </mj-text>
+
+
+      </mj-column>
+      </mj-section>
+
+    <mj-section padding-top="5px">
+      <mj-column>
+      <mj-text padding-left="5px" color="#9B9B9B">
+Ha recibido una solicitud de PQR
+        </mj-text>
+      </mj-column>
+    </mj-section>
+
+
+
+
+<mj-section>
+
+      <mj-column background-color="#F6F6F6" width="60%">
+  <mj-text align="left" padding-left="10px">
+   <b> Nombre Cliente: </b>  {{user.firstName}} {{user.lastName}}
+      </mj-text>
+     </mj-column> <mj-column width="40%"></mj-column>
+
+         <mj-column background-color="white" width="60%">
+  <mj-text align="left" padding-left="10px">
+   <b> Documento de identidad: </b> CC {{ user.identification }}
+      </mj-text>
+     </mj-column> <mj-column width="40%"></mj-column>
+
+    <mj-column background-color="#F6F6F6" width="60%">
+  <mj-text align="left" padding-left="10px">
+   <b> Telefono: </b> {{ pqr.phone }}
+      </mj-text>
+     </mj-column> <mj-column width="40%"></mj-column>
+
+         <mj-column background-color="white" width="60%">
+  <mj-text align="left" padding-left="10px">
+   <b> Email: </b> {{ user.email }}
+      </mj-text>
+     </mj-column> <mj-column width="40%"></mj-column>
+
+          <mj-column background-color="#F6F6F6" width="60%">
+  <mj-text align="left" padding-left="10px">
+   <b>Nº de compra: </b> {{ pqr.orderId }}
+      </mj-text>
+     </mj-column> <mj-column width="40%"></mj-column>
+
+         <mj-column background-color="white" width="60%">
+  <mj-text align="left" padding-left="10px">
+   <b> Ciudad:</b> {{city.name}}
+      </mj-text>
+     </mj-column> <mj-column width="40%"></mj-column>
+
+
+           <mj-column background-color="#F6F6F6" width="60%">
+  <mj-text align="left" padding-left="10px">
+   <b> Observación:</b>  {{ pqr.commentary}}
+      </mj-text>
+     </mj-column>
+  <mj-column width="40%"></mj-column>
+
+
+    </mj-section>
+
+    <mj-section>
+    <mj-column width="100%">
+
+      </mj-column>
+    </mj-section>
+
+
+
+  </mj-body>
+</mjml>

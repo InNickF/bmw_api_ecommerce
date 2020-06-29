@@ -1,0 +1,36 @@
+{
+  "name": "ProcessLog",
+  "plural": "process-logs",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "required": false,
+      "validateUpsert": true,
+      "silenceWarnings": true
+    }
+  },
+  "properties": {
+    "process": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string",
+      "dataType": "text"
+    },
+    "messageId": {
+      "type": "string"
+    },
+    "isError": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

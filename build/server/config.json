@@ -1,0 +1,22 @@
+{
+  "restApiRoot": "/",
+  "host": "0.0.0.0",
+  "port": 8080,
+  "remoting": {
+    "context": false,
+    "rest": {
+      "handleErrors": false,
+      "normalizeHttpPath": false,
+      "xml": false
+    },
+    "json": {
+      "strict": false,
+      "limit": "200mb"
+    },
+    "urlencoded": {
+      "extended": true,
+      "limit": "200mb"
+    },
+    "cors": false
+  }
+}

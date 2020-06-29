@@ -1,0 +1,43 @@
+stages:
+  - build
+  - deploy
+
+services:
+  - docker:19.03.1-dind
+
+build:
+  image: docker:19.03.1
+  stage: build
+  variables:
+    IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+    DOCKER_HOST: tcp://docker:2375
+    # REACT_APP_API_URLN: http://192.168.254.16:8080/site_servicios/services/webgana/
+    # AUTO_APP_API_URL: https://apps.autogermana.com.co:15027
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    # - ./setup_env.sh
+  script:
+    - docker build -t $IMAGE_TAG .
+    - docker push $IMAGE_TAG
+  only:
+    - develop
+
+ssh-into-ec2:
+  stage: deploy
+  variables:
+    IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHORT_SHA
+    SWARM_MANAGER_DNS: ubuntu@ec2-3-234-177-204.compute-1.amazonaws.com
+    SWARM_MANAGER_IP: 3.234.177.204
+    DOCKER_SERVICE: e-commerce_api
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - mkdir -p ~/.ssh
+    - ssh-keyscan -H $SWARM_MANAGER_IP >> ~/.ssh/known_hosts
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
+  script:
+    - ssh $SWARM_MANAGER_DNS "docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY"
+    - ssh $SWARM_MANAGER_DNS "docker service update --with-registry-auth --image $IMAGE_TAG $DOCKER_SERVICE"
+  only:
+    - develop

@@ -1,0 +1,43 @@
+{
+  "name": "VehicleModel",
+  "plural": "vehicle-models",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "required": false,
+      "validateUpsert": true,
+      "silenceWarnings": true
+    }
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "vehicleSerieId": {
+      "type": "string"
+    },
+    "image": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "productVariations": {
+      "type": "hasMany",
+      "model": "ProductVariation",
+      "foreignKey": "vehicleModelId"
+    },
+    "vehicleSerie": {
+      "type": "belongsTo",
+      "model": "VehicleSerie",
+      "foreignKey": "vehicleSerieId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

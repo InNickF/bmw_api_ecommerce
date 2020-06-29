@@ -1,0 +1,32 @@
+{
+  "name": "RelatedProduct",
+  "plural": "related-products",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "mixins": {
+    "TimeStamp": {
+      "required": false,
+      "validateUpsert": true,
+      "silenceWarnings": true
+    }
+  },
+  "properties": {},
+  "validations": [],
+  "relations": {
+    "relatedProduct": {
+      "type": "belongsTo",
+      "model": "Product",
+      "foreignKey": "relatedProductId"
+    },
+    "product": {
+      "type": "belongsTo",
+      "model": "Product",
+      "foreignKey": "productId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
