@@ -73,7 +73,6 @@ Deploy:
     - sed -i 's/campo_gitlab_ci/'"$CI_COMMIT_BRANCH"'-'"$CI_PROJECT_NAME"'/g' deploy/${file_yaml_service} ;      
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_service}
 
-
   script:
 #    - ls -la deploy    
 
@@ -84,20 +83,19 @@ Deploy:
     - cat ${KUBECONFIG} > $HOME/.kube/config
     
 # ENV SECRET
-#    - echo $file_yaml_secret
     - echo "script - ENV SECRET"
+#    - echo $file_yaml_secret    
 #    - cat deploy/${file_yaml_service}    
     - kubectl apply -f deploy/${file_yaml_secret}
     
 # DEPLOYMENT
-#    - echo $file_yaml_deployment
     - echo "script - DEPLOYMENT"
-    - cat deploy/${file_yaml_deployment}
+#    - echo $file_yaml_deployment    
+#    - cat deploy/${file_yaml_deployment}
     - kubectl apply -f deploy/${file_yaml_deployment}    
     
 # SERVICE
-#    - echo $file_yaml_service
     - echo "script - SERVICE"
-    - cat deploy/${file_yaml_service}    
+#    - echo $file_yaml_service    
+#    - cat deploy/${file_yaml_service}    
     - kubectl apply -f deploy/${file_yaml_service}        
-    - export
