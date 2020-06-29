@@ -44,7 +44,7 @@ Deploy:
     - echo $imagen_docker
 
 # SELECT master or staging ENV
-    - echo "before_script: SELECT master or staging ENV" ;
+    - echo "before_script:\ SELECT master or staging ENV" ;
     - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
         echo "MASTER" ; 
         cat "$CI_ENV_MASTER" > temp_env ;            
@@ -54,7 +54,7 @@ Deploy:
       fi
       
 # ENV SECRET ${file_yaml_secret}
-    - echo "before_script: ENV SECRET" ;
+    - echo "before_script:\ ENV SECRET" ;
     - sed -i 's/^/  /g' temp_env ;
     - sed -i 's/=/:\ "/1' temp_env ;
     - sed -i 's/$/"/' temp_env ; 
@@ -63,13 +63,13 @@ Deploy:
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_secret} ;
 
 # DEPLOYMENT ${file_yaml_deployment}
-    - echo "before_script: DEPLOYMENT" ;
+    - echo "before_script:\ DEPLOYMENT" ;
     - sed -i 's/apiecommerce/'"$CI_COMMIT_BRANCH"'-apiecommerce/g' deploy/${file_yaml_deployment} ;      
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_deployment}
     - sed -i '20 s/image:\ /&'"$imagen_docker"'/g' deploy/${file_yaml_deployment}
     
 # SERVICE ${file_yaml_service}
-    - echo "before_script: SERVICE" ;
+    - echo "before_script:\ SERVICE" ;
     - sed -i 's/campo_gitlab_ci/'"$CI_COMMIT_BRANCH"'-apiecommerce/g' deploy/${file_yaml_service} ;      
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_service}
 
@@ -86,17 +86,17 @@ Deploy:
     - cat ${KUBECONFIG} > $HOME/.kube/config
     
 # ENV SECRET
-    - echo "before_script: ENV SECRET"
+    - echo "before_script:\ ENV SECRET"
 #    - echo $file_yaml_secret
     - kubectl apply -f deploy/${file_yaml_secret}
     
 # DEPLOYMENT
-    - echo "script: DEPLOYMENT"
+    - echo "script:\ DEPLOYMENT"
 #    - echo $file_yaml_deployment
     - kubectl apply -f deploy/${file_yaml_deployment}    
     
 # SERVICE
-    - echo "script: SERVICE"
+    - echo "script:\ SERVICE"
 #    - echo $file_yaml_service
     - kubectl apply -f deploy/${file_yaml_service}        
     - export
