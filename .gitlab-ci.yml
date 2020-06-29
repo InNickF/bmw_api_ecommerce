@@ -86,7 +86,7 @@ Deploy:
 # ENV SECRET
     - echo "script - ENV SECRET"
 #    - echo $file_yaml_secret    
-#    - cat deploy/${file_yaml_service}    
+    - cat deploy/${file_yaml_secret}    
     - kubectl apply -f deploy/${file_yaml_secret}
     
 # DEPLOYMENT
