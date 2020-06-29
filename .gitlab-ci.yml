@@ -50,6 +50,7 @@ Deploy:
 # SELECT master or staging ENV
     - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
         echo "MASTER" ; 
+        cat "$CI_ENV_MASTER" > temp_env ;            
       else 
         echo "STAGING" ;
         cat "$CI_ENV_STAGING" > temp_env ;        
@@ -64,13 +65,15 @@ Deploy:
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_secret} ;
 
 # DEPLOYMENT ${file_yaml_deployment}
-    - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
-        echo "DEPLOYMENT MASTER" ; 
-        sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/${file_yaml_deployment} ;
-      else 
-        echo "DEPLOYMENT STAGING" ;
-        sed -i 's/apiecommerce/'"$CI_COMMIT_BRANCH"'-apiecommerce/g' deploy/${file_yaml_deployment} ;
-      fi
+#    - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
+#        echo "DEPLOYMENT MASTER" ; 
+#        sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/${file_yaml_deployment} ;
+#      else 
+#        echo "DEPLOYMENT STAGING" ;
+#        sed -i 's/apiecommerce/'"$CI_COMMIT_BRANCH"'-apiecommerce/g' deploy/${file_yaml_deployment} ;
+#      fi
+ 
+    - sed -i 's/apiecommerce/'"$CI_COMMIT_BRANCH"'-apiecommerce/g' deploy/${file_yaml_deployment} ;      
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_deployment}
     - sed -i '20 s/image:\ /&'"$imagen_docker"'/g' deploy/${file_yaml_deployment}    
 
@@ -94,7 +97,7 @@ Deploy:
     - echo $file_yaml_deployment
     - kubectl apply -f deploy/${file_yaml_deployment}    
     
-
+#
 #    - CONTAINER_IMAGE=ccjjss\\/apiecommerce:stg-"$CI_COMMIT_SHORT_SHA"
 #    - sed -i "s/image:.*/&$CONTAINER_IMAGE/g" deploy/${file_yaml_deployment}
 #    - cat deploy/${file_yaml_deployment}
