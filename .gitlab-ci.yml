@@ -48,7 +48,7 @@ Deploy:
     - sed -i 's/=/:\ "/1' temp_env ;
     - sed -i 's/$/"/' temp_env ; 
 
-    - echo "  API_URL\:\ https://""$url_api" >> deploy/${file_yaml_secret} ;
+    - echo "  API_URL:: https://""$url_api" >> deploy/${file_yaml_secret} ;
     - cat temp_env >> deploy/${file_yaml_secret} ;
 #    - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/${file_yaml_secret} ;
     - sed -i 's/campo_gitlab_ci/'"$CI_COMMIT_BRANCH"'-'"$CI_PROJECT_NAME"'/g' deploy/${file_yaml_secret} ;      
