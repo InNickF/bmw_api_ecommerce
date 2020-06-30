@@ -10,7 +10,9 @@ Build:
 
 # URL    
     - url="URL_""$CI_PROJECT_NAME""_""$CI_COMMIT_BRANCH" ;
-    - echo $url;    
+    - echo $url;  
+    - url=$(eval echo $(echo '$'$url)) ;
+    - echo $url;        
     
     - echo 'API_URL= "https://stagingapiecm.autogermana.com.co"' >> build/.env
 #    - cat $CI_ENV_STAGING    
