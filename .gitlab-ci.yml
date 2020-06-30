@@ -14,7 +14,7 @@ Build:
     - url=$(eval echo $(echo '$'$url)) ;
     - echo $url;        
     
-    - echo 'API_URL= "https://stagingapiecm.autogermana.com.co"' >> build/.env
+    - echo 'API_URL= "$url"' >> build/.env
 #    - cat $CI_ENV_STAGING    
 #    - cat $CI_ENV_STAGING >> build/.env
 #    - ls -la 
