@@ -12,16 +12,25 @@ Build:
     - url="URL_""$CI_PROJECT_NAME""_""$CI_COMMIT_BRANCH" ;
     - echo $url;  
     - url=$(eval echo $(echo '$'$url)) ;
-    - echo $url;        
-    
+    - echo $url;   
+
+#Construccion ENV
+
     - echo 'API_URL= "$url"' >> build/.env
-#    - cat $CI_ENV_STAGING    
-#    - cat $CI_ENV_STAGING >> build/.env
+
+  # SELECT master or staging ENV
+    - echo "before_script - SELECT master or staging ENV" ;
+    - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
+        echo "MASTER" ; 
+        cat "$CI_ENV_MASTER" > build/.env ;            
+      else 
+        echo "STAGING" ;
+        cat "$CI_ENV_STAGING" > build/.env ;        
+      fi
+
 #    - ls -la 
 #    - ls -la build    
-    - cat build/.env  
-#    - chmod +x script_staging.sh script_master.sh
-#
+    - cat build/.env 
 
   script:
     echo "CORRECTO" ;
