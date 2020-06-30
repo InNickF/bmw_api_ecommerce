@@ -7,117 +7,30 @@ Build:
     - imagen_docker="$CI_REGISTRY_IMAGE":"$CI_COMMIT_BRANCH"-"$CI_COMMIT_SHORT_SHA"  
     - echo $imagen_docker  
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
-    - echo $CI_ENV_STAGING >> build/.env    
-#    - ls -la 
-#    - ls -la build    
-#    - cat build/.env  
-#    - chmod +x script_staging.sh script_master.sh
-#
-    - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
-        echo "MASTER" ; 
-        docker build --pull -t "$CI_REGISTRY_IMAGE" . ;
-        docker tag  "$CI_REGISTRY_IMAGE" "$imagen_docker" ;        
-        docker tag  "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_IMAGE":latest ;        
-      else 
-        echo "STAGING" ;
-        docker build --pull -t "$imagen_docker" . ;
-      fi
-  script:
-    docker push "$CI_REGISTRY_IMAGE" ; 
 
-Deploy:
-  image: alpine:3.7
-  stage: deploy
-  environment:
-    name: deploy
-  only:
-    - /^release.*$/
-    - master
-    - staging
-  variables:
-    file_yaml_secret: 01-secret.yaml
-    file_yaml_deployment: 02-deployment.yaml
-    file_yaml_service: 03-service.yaml      
-    file_yaml_ingress: 04-ingress.yaml          
-  before_script:
-# IMAGEN DOCKER
-    - imagen_docker=$(echo "$CI_REGISTRY_IMAGE" | sed 's/\//\\\//g') ; 
-    - imagen_docker="$imagen_docker"$(echo ":")"$CI_COMMIT_BRANCH"$(echo "-")"$CI_COMMIT_SHORT_SHA" ;
-    - echo $imagen_docker ;
- 
-# URL
+# URL    
     - url="URL_""$CI_PROJECT_NAME""_""$CI_COMMIT_BRANCH" ;
-    - echo $url;        
-#    - url='eval echo $(echo '$'$url)' ;
+    - echo $url;  
     - url=$(eval echo $(echo '$'$url)) ;
-    - echo $url;    
+    - echo $url;   
 
-# SELECT master or staging ENV
+#Construccion ENV
+
+    - echo 'API_URL= "$url"' >> build/.env
+
+  # SELECT master or staging ENV
     - echo "before_script - SELECT master or staging ENV" ;
     - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
         echo "MASTER" ; 
-        cat "$CI_ENV_MASTER" > temp_env ;            
+        cat "$CI_ENV_MASTER" > build/.env ;            
       else 
         echo "STAGING" ;
-        cat "$CI_ENV_STAGING" > temp_env ;        
+        cat "$CI_ENV_STAGING" > build/.env ;        
       fi
-      
-# ENV SECRET ${file_yaml_secret}
-    - echo "before_script - ENV SECRET" ;
-    - sed -i 's/^/  /g' temp_env ;
-    - sed -i 's/=/:\ "/1' temp_env ;
-    - sed -i 's/$/"/' temp_env ; 
-    - cat temp_env >> deploy/${file_yaml_secret} ;
-#    - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/${file_yaml_secret} ;
-    - sed -i 's/campo_gitlab_ci/'"$CI_COMMIT_BRANCH"'-'"$CI_PROJECT_NAME"'/g' deploy/${file_yaml_secret} ;      
-    - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_secret} ;
 
-# DEPLOYMENT ${file_yaml_deployment}
-    - echo "before_script - DEPLOYMENT" ;
-    - sed -i 's/campo_gitlab_ci/'"$CI_COMMIT_BRANCH"'-'"$CI_PROJECT_NAME"'/g' deploy/${file_yaml_deployment} ;      
-    - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_deployment}
-    - sed -i '20 s/image:\ /&'"$imagen_docker"'/g' deploy/${file_yaml_deployment}
-    
-# SERVICE ${file_yaml_service}
-    - echo "before_script - SERVICE" ;
-    - sed -i 's/campo_gitlab_ci/'"$CI_COMMIT_BRANCH"'-'"$CI_PROJECT_NAME"'/g' deploy/${file_yaml_service} ;      
-    - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_service}
-    
-# INGRESS ${file_yaml_ingress}
-    - echo "before_script - INGRESS" ;
-    - sed -i 's/campo_gitlab_ci/'"$CI_COMMIT_BRANCH"'-'"$CI_PROJECT_NAME"'/g' deploy/${file_yaml_ingress} ;      
-    - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_ingress}    
-    - sed -i 's/URL/'"$url"'/g' deploy/${file_yaml_ingress} ;          
+#    - ls -la 
+#    - ls -la build    
+    - cat build/.env 
 
   script:
-#    - ls -la deploy    
-#Ejecutable Kubectl
-    - apk update  && apk add --no-cache curl grep
-    - curl -LO https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl
-    - chmod +x ./kubectl && mv ./kubectl /usr/local/bin/kubectl
-    - mkdir -p ${HOME}/.kube
-    - cat ${KUBECONFIG} > $HOME/.kube/config
-    
-# ENV SECRET
-    - echo "script - ENV SECRET"
-#    - echo $file_yaml_secret    
-#    - cat deploy/${file_yaml_secret}    
-    - kubectl apply -f deploy/${file_yaml_secret}
-    
-# DEPLOYMENT
-    - echo "script - DEPLOYMENT"
-#    - echo $file_yaml_deployment    
-#    - cat deploy/${file_yaml_deployment}
-    - kubectl apply -f deploy/${file_yaml_deployment}    
-    
-# SERVICE
-    - echo "script - SERVICE"
-#    - echo $file_yaml_service    
-#    - cat deploy/${file_yaml_service}    
-    - kubectl apply -f deploy/${file_yaml_service}        
-
-# INGRESS
-    - echo "script - INGRESS"
-#    - echo $file_yaml_service    
-    - cat deploy/${file_yaml_ingress}    
-    - kubectl apply -f deploy/${file_yaml_ingress}     
+    echo "CORRECTO" ;
