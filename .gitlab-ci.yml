@@ -8,15 +8,21 @@ Build:
     - echo $imagen_docker  
     - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD"
 
-# URL    
-    - url="URL_""$CI_PROJECT_NAME""_""$CI_COMMIT_BRANCH" ;
-    - echo $url;  
-    - url=$(eval echo $(echo '$'$url)) ;
-    - echo $url;   
+# URL API
+    - url_api="URL_apiecommerce_""$CI_COMMIT_BRANCH" ;
+    - echo $url_api;  
+    - url_api=$(eval echo $(echo '$'$url_api)) ;
+    - echo $url_api;   
+
+# URL SITIO
+    - url_sitio="URL_""$CI_PROJECT_NAME""_""$CI_COMMIT_BRANCH" ;
+    - echo $url_sitio;  
+    - url_sitio=$(eval echo $(echo '$'$url_sitio)) ;
+    - echo $url_sitio;   
 
 #Construccion ENV
 
-    - echo 'API_URL= "$url"' >> build/.env
+    - echo 'API_URL= "$url_api"' >> build/.env
 
   # SELECT master or staging ENV
     - echo "before_script - SELECT master or staging ENV" ;
@@ -63,14 +69,21 @@ Deploy:
     - imagen_docker="$imagen_docker"$(echo ":")"$CI_COMMIT_BRANCH"$(echo "-")"$CI_COMMIT_SHORT_SHA" ;
     - echo $imagen_docker ;
  
-# URL
-    - url="URL_""$CI_PROJECT_NAME""_""$CI_COMMIT_BRANCH" ;
-    - echo $url;        
-#    - url='eval echo $(echo '$'$url)' ;
-    - url=$(eval echo $(echo '$'$url)) ;
-    - echo $url;    
+# URL API
+    - url_api="URL_apiecommerce_""$CI_COMMIT_BRANCH" ;
+    - echo $url_api;  
+    - url_api=$(eval echo $(echo '$'$url_api)) ;
+    - echo $url_api;
+
+# URL SITIO
+    - url_sitio="URL_""$CI_PROJECT_NAME""_""$CI_COMMIT_BRANCH" ;
+    - echo $url_sitio;        
+#    - url_sitio='eval echo $(echo '$'$url_sitio)' ;
+    - url_sitio=$(eval echo $(echo '$'$url_sitio)) ;
+    - echo $url_sitio;    
 
 # SELECT master or staging ENV
+
     - echo "before_script - SELECT master or staging ENV" ;
     - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
         echo "MASTER" ; 
@@ -85,6 +98,8 @@ Deploy:
     - sed -i 's/^/  /g' temp_env ;
     - sed -i 's/=/:\ "/1' temp_env ;
     - sed -i 's/$/"/' temp_env ; 
+
+    - echo '  API_URL: "$url_api"' >> deploy/${file_yaml_secret} ;
     - cat temp_env >> deploy/${file_yaml_secret} ;
 #    - sed -i '4 s/name:\ /&'"$CI_COMMIT_BRANCH"'-/g' deploy/${file_yaml_secret} ;
     - sed -i 's/campo_gitlab_ci/'"$CI_COMMIT_BRANCH"'-'"$CI_PROJECT_NAME"'/g' deploy/${file_yaml_secret} ;      
@@ -105,7 +120,7 @@ Deploy:
     - echo "before_script - INGRESS" ;
     - sed -i 's/campo_gitlab_ci/'"$CI_COMMIT_BRANCH"'-'"$CI_PROJECT_NAME"'/g' deploy/${file_yaml_ingress} ;      
     - sed -i '5 s/namespace:\ /&'"$CI_COMMIT_BRANCH"'/g' deploy/${file_yaml_ingress}    
-    - sed -i 's/URL/'"$url"'/g' deploy/${file_yaml_ingress} ;          
+    - sed -i 's/URL/'"$url_sitio"'/g' deploy/${file_yaml_ingress} ;          
 
   script:
 #    - ls -la deploy    
