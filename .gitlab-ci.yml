@@ -22,7 +22,7 @@ Build:
 
 #Construccion ENV
 
-    - echo 'API_URL= '"$url_api" >> build/.env
+    - echo 'API_URL='"$url_api" >> build/.env
 
   # SELECT master or staging ENV
     - echo "before_script - SELECT master or staging ENV" ;
@@ -137,7 +137,7 @@ Deploy:
 # ENV SECRET
     - echo "script - ENV SECRET"
 #    - echo $file_yaml_secret    
-    - cat deploy/${file_yaml_secret}    
+#    - cat deploy/${file_yaml_secret}    
     - kubectl apply -f deploy/${file_yaml_secret}
     
 # DEPLOYMENT
@@ -162,4 +162,3 @@ Deploy:
     - kubectl -n "$CI_COMMIT_BRANCH" get rs -o json|jq -r '.items[] | select(.spec.replicas | contains(0)) | " \(.metadata.name)"'
     - sleep 40
     - eval $(kubectl -n "$CI_COMMIT_BRANCH" get rs -o json|jq -r '.items[] | select(.spec.replicas | contains(0)) | "kubectl delete rs -n $CI_COMMIT_BRANCH \(.metadata.name)"')    
-#
