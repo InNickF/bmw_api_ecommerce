@@ -28,10 +28,10 @@ Build:
     - echo "before_script - SELECT master or staging ENV" ;
     - if [ "$CI_COMMIT_BRANCH" == "master" ]; then 
         echo "MASTER" ; 
-        cat "$CI_ENV_MASTER" > build/.env ;            
+        cat "$CI_ENV_MASTER" >> build/.env ;            
       else 
         echo "STAGING" ;
-        cat "$CI_ENV_STAGING" > build/.env ;        
+        cat "$CI_ENV_STAGING" >> build/.env ;        
       fi
 
 #    - ls -la 
