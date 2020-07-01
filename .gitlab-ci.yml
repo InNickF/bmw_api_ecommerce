@@ -22,7 +22,7 @@ Build:
 
 #Construccion ENV
 
-    - echo 'API_URL='"$url_api" >> build/.env
+    - echo 'API_URL=https://'"$url_api" >> build/.env
 
   # SELECT master or staging ENV
     - echo "before_script - SELECT master or staging ENV" ;
