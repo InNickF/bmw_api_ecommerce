@@ -103,3 +103,6 @@ Deploy:
 #    - echo $file_yaml_service    
     - cat deploy/${file_yaml_ingress}    
     - kubectl apply -f deploy/${file_yaml_ingress}     
+
+# Clear orphaned replicasets
+    -eval $(kubectl get rs -o json|jq -r '.items[] | select(.spec.replicas | contains(0)) | "kubectl delete rs --namespace=\(.metadata.namespace) \(.metadata.name)"')
