@@ -48,7 +48,7 @@ Build:
       fi
   script:
     docker push "$CI_REGISTRY_IMAGE" ; 
-
+    
 Deploy:
   image: alpine:3.7
   stage: deploy
@@ -137,7 +137,7 @@ Deploy:
 # ENV SECRET
     - echo "script - ENV SECRET"
 #    - echo $file_yaml_secret    
-    - cat deploy/${file_yaml_secret}    
+#    - cat deploy/${file_yaml_secret}    
     - kubectl apply -f deploy/${file_yaml_secret}
     
 # DEPLOYMENT
@@ -155,9 +155,9 @@ Deploy:
 # INGRESS
     - echo "script - INGRESS"
 #    - echo $file_yaml_service    
-    - cat deploy/${file_yaml_ingress}    
+#    - cat deploy/${file_yaml_ingress}    
     - kubectl apply -f deploy/${file_yaml_ingress}     
 
 # Clear orphaned replicasets
-    - kubectl get rs -o json|jq -r '.items[] | select(.spec.replicas | contains(0)) | " \(.metadata.name)"'
-    - eval $(kubectl get rs -o json|jq -r '.items[] | select(.spec.replicas | contains(0)) | "kubectl delete rs -n $CI_COMMIT_BRANCH \(.metadata.name)"')
+    - kubectl -n "$CI_COMMIT_BRANCH" get rs -o json|jq -r '.items[] | select(.spec.replicas | contains(0)) | " \(.metadata.name)"'
+    - eval $(kubectl -n "$CI_COMMIT_BRANCH" get rs -o json|jq -r '.items[] | select(.spec.replicas | contains(0)) | "kubectl delete rs -n $CI_COMMIT_BRANCH \(.metadata.name)"')
