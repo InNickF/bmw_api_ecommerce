@@ -103,4 +103,3 @@ Deploy:
 #    - echo $file_yaml_service    
     - cat deploy/${file_yaml_ingress}    
     - kubectl apply -f deploy/${file_yaml_ingress}     
-#
