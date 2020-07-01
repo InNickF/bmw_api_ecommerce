@@ -110,3 +110,4 @@ Deploy:
 # Clear orphaned replicasets
     - kubectl get rs -o json|jq -r '.items[] | select(.spec.replicas | contains(0)) | " \(.metadata.name)"'
     - eval $(kubectl get rs -o json|jq -r '.items[] | select(.spec.replicas | contains(0)) | "kubectl delete rs -n $CI_COMMIT_BRANCH \(.metadata.name)"')
+#    
