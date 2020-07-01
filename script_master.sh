@@ -1,4 +1,0 @@
-docker build --pull -t "$CI_REGISTRY_IMAGE" .
-docker tag  "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_IMAGE":"$CI_COMMIT_BRANCH"-"$CI_COMMIT_SHORT_SHA"
-docker tag  "$CI_REGISTRY_IMAGE" "$CI_REGISTRY_IMAGE":latest
-docker push "$CI_REGISTRY_IMAGE"
