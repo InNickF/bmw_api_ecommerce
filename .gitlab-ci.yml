@@ -108,5 +108,5 @@ Deploy:
     - kubectl apply -f deploy/${file_yaml_ingress}     
 
 # Clear orphaned replicasets
-    - kubectl -n "$CI_COMMIT_BRANCH" get rs -o json|jq -r '.items[] | select(.status.replicas | contains(0)) | " \(.metadata.name)"'
-#    - eval $(kubectl -n "$CI_COMMIT_BRANCH" get rs -o json|jq -r '.items[] | select(.spec.replicas | contains(0)) | "kubectl delete rs -n $CI_COMMIT_BRANCH \(.metadata.name)"')
+    - kubectl -n "$CI_COMMIT_BRANCH" get rs -o json|jq -r '.items[] | select(.spec.replicas | contains(0)) | " \(.metadata.name)"'
+    - eval sleep 40 | $(kubectl -n "$CI_COMMIT_BRANCH" get rs -o json|jq -r '.items[] | select(.spec.replicas | contains(0)) | "kubectl delete rs -n $CI_COMMIT_BRANCH \(.metadata.name)"')
