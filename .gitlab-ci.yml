@@ -13,6 +13,9 @@ Deploy:
     file_yaml_service: 03-service.yaml      
     file_yaml_ingress: 04-ingress.yaml          
   before_script:
+# Instalar jq
+    - apk update && apk add jq ;
+  
 # IMAGEN DOCKER
     - imagen_docker=$(echo "$CI_REGISTRY_IMAGE" | sed 's/\//\\\//g') ; 
     - imagen_docker="$imagen_docker"$(echo ":")"$CI_COMMIT_BRANCH"$(echo "-")"$CI_COMMIT_SHORT_SHA" ;
