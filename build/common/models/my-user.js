@@ -1,5 +1,6 @@
 import * as Util from "../../server/utils";
 import path from "path";
+import * as requestIp from 'request-ip'
 import { generateHtmlByEmailtemplate } from "../../server/functions/generate-html-by-email-template";
 import { userSucces } from '../../integrations/mail/index';
 import { Mailer } from "../../server/services/mailer";
@@ -13,6 +14,7 @@ module.exports = function (MyUser) {
 
   myUserParam.createUser = async (req) => {
     const { body } = req;
+    const { AuditTerms } = myUserParam.app.models;
 
     let user = null;
     try {
@@ -97,6 +99,12 @@ module.exports = function (MyUser) {
           docType: body.docType,
           identification: body.identification,
         });
+        await AuditTerms.create({
+          ip: requestIp.getClientIp(req),
+          terms: true,
+          userId: user.id,
+          privacy: true
+        })
       } catch (error) {
         throw error;
       }
@@ -104,11 +112,11 @@ module.exports = function (MyUser) {
       let url = {};
       try {
         if (body.brandId === 1) {
-          url.url = "https://bmwmotorradshop.autogermana.com.co/mi-perfil";
+          url.url = "https://staging.bmwmotorradshop.com.co/mi-perfil";
         } else if (body.brandId === 2) {
-          url.url = "https://bmwshop.autogermana.com.co/mi-perfil";
+          url.url = "https://staging.minishop.com.co/mi-perfil";
         } else if (body.brandId === 3) {
-          url.url = "https://minishop.autogermana.com.co/mi-perfil";
+          url.url = "https://staging.bmwshop.com.co/mi-perfil";
         }
       } catch (error) {
         throw error;
@@ -142,13 +150,13 @@ module.exports = function (MyUser) {
           const linkProfile = (brandId) => {
             switch (brandId) {
               case 1:
-                return 'https://bmwshop-autogermana.herokuapp.com/mi-perfil'
+                return 'https://staging.bmwshop.com.co/mi-perfil'
 
               case 2:
-                return 'https://minishop-autogermana.herokuapp.com/mi-perfil'
+                return 'https://staging.minishop.com.co/mi-perfil'
 
               case 3:
-                return 'https://bmwshop-autogermana.herokuapp.com/mi-perfil'
+                return 'https://staging.bmwshop.com.co/mi-perfil'
             }
           }
 
@@ -164,11 +172,23 @@ module.exports = function (MyUser) {
               name: capitalize(user.firstName),
               lastName: capitalize(user.lastName),
               userName: capitalize(user.firstName),
+              phone: "+57" + user.phone,
               urlPerfil: linkProfile(user.brandId),
               email: user.email,
             }
           }))
-
+          console.log({
+            email: user.email,
+            eventName: eventName(user.brandId),
+            attributes: {
+              name: capitalize(user.firstName),
+              lastName: capitalize(user.lastName),
+              userName: capitalize(user.firstName),
+              phone: "+57" + user.phone,
+              urlPerfil: linkProfile(user.brandId),
+              email: user.email,
+            }
+          });
           /* await mailerObject.sendMail([user.email], html, 'Gracias por registrarse!') */
         } catch (error) {
           throw error
