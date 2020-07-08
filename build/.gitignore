@@ -19,3 +19,4 @@ coverage
 npm-debug.log
 package-lock.json
 .file
+.env
