@@ -579,19 +579,17 @@ module.exports = function (Payment) {
         "Confirmacion de pago solo si no tiene antes de generar incadea"
       );
 
-      let incadeaOrder = {
-        orderStatusInstanceFromZV: 10000,
-        respuesta_TSQL: "PVRE-19-100000",
-      };
+      let incadeaOrder;
+
       if (
         orderInstace.incadeaOrderId === "0" &&
         orderInstace.delivery === "0"
       ) {
         console.log("--------------Entro aqui---------------------");
         try {
-          /*  incadeaOrder = await autogermanaIntegration.createdOrder(
-             incadeOrderObj
-           ); */
+          incadeaOrder = await autogermanaIntegration.createdOrder(
+            incadeOrderObj
+          );
 
         } catch (error) {
           throw error;
