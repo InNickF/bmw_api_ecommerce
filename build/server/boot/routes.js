@@ -1120,11 +1120,11 @@ module.exports = app => {
           let url = {}
           try {
             if (user.brandId === 1) {
-              url.url = 'https://staging.bmwmotorradshop.com.co'
+              url.url = 'https://bmwmotorradshop.com.co'
             } else if (user.brandId === 2) {
-              url.url = 'https://staging.bmwshop.com.co'
+              url.url = 'https://bmwshop.com.co'
             } else if (user.brandId === 3) {
-              url.url = 'https://staging.minishop.com.co'
+              url.url = 'https://minishop.com.co'
             }
           } catch (error) {
             throw error
