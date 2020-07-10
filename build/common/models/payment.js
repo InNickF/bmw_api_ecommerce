@@ -583,30 +583,33 @@ module.exports = function (Payment) {
 
       if (
         orderInstace.incadeaOrderId === "0" &&
-        orderInstace.delivery === "0"
+        orderInstace.delivery === "0",
+        orderInstace.orderStatusId != "2"
       ) {
         console.log("--------------Entro aqui---------------------");
+        await orderInstace.updateAttributes({
+          orderStatusId: 2,
+        });
         try {
           incadeaOrder = await autogermanaIntegration.createdOrder(
             incadeOrderObj
           );
-
+          if (incadeaOrder) {
+            try {
+              await orderInstace.updateAttributes({
+                orderStatusId: orderStatusInstanceFromZV.id,
+                incadeaOrderId: incadeaOrder.respuesta_TSQL,
+                sendDate: moment().tz("America/Bogota").format("YYYY-MM-DD"),
+                transactionCode: transactionCode
+              });
+            } catch (error) {
+              throw error;
+            }
+          }
         } catch (error) {
           throw error;
         }
 
-        if (incadeaOrder) {
-          try {
-            await orderInstace.updateAttributes({
-              orderStatusId: orderStatusInstanceFromZV.id,
-              incadeaOrderId: incadeaOrder.respuesta_TSQL,
-              sendDate: moment().tz("America/Bogota").format("YYYY-MM-DD"),
-              transactionCode: transactionCode,
-            });
-          } catch (error) {
-            throw error;
-          }
-        }
       }
 
       // valido
@@ -850,7 +853,7 @@ module.exports = function (Payment) {
       // Ejecuto la integracion
       let responseTcc;
       console.log(orderInstace, incadeaOrder, "final test");
-      if (incadeaOrder) {
+      if (orderInstace && orderInstace.incadeaOrderId != 0) {
         console.log(
           "---- Confirmacion de pago Solo si no tiene --------------"
         );
