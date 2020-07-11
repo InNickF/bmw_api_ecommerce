@@ -1,6 +1,6 @@
 const rp = require('request-promise')
 const urlBase = process.env.AUTO_APP_API_URL
-const urlBasePvre = process.env.AUTO_APP_API_URL_PUVRE
+/* const urlBasePvre = process.env.AUTO_APP_API_URL_PUVRE */
 
 const request = (url = '', body = {}, type = 'GET') => {
   const options = {
@@ -16,7 +16,7 @@ const request = (url = '', body = {}, type = 'GET') => {
   }
   return rp(options)
 }
-const requestPve = (url = '', body = {}, type = 'GET') => {
+/* const requestPve = (url = '', body = {}, type = 'GET') => {
   const options = {
     method: type,
     uri: `${urlBasePvre}${url}`,
@@ -30,7 +30,7 @@ const requestPve = (url = '', body = {}, type = 'GET') => {
     json: true
   }
   return rp(options)
-}
+} */
 
 export const getProducts = (productId) => request(`/PartesEcommerce/1/${productId}/`, null, 'GET')
 

@@ -291,7 +291,7 @@ module.exports = function (Payment) {
   paymentParam.paymentConfirmation = async (req) => {
     const { body } = req;
     const { data, topic } = body;
-    const id = data?.id ? data.id : 0;
+    const id = data && data.id ? data.id : 0;
     let responseMercadoPago = await verificarPago(id);
     console.log(responseMercadoPago, "==========");
 
