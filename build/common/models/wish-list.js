@@ -132,7 +132,7 @@ module.exports = function (Wishlist) {
       }
       console.log(data.attributes.event_items)
       if (productInstances.length > 0) {
-        await wishList(data);
+        /* await wishList(data); */
       }
 
 
@@ -145,6 +145,138 @@ module.exports = function (Wishlist) {
       // } catch (error) {
       //   throw error
       // }
+    }
+  })
+
+  wishlistParam.abandoned = async body => {
+    const {
+      MyUser,
+      Product
+    } = wishlistParam.app.models
+
+    var date = new Date();
+    let orders = null
+    console.log(date, "inicial");
+    date.setDate(date.getDate() - 1.5);
+    try {
+      orders = await wishlistParam.find({
+        where: {
+          updatedAt: { gt: date }
+        }
+      })
+    } catch (error) {
+      throw error
+    }
+    console.log(date)
+
+
+    const eventName = (brandId) => {
+      switch (brandId) {
+        case 1:
+          return 'autorespuesta_motorrad_6_lista_de_deseos'
+
+        case 2:
+          return 'autorespuesta_mini_6_lista_de_deseos'
+
+        case 3:
+          return 'autorespuesta_bmw_6_lista_de_deseos'
+      }
+    }
+
+    const car = await Promise.all(orders.map(async (order) => {
+      try {
+        return {
+          car: await Product.find({
+            where: {
+              id: order.productId
+            }, include: [
+              {
+                relation: 'imageProducts',
+                scope: {
+                  fields: {
+                    image: true
+                  }
+                }
+              },
+            ],
+          }),
+
+          user: await MyUser.findOne({
+            where: {
+              id: order.userId
+            },
+          })
+        }
+      } catch (error) {
+        throw error
+      }
+    })
+    )
+
+    let itemsWishlist = []
+    car.map(item => {
+      if (!itemsWishlist.find(element => element.user.id == item.user.id)) {
+        itemsWishlist.push({ user: item.user, products: item.car })
+      } else {
+        /* itemsWishlist[] */
+        itemsWishlist.find((element, index) => {
+          if (element.user.id == item.user.id) {
+            itemsWishlist[index].products.push(item.car[0])
+          }
+        })
+      }
+    })
+
+
+    await Promise.all(itemsWishlist.map(async (item) => {
+      const data = {
+        email: item.user.email,
+        eventName: eventName(item.user.brandId),
+        attributes: {
+          name: item.user.firstName,
+          lastName: item.user.lastName,
+          event_items: item.products.length > 3 ?
+            await Promise.all(item.products.slice(item.products.length - 3, item.products.length).
+              map(async (product) => {
+                return {
+                  productImage: await product.imageProducts.find()[0].image,
+                  productName: product.name.toUpperCase(),
+                  productPrice: priceFormatter(product.price)
+                }
+              }))
+            :
+            await Promise.all(item.products.map(async (product) => {
+              return {
+                productImage: Array.from(await product.imageProducts.find())[0].image,
+                productName: product.name.toUpperCase(),
+                productPrice: priceFormatter(product.price)
+              }
+            }))
+        }
+      }
+
+      if (item.products.length > 0) {
+        console.log(JSON.stringify(data))
+        await wishList(data);
+      }
+
+    }))
+    /* console.log(itemsWishlist) */
+    return { ok: "abandoned ok" }
+  }
+
+  wishlistParam.remoteMethod('abandoned', {
+    accepts: {
+      arg: 'body',
+      type: 'Object'
+    },
+    http: {
+      verb: 'get',
+      path: '/abandoned'
+    },
+    returns: {
+      arg: 'data',
+      type: 'Object'
     }
   })
 
