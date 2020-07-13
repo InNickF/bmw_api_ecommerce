@@ -172,7 +172,7 @@ module.exports = function (MyUser) {
               name: capitalize(user.firstName),
               lastName: capitalize(user.lastName),
               userName: capitalize(user.firstName),
-              phone: "+57" + user.phone,
+              phone: "57" + user.phone,
               urlPerfil: linkProfile(user.brandId),
               email: user.email,
             }
@@ -184,7 +184,7 @@ module.exports = function (MyUser) {
               name: capitalize(user.firstName),
               lastName: capitalize(user.lastName),
               userName: capitalize(user.firstName),
-              phone: "+57" + user.phone,
+              phone: "57" + user.phone,
               urlPerfil: linkProfile(user.brandId),
               email: user.email,
             }
