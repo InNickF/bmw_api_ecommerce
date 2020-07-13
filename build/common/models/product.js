@@ -2162,7 +2162,10 @@ module.exports = function (Product) {
           });
           if (isAccesory && product.productCategoryId) {
             let accesory = await productParam.updateAll(
-              { sku: product.sku },
+              {
+                sku: product.sku,
+                brandId: product.brandId
+              },
               {
                 price: product.priceWithTax,
                 stock: product.stock,
@@ -2385,7 +2388,10 @@ module.exports = function (Product) {
           });
           if (isAccesory && product.productCategoryId) {
             let accesory = await productParam.updateAll(
-              { sku: product.sku },
+              {
+                sku: product.sku,
+                brandId: product.brandId
+              },
               {
                 price: product.priceWithTax,
                 stock: product.stock,
