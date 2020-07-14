@@ -2233,7 +2233,10 @@ module.exports = function (Product) {
                   vehicleSerieInstance = await VehicleSerie.findOrCreate(
                     {
                       where: {
-                        name: productVarioation.serie,
+                        /* name: productVarioation.serie, */
+                        name: product.brandId == 1
+                          ? productVarioation.class
+                          : productVarioation.serie,
                         brandId: product.brandId,
                       },
                     },

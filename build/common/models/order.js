@@ -242,7 +242,7 @@ module.exports = function (Order, OrderDetail) {
       return product
     }))
 
-    console.log("entro aaqui")
+    /* console.log("entro aaqui") */
     let isTire = true;
     const weightVolume = products.map(item => {
       if (item.productCategoryId != 6142 && item.productCategoryId != 6143) {
@@ -261,8 +261,8 @@ module.exports = function (Order, OrderDetail) {
       }
     })
 
-    console.log(weightVolumeTemp)
-    console.log(weightVolume, "teste")
+    /* console.log(weightVolumeTemp)
+    console.log(weightVolume, "teste") */
 
     const weightVolumeK = (weightVolume / 1000.0).toFixed(3)
     let unidadDeNEgocio = null
@@ -282,7 +282,7 @@ module.exports = function (Order, OrderDetail) {
       }
     }
 
-    console.log(unidadDeNEgocio, total, weightVolumeK)
+    /* console.log(unidadDeNEgocio, total, weightVolumeK) */
     const parameters = {
       Liquidacion: {
         tipoenvio: 1,
@@ -317,7 +317,7 @@ module.exports = function (Order, OrderDetail) {
     // valido
     if (!response.consultarliquidacionResult.idliquidacion) {
       /*  throw returnError(`${response.consultarliquidacionResult.respuesta.codigo}: ${response.consultarliquidacionResult.respuesta.mensaje}`, 500) */
-      console.log(response)
+      /* console.log(response) */
       return parseInt(0)
     }
 

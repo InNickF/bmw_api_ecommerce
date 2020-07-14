@@ -267,7 +267,7 @@ module.exports = function (Payment) {
     const result = {};
     result.payment = payment;
     result.url = payment.init_point;
-    console.log(preferenceMercadoPago.items, "ooooooooo");
+    /* console.log(preferenceMercadoPago.items, "ooooooooo"); */
     result.order = orderInstace;
     return result;
   };
@@ -288,15 +288,28 @@ module.exports = function (Payment) {
     },
   });
 
-  paymentParam.paymentConfirmation = async (req) => {
+  paymentParam.paymentConfirmation = async (req, res, next) => {
     const { body } = req;
     const { data, topic } = body;
     const id = data && data.id ? data.id : 0;
-    let responseMercadoPago = await verificarPago(id);
-    console.log(responseMercadoPago, "==========");
+    let responseMercadoPago;
+    if (id) {
+      try {
+        responseMercadoPago = await verificarPago(id);
+      } catch (error) {
+        res.status(404);
+        console.log(error.response.body.message)
+        return { menssage: error.response.body.message };
+        /* res.status(400).send("unable to update the database") */
+      }
+      /* console.log(responseMercadoPago, "=========="); */
+    } else {
+      console.log("Pin MercadoPago")
+      res.status(404);
+      return { result: "pin" };
+    }
 
     /* const { id_pago: paymentUuid, detalle_estado: detalleEstado, estado_pago: estadoPago } = query */
-
     // busco el pago
     let paymentInstance;
     try {
@@ -495,8 +508,8 @@ module.exports = function (Payment) {
       );
     }
 
+    console.log("Respuesta Aprobado: ", responseMercadoPago.status);
     if (responseMercadoPago.status === "approved") {
-      console.log("Respuesta Aprobado: ", responseMercadoPago.status);
       console.log("debo enviar el correo");
       let parametersVerificarPago = {
         str_id_pago: paymentInstance.uuid,
@@ -523,7 +536,7 @@ module.exports = function (Payment) {
    */ let estadoPagoVerificado =
         responseMercadoPago.status == "approved"
           ? "PAGO_APROBADO"
-          : "PAGO_RECHAZADO";
+          : responseMercadoPago.status == "in_process" ?"PENDIENTE_PAGO": "PAGO_RECHAZADO";
       let idClientePagoVerificado = responseMercadoPago.payer.id;
       let valorPagoVerificado = responseMercadoPago.transaction_amount;
       const transactionCode = responseMercadoPago.id;
@@ -582,12 +595,12 @@ module.exports = function (Payment) {
 
       if (
         orderInstace.incadeaOrderId === "0" &&
-        orderInstace.delivery === "0",
-        orderInstace.orderStatusId != "2"
+        orderInstace.delivery === "0" &&
+        orderInstace.orderStatusId <= 2
       ) {
         console.log("--------------Entro aqui---------------------");
         await orderInstace.updateAttributes({
-          orderStatusId: 2,
+          orderStatusId: orderStatusInstanceFromZV.id,
         });
         try {
           incadeaOrder = await autogermanaIntegration.createdOrder(
@@ -852,19 +865,17 @@ module.exports = function (Payment) {
       // Ejecuto la integracion
       let responseTcc;
       console.log(orderInstace, incadeaOrder, "final test");
-      if (orderInstace && orderInstace.incadeaOrderId != 0) {
+      if (incadeaOrder) {
         console.log(
           "---- Confirmacion de pago Solo si no tiene --------------"
         );
-        console.log(orderInstace);
         try {
           responseTcc = await obtenerValorGrabarRemesa(parameters);
         } catch (error) {
           throw error;
         }
 
-        console.log("Respuesta TCC: ", responseTcc);
-
+        console.log("Respuesta TCC: ");
         if (responseTcc.respuesta === "-1") {
           throw new Error(
             `Algo salio mal creando la remesa para el orden ${orderInstace.id}, en TCC.`
@@ -879,7 +890,7 @@ module.exports = function (Payment) {
           throw error;
         }
 
-        if (incadeaOrder.respuesta_TSQL.split("-")[0] !== "PVRE") {
+        if (incadeaOrder && incadeaOrder.respuesta_TSQL.split("-")[0] !== "PVRE") {
 
           const parametersEmailIncadea = {
             user: userInstance,
@@ -1103,9 +1114,10 @@ module.exports = function (Payment) {
       }
 
       // Actualizo la instancia
+      console.log(orderStatusInstanceFromZV)
       try {
         await orderInstace.updateAttributes({
-          orderStatusId: orderStatusInstanceFromZV.id,
+          orderStatusId: orderStatusInstanceFromZV ? orderStatusInstanceFromZV.id : 1,
         });
       } catch (error) {
         throw error;
@@ -1118,14 +1130,21 @@ module.exports = function (Payment) {
   };
 
   paymentParam.remoteMethod("paymentConfirmation", {
-    accepts: {
+    accepts: [{
       arg: "req",
       type: "Object",
       require: true,
       http: {
         source: "req",
       },
-    },
+    }, {
+      arg: "res",
+      type: "Object",
+      require: true,
+      http: {
+        source: "res",
+      },
+    }],
     http: {
       verb: "post",
       path: "/paymentConfirmation.php",
