@@ -536,7 +536,7 @@ module.exports = function (Payment) {
    */ let estadoPagoVerificado =
         responseMercadoPago.status == "approved"
           ? "PAGO_APROBADO"
-          : responseMercadoPago.status == "in_process" ?"PENDIENTE_PAGO": "PAGO_RECHAZADO";
+          : responseMercadoPago.status == "in_process" ? "PENDIENTE_PAGO" : "PAGO_RECHAZADO";
       let idClientePagoVerificado = responseMercadoPago.payer.id;
       let valorPagoVerificado = responseMercadoPago.transaction_amount;
       const transactionCode = responseMercadoPago.id;
@@ -596,7 +596,9 @@ module.exports = function (Payment) {
       if (
         orderInstace.incadeaOrderId === "0" &&
         orderInstace.delivery === "0" &&
-        orderInstace.orderStatusId <= 2
+        orderInstace.orderStatusId <= 2 &&
+        orderStatusInstanceFromZV &&
+        orderStatusInstanceFromZV.id == 3
       ) {
         console.log("--------------Entro aqui---------------------");
         await orderInstace.updateAttributes({
@@ -890,7 +892,7 @@ module.exports = function (Payment) {
           throw error;
         }
 
-        if (incadeaOrder && incadeaOrder.respuesta_TSQL.split("-")[0] !== "PVRE") {
+        if (orderInstace.incadeaOrderId == 0 && incadeaOrder && incadeaOrder.respuesta_TSQL.split("-")[0] !== "PVRE") {
 
           const parametersEmailIncadea = {
             user: userInstance,
@@ -1033,7 +1035,9 @@ module.exports = function (Payment) {
         //     tiemposEstablecidos
         //   }
         // }
-        console.log(await orderSucces(data2))
+        if (incadeaOrder) {
+          console.log(await orderSucces(data2))
+        }
 
         //await form(data3)
 
