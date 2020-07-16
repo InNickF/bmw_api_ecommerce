@@ -116,7 +116,7 @@ module.exports = function (MyUser) {
         } else if (body.brandId === 2) {
           url.url = "https://minishop.com.co/mi-perfil";
         } else if (body.brandId === 3) {
-          url.url = "https://staging.bmwshop.com.co/mi-perfil";
+          url.url = "https://bmwshop.com.co/mi-perfil";
         }
       } catch (error) {
         throw error;
@@ -150,13 +150,13 @@ module.exports = function (MyUser) {
           const linkProfile = (brandId) => {
             switch (brandId) {
               case 1:
-                return 'https://staging.bmwshop.com.co/mi-perfil'
+                return 'https://bmwshop.com.co/mi-perfil'
 
               case 2:
                 return 'https://minishop.com.co/mi-perfil'
 
               case 3:
-                return 'https://staging.bmwshop.com.co/mi-perfil'
+                return 'https://bmwshop.com.co/mi-perfil'
             }
           }
 

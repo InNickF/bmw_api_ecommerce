@@ -96,19 +96,19 @@ module.exports = function (Payment) {
       back_urls: {
         success:
           orderInstace.brandId == 3
-            ? "https://staging.bmwshop.com.co/payment-confirmation"
+            ? "https://bmwshop.com.co/payment-confirmation"
             : orderInstace.brandId == 2
               ? "https://minishop.com.co/payment-confirmation"
               : "https://bmwshop.com.co/payment-confirmation",
         pending:
           orderInstace.brandId == 3
-            ? "https://staging.bmwshop.com.co/payment-confirmation"
+            ? "https://bmwshop.com.co/payment-confirmation"
             : orderInstace.brandId == 2
               ? "https://minishop.com.co/payment-confirmation"
               : "https://bmwshop.com.co/confirmacion-pago",
         failure:
           orderInstace.brandId == 3
-            ? "https://staging.bmwshop.com.co/payment-confimation?state=failed"
+            ? "https://bmwshop.com.co/payment-confimation?state=failed"
             : orderInstace.brandId == 2
               ? "https://minishop.com.co/payment-confimation?state=failed"
               : "https://bmwshop.com.co/payment-confimation?state=failed",
