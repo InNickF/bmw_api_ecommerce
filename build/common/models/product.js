@@ -1917,6 +1917,7 @@ module.exports = function (Product) {
                 where: {
                   name: product.subCategory,
                   brandId: product.brandId,
+                  parentId: categoryInstance1[0].id
                 },
               },
               {
@@ -2135,7 +2136,7 @@ module.exports = function (Product) {
             categoryInstance2 = await ProductCategory.findOne({
               where: {
                 name: product.subCategory,
-                brandId: product.brandId,
+                brandId: product.brandId
               },
             });
           }
