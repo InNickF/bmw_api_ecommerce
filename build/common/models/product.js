@@ -2605,7 +2605,9 @@ module.exports = function (Product) {
 
       products.map(async product => {
         let temp = product.toJSON()
+        let tempPrice = 0;
         let active = temp.skuVariations.some(temp => {
+          tempPrice = temp.productChildren.price;
           return temp && temp.productChildren && temp.productChildren.stock > 0
         })
         if (active && temp.imageProducts.length > 0) {
@@ -2615,6 +2617,14 @@ module.exports = function (Product) {
               active: true,
             }
           );
+          if (product.price == 0) {
+            await productParam.updateAll(
+              { sku: product.sku },
+              {
+                price: tempPrice,
+              }
+            )
+          }
         }
       })
 
