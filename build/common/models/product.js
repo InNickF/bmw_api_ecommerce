@@ -2412,6 +2412,7 @@ module.exports = function (Product) {
                 type: product.type,
                 color: product.color,
                 hex: product.hex,
+                scale: product.rin,
                 indexRin: product.indexRin,
                 productBrand: product.productBrand,
                 runflat: product.runflat,
@@ -2438,6 +2439,7 @@ module.exports = function (Product) {
               type: product.type,
               color: product.color,
               hex: product.hex,
+              scale: product.rin,
               indexRin: product.indexRin,
               productBrand: product.productBrand,
               runflat: product.runflat,
@@ -2490,7 +2492,7 @@ module.exports = function (Product) {
       */
 
                 // busco el modelo
-                let vehicleModelInstance;
+            /*     let vehicleModelInstance;
                 try {
                   vehicleModelInstance = await VehicleModel.findOrCreate(
                     {
@@ -2506,7 +2508,7 @@ module.exports = function (Product) {
                   );
                 } catch (error) {
                   throw error;
-                }
+                } */
 
                 /*      console.log(vehicleModelInstance)
                    // valido
@@ -2542,7 +2544,7 @@ module.exports = function (Product) {
                   return new Error(`La carroceria ${productVarioation.bodywork}, no existe.`)
                 } */
                 // defino el objeto
-                console.log(vehicleSerieInstance);
+           /*      console.log(vehicleSerieInstance);
                 const productVariationObject = {
                   productId: res.id,
                   vehicleSerieId: 0,
@@ -2551,8 +2553,8 @@ module.exports = function (Product) {
                 };
 
                 console.log("productVariationObject");
-
-                try {
+ */
+  /*               try {
                   await ProductVariation.findOrCreate(
                     {
                       where: productVariationObject,
@@ -2560,15 +2562,15 @@ module.exports = function (Product) {
                     productVariationObject,
                     (err, success) => {
                       if (success) {
-                        /* console.log(success, " bien") */
+                        console.log(success, " bien")
                       } else {
-                        /* console.log(err, " error") */
+                        console.log(err, " error")
                       }
                     }
                   );
                 } catch (error) {
                   return error;
-                }
+                } */
               });
             }
           );
