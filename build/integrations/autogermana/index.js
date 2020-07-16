@@ -46,9 +46,9 @@ export const getVehicle = (body) => request(`/Vehiculos/${body.chassis}`, body, 
 
 export const getReferences = (body) => request(`/PartesVehiculos/${body.id}`, body, 'GET')
 
-export const createdOrder = (body) => requestPve('/pvre', body, 'POST')
+/* export const createdOrder = (body) => requestPve('/pvre', body, 'POST') */
 
-/* export const createdOrder = (body) => request('/CrearPedido', body, 'POST') */
+export const createdOrder = (body) => request('/CrearPedido', body, 'POST')
 
 export const getCategories = () => request('/CategoriasAutogermana', null, 'GET')
 
