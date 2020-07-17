@@ -2159,6 +2159,7 @@ module.exports = function (Product) {
           let isAccesory = await productParam.findOne({
             where: {
               sku: product.sku,
+              brandId: product.brandId
             },
           });
           if (isAccesory && product.productCategoryId) {
@@ -2221,9 +2222,11 @@ module.exports = function (Product) {
           let productInstance = await productParam.upsertWithWhere(
             {
               sku: product.sku,
+              brandId: product.brandId
             },
             {
               sku: product.sku,
+              brandId: product.brandId
             },
             async function (err, res) {
               product.compatibility.map(async (productVarioation) => {
@@ -2315,7 +2318,7 @@ module.exports = function (Product) {
                   return new Error(`La carroceria ${productVarioation.bodywork}, no existe.`)
                 } */
                 // defino el objeto
-                console.log(vehicleSerieInstance);
+                console.log(res);
                 const productVariationObject = {
                   productId: res.id,
                   vehicleSerieId: vehicleSerieInstance[0].id,
