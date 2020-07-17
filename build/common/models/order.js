@@ -219,7 +219,7 @@ module.exports = function (Order, OrderDetail) {
       total = await Promise.all(orderDetailInstances.map(async (item) => {
         let product = await item.product.get()
         console.log(product.productCategoryId)
-        if (product.productCategoryId != 6142 && product.productCategoryId != 6143) {
+        if (product.productCategoryId != 6142 && product.productCategoryId != 6143 && product.productCategoryId != 6141) {
           return item.price * item.quantity
         } else {
           return 0
@@ -245,7 +245,7 @@ module.exports = function (Order, OrderDetail) {
     /* console.log("entro aaqui") */
     let isTire = true;
     const weightVolume = products.map(item => {
-      if (item.productCategoryId != 6142 && item.productCategoryId != 6143) {
+      if (item.productCategoryId != 6142 && item.productCategoryId != 6143 && product.productCategoryId != 6141) {
         isTire = false;
         return item.weightVolume
       } else {
@@ -254,7 +254,7 @@ module.exports = function (Order, OrderDetail) {
     }).reduce((pre, cur) => pre + cur, 0)
 
     const weightVolumeTemp = products.map(item => {
-      if (item.productCategoryId != 6142 && item.productCategoryId != 6143) {
+      if (item.productCategoryId != 6142 && item.productCategoryId != 6143 && product.productCategoryId != 6141) {
         return item.weightVolume
       } else {
 
