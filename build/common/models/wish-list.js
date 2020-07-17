@@ -76,11 +76,11 @@ module.exports = function (Wishlist) {
       let url = {}
       try {
         if (ctx.instance.brandId === 1) {
-          url.url = 'https://bmwshop.com.co/lista-de-deseos'
+          url.url = 'https://staging.bmwmotorradshop.com.co/lista-de-deseos'
         } else if (ctx.instance.brandId === 2) {
-          url.url = 'https://bmwshop.com.co/lista-de-deseos'
+          url.url = 'https://staging.minishop.com.co/lista-de-deseos'
         } else if (ctx.instance.brandId === 3) {
-          url.url = 'https://minishop.com.co/lista-de-deseos'
+          url.url = 'https://staging.bmwshop.com.co/lista-de-deseos'
         }
       } catch (error) {
         throw error
