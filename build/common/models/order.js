@@ -245,7 +245,7 @@ module.exports = function (Order, OrderDetail) {
     /* console.log("entro aaqui") */
     let isTire = true;
     const weightVolume = products.map(item => {
-      if (item.productCategoryId != 6142 && item.productCategoryId != 6143 && product.productCategoryId != 6141) {
+      if (item.productCategoryId != 6142 && item.productCategoryId != 6143 && item.productCategoryId != 6141) {
         isTire = false;
         return item.weightVolume
       } else {
@@ -254,7 +254,7 @@ module.exports = function (Order, OrderDetail) {
     }).reduce((pre, cur) => pre + cur, 0)
 
     const weightVolumeTemp = products.map(item => {
-      if (item.productCategoryId != 6142 && item.productCategoryId != 6143 && product.productCategoryId != 6141) {
+      if (item.productCategoryId != 6142 && item.productCategoryId != 6143 && item.productCategoryId != 6141) {
         return item.weightVolume
       } else {
 
