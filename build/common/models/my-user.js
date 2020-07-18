@@ -112,7 +112,7 @@ module.exports = function (MyUser) {
       let url = {};
       try {
         if (body.brandId === 1) {
-          url.url = "https://staging.bmwmotorradshop.com.co/mi-perfil";
+          url.url = "https://bmwmotorradshop.com.co/mi-perfil";
         } else if (body.brandId === 2) {
           url.url = "https://minishop.com.co/mi-perfil";
         } else if (body.brandId === 3) {
@@ -150,7 +150,7 @@ module.exports = function (MyUser) {
           const linkProfile = (brandId) => {
             switch (brandId) {
               case 1:
-                return 'https://staging.bmwmotorradshop.com.co/mi-perfil'
+                return 'https://bmwmotorradshop.com.co/mi-perfil'
 
               case 2:
                 return 'https://minishop.com.co/mi-perfil'
