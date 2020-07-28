@@ -2496,23 +2496,23 @@ module.exports = function (Product) {
       */
 
                 // busco el modelo
-            /*     let vehicleModelInstance;
-                try {
-                  vehicleModelInstance = await VehicleModel.findOrCreate(
-                    {
-                      where: {
-                        name: productVarioation,
-                        vehicleSerieId: "motorrad",
-                      },
-                    },
-                    {
-                      name: productVarioation,
-                      vehicleSerieId: "motorrad",
-                    }
-                  );
-                } catch (error) {
-                  throw error;
-                } */
+                /*     let vehicleModelInstance;
+                    try {
+                      vehicleModelInstance = await VehicleModel.findOrCreate(
+                        {
+                          where: {
+                            name: productVarioation,
+                            vehicleSerieId: "motorrad",
+                          },
+                        },
+                        {
+                          name: productVarioation,
+                          vehicleSerieId: "motorrad",
+                        }
+                      );
+                    } catch (error) {
+                      throw error;
+                    } */
 
                 /*      console.log(vehicleModelInstance)
                    // valido
@@ -2548,33 +2548,33 @@ module.exports = function (Product) {
                   return new Error(`La carroceria ${productVarioation.bodywork}, no existe.`)
                 } */
                 // defino el objeto
-           /*      console.log(vehicleSerieInstance);
-                const productVariationObject = {
-                  productId: res.id,
-                  vehicleSerieId: 0,
-                  vehicleModelId: vehicleModelInstance[0].id,
-                  vehicleBodyWorkId: 0,
-                };
-
-                console.log("productVariationObject");
- */
-  /*               try {
-                  await ProductVariation.findOrCreate(
-                    {
-                      where: productVariationObject,
-                    },
-                    productVariationObject,
-                    (err, success) => {
-                      if (success) {
-                        console.log(success, " bien")
-                      } else {
-                        console.log(err, " error")
-                      }
-                    }
-                  );
-                } catch (error) {
-                  return error;
-                } */
+                /*      console.log(vehicleSerieInstance);
+                     const productVariationObject = {
+                       productId: res.id,
+                       vehicleSerieId: 0,
+                       vehicleModelId: vehicleModelInstance[0].id,
+                       vehicleBodyWorkId: 0,
+                     };
+     
+                     console.log("productVariationObject");
+      */
+                /*               try {
+                                await ProductVariation.findOrCreate(
+                                  {
+                                    where: productVariationObject,
+                                  },
+                                  productVariationObject,
+                                  (err, success) => {
+                                    if (success) {
+                                      console.log(success, " bien")
+                                    } else {
+                                      console.log(err, " error")
+                                    }
+                                  }
+                                );
+                              } catch (error) {
+                                return error;
+                              } */
               });
             }
           );
@@ -2613,7 +2613,9 @@ module.exports = function (Product) {
         let temp = product.toJSON()
         let tempPrice = 0;
         let active = temp.skuVariations.some(temp => {
-          tempPrice = temp.productChildren.price;
+          if (temp.productChildren.active) {
+            tempPrice = temp.productChildren.price;
+          }
           return temp && temp.productChildren && temp.productChildren.stock > 0
         })
         if (active && temp.imageProducts.length > 0) {
