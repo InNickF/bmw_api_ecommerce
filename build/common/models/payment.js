@@ -203,7 +203,7 @@ module.exports = function (Payment) {
       );
       if (
         orderInstace.codeCouponId &&
-        !orderInstace.couponInstance.isPercentage
+        !couponInstance.isPercentage
       ) {
         preferenceMercadoPago.items.push({
           title: "descuent",
@@ -211,8 +211,8 @@ module.exports = function (Payment) {
           unit_price: parseInt(couponInstance.value * -1),
         });
       } else if (
-        orderInstace.couponInstance &&
-        orderInstace.couponInstance.isPercentage
+        orderInstace.codeCouponId &&
+        couponInstance.isPercentage
       ) {
         preferenceMercadoPago.items.push({
           title: `Descuento con porcentaje de ${couponInstance.discount}`,
@@ -221,7 +221,6 @@ module.exports = function (Payment) {
             ((orderInstace.total * couponInstance.discount) / 100) * -1
           ),
         });
-        console.log(preferenceMercadoPago);
       }
 
       payment = await inicioPago(preferenceMercadoPago);
