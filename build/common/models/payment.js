@@ -96,22 +96,22 @@ module.exports = function (Payment) {
       back_urls: {
         success:
           orderInstace.brandId == 3
-            ? "https://bmwshop.com.co/payment-confirmation"
+            ? "http://staging.bmwshop.com.co/payment-confirmation"
             : orderInstace.brandId == 2
-              ? "https://minishop.com.co/payment-confirmation"
-              : "https://bmwmotorradshop.com.co/payment-confirmation",
+              ? "http://staging.minishop.com.co/payment-confirmation"
+              : "http://staging.bmwmotorradshop.com.co/payment-confirmation",
         pending:
           orderInstace.brandId == 3
-            ? "https://bmwshop.com.co/payment-confirmation"
+            ? "http://staging.bmwshop.com.co/payment-confirmation"
             : orderInstace.brandId == 2
-              ? "https://minishop.com.co/payment-confirmation"
-              : "https://bmwmotorradshop.com.co/confirmacion-pago",
+              ? "http://staging.minishop.com.co/payment-confirmation"
+              : "http://staging.bmwmotorradshop.com.co/confirmacion-pago",
         failure:
           orderInstace.brandId == 3
-            ? "https://bmwshop.com.co/payment-confimation?state=failed"
+            ? "http://staging.bmwshop.com.co/payment-confimation?state=failed"
             : orderInstace.brandId == 2
-              ? "https://minishop.com.co/payment-confimation?state=failed"
-              : "https://bmwmotorradshop.com.co/payment-confimation?state=failed",
+              ? "http://staging.minishop.com.co/payment-confimation?state=failed"
+              : "http://staging.bmwmotorradshop.com.co/payment-confimation?state=failed",
       },
       items: [
         {
