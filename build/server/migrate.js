@@ -67,7 +67,8 @@ const tables = [
   'ProcessLog',
   'SkuVariation',
   'UserCoupon',
-  'AuditTerms'
+  'AuditTerms',
+  'CodeCouponMyUser'
 ];
 
 ds.autoupdate(tables, err => {

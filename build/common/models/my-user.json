@@ -74,6 +74,12 @@
       "type": "belongsTo",
       "model": "Brand",
       "foreignKey": "brandId"
+    },
+    "codeCoupons": {
+      "type": "hasMany",
+      "model": "CodeCoupon",
+      "foreignKey": "myUserId",
+      "through": "CodeCouponMyUser"
     }
   },
   "acls": [],

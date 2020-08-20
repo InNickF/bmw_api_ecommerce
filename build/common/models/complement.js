@@ -12,22 +12,30 @@ module.exports = function (Complement) {
       Product
     } = complementParam.app.models
     let payload = req.body;
-    payload.kit.map(async (item) => {
-      let productInstace = await Product.findOne({
+    payload.forEach(async (item) => {
+      let productInstance = await Product.findOne({
         where: {
           sku: item.sku
         }
       })
-      item.kit.map(async (kit) => {
-        await complementParam.create({
-          productId: productInstace.id,
-          name: kit.name,
-          description: kit.name,
-          price: kit.price,
-          priceWithTax: kit.priceWithTax,
-          amoutn: kit.quanty
+      if(productInstance) {
+        item.kit.forEach(async (kit) => {
+          try {
+            await complementParam.create({
+              sku: kit.sku,
+              code: kit.code ? kit.code : null,
+              productId: productInstance.id,
+              name: kit.name,
+              description: kit.description,
+              price: kit.price,
+              priceWithTax: kit.priceWithTax,
+              amount: kit.quantity
+            })
+          } catch (error) {
+            throw error
+          }
         })
-      })
+      }
     })
     /*  body.kit.map(async (item) => {
        let productInstace = await Product.findOne({
@@ -66,8 +74,7 @@ module.exports = function (Complement) {
             return error
           }
         } */
-
-    return "Ok"
+        return "Ok"
   }
   complementParam.remoteMethod(
     'kitComplements', {
