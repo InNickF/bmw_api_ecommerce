@@ -1,12 +1,12 @@
 import * as requestIp from 'request-ip'
-import { getMissinKeys, returnError } from '../../server/utils'
+import {getMissinKeys, returnError} from '../../server/utils'
 import * as app from '../../server/server'
 import getParameterValue from '../../server/functions/get-parameter-value'
 import moment from 'moment-timezone'
-import { obtenerValorLiquidacion } from '../../integrations/tcc'
+import {obtenerValorLiquidacion} from '../../integrations/tcc'
 import * as autogermanaIntegration from '../../integrations/autogermana'
-import { abandoned } from '../../integrations/mail/index';
-import { priceFormatter } from '../../server/utils'
+import {abandoned} from '../../integrations/mail/index';
+import {priceFormatter} from '../../server/utils'
 
 moment.tz('America/Bogota')
 const integrationZonaPago = require('../../integrations/zona_virtual')
@@ -217,14 +217,14 @@ module.exports = function (Order, OrderDetail) {
     let total
     if (orderDetailInstances.length > 0) {
       total = await Promise.all(orderDetailInstances.map(async (item) => {
-        let product = await item.product.get()
-        console.log(product.productCategoryId)
-        if (product.productCategoryId != 6142 && product.productCategoryId != 6143 && product.productCategoryId != 6141) {
-          return item.price * item.quantity
-        } else {
-          return 0
+          let product = await item.product.get()
+          console.log(product.productCategoryId)
+          if (product.productCategoryId != 6142 && product.productCategoryId != 6143 && product.productCategoryId != 6141) {
+            return item.price * item.quantity
+          } else {
+            return 0
+          }
         }
-      }
       ))
       total = total.reduce((pre, cur) => pre + cur, 0)
     }
@@ -347,7 +347,7 @@ module.exports = function (Order, OrderDetail) {
     response.tccRate = 0
 
     // obtengo los detalles
-    const { details = [] } = parameters
+    const {details = []} = parameters
 
     // calculo el iva y el valor de la orden
     for (const detail of details) {
@@ -356,7 +356,7 @@ module.exports = function (Order, OrderDetail) {
     }
 
     // obtengo la tarifa de tcc
-    const { orderId } = parameters
+    const {orderId} = parameters
     if (orderId) {
       try {
         response.tccRate = await getTccRate(orderId)
@@ -378,7 +378,7 @@ module.exports = function (Order, OrderDetail) {
    */
   const determinateOrderDetails = async (orderId, details) => {
     // Obtengo la orden
-    const { Order } = app.models
+    const {Order} = app.models
     let orderInstance = null
     try {
       orderInstance = await Order.findById(orderId)
@@ -391,9 +391,9 @@ module.exports = function (Order, OrderDetail) {
       throw returnError(`La orden con el id ${orderId}, no existe`, 422)
     }
 
-    const { OrderDetail } = app.models
+    const {OrderDetail} = app.models
     const promises = details.map(async detail => {
-      // Defino el objeto para crear
+      // Defino el objeto para crear7219
       const orderDetailObj = detail
       orderDetailObj.orderId = orderInstance.id
 
@@ -407,6 +407,7 @@ module.exports = function (Order, OrderDetail) {
           }
         }, orderDetailObj)
       } catch (error) {
+        console.log(error)
         throw error
       }
 
@@ -431,7 +432,9 @@ module.exports = function (Order, OrderDetail) {
     // Elimino lo que no este en esos ids
     let detailsFromOrder = await orderInstance.orderDetails.find()
     detailsFromOrder.forEach(async item => {
-      if (!orderDetailIds.includes(item.id)) { await OrderDetail.destroyById(item.id) }
+      if (!orderDetailIds.includes(item.id)) {
+        await OrderDetail.destroyById(item.id)
+      }
     })
 
     return resolvedPromises
@@ -448,10 +451,10 @@ module.exports = function (Order, OrderDetail) {
     }
 
     // obtengo la tienda
-    const { Store } = app.models
+    const {Store} = app.models
     let storeInstance
     try {
-      storeInstance = await Store.findOne({ where: { name: storeCode } })
+      storeInstance = await Store.findOne({where: {name: storeCode}})
     } catch (error) {
       throw error
     }
@@ -477,7 +480,7 @@ module.exports = function (Order, OrderDetail) {
    */
   const determinateOrder = async (userId, addressId, wantRead, clientIp, clientBrowser, brandId) => {
     // Obtengo el usuario
-    const { MyUser } = app.models
+    const {MyUser} = app.models
     let userInstance = null
     try {
       userInstance = await MyUser.findById(userId)
@@ -510,7 +513,7 @@ module.exports = function (Order, OrderDetail) {
     }
 
     // Obtego el estado
-    const { OrderStatus } = app.models
+    const {OrderStatus} = app.models
     let orderStatusInstance = null
     try {
       orderStatusInstance = await OrderStatus.findOne({
@@ -545,7 +548,7 @@ module.exports = function (Order, OrderDetail) {
     }
 
     // Obtengo la orden
-    const { Order } = app.models
+    const {Order} = app.models
     let orderLast = null
     try {
       orderLast = await Order.findOne({
@@ -618,7 +621,7 @@ module.exports = function (Order, OrderDetail) {
         }
         // actualizo el producto
         try {
-          await productInstance.updateAttributes({ intent: productInstance.intent - detailInOrder.quantity })
+          await productInstance.updateAttributes({intent: productInstance.intent - detailInOrder.quantity})
         } catch (error) {
           throw error
         }
@@ -653,7 +656,7 @@ module.exports = function (Order, OrderDetail) {
             } catch (error) {
               throw error
             }
-    
+
             if (orderLastPen.length === 0) {
               popUp = true
               popUpArrayOrders = orderLast
@@ -673,7 +676,7 @@ module.exports = function (Order, OrderDetail) {
     // Obtengo la direccion
     let addressValue = null
     if (addressId) {
-      const { Address } = app.models
+      const {Address} = app.models
       let addressInstance = null
       try {
         addressInstance = await Address.findOne({
@@ -747,10 +750,10 @@ module.exports = function (Order, OrderDetail) {
     }
 
     // obtengo el userId, addressId del objeto que llega como parametro
-    let { userId, addressId } = parameterObj
+    let {userId, addressId} = parameterObj
 
     // Obtengo la variable que indica si se desea consultar
-    const { wantRead, clientIp, clientBrowser, brandId } = parameterObj
+    const {wantRead, clientIp, clientBrowser, brandId} = parameterObj
 
     let orderInstace
     // Valido si el usuario me llega
@@ -824,16 +827,18 @@ module.exports = function (Order, OrderDetail) {
     }
 
     // filtro y curo los detalles
-    const { Product, SkuVariation, ProductCategory, ProductVariation } = app.models
+    const {Product, SkuVariation, ProductCategory, ProductVariation} = app.models
     let noAvaliableProducts = 0
     let productsNumber = 0
     const promises = groupDetails.map(async detail => {
       // obtengo el producto del detalle
-      let productInstance
-      let variation
+      let productInstance;
+      let variation;
+      let precio = 0;
+      let precioSinIva = 0;
       try {
         productInstance = await Product.findById(detail.productId)
-        await SkuVariation.findOne({ where: { productChildrenId: detail.productId } })
+        await SkuVariation.findOne({where: {productChildrenId: detail.productId}})
         /* console.log(await productInstance.skuVariations.find()) */
       } catch (error) {
         return error
@@ -878,31 +883,59 @@ module.exports = function (Order, OrderDetail) {
       // cuento los productos
       productsNumber += detail.quantity
 
+      const producto = JSON.parse(JSON.stringify(productInstance));
+      const today = new Date();
+      const initDis = new Date(producto.initDateDiscount);
+      const endDis = new Date(producto.endDateDiscount);
+      const isDiscountAvalidable = today >= initDis && today <= endDis;
+      precio = precio = Math.round(isDiscountAvalidable
+        ? (producto.calculardescuentos
+          ? Math.round(producto.price - ((producto.price * producto.discountPercentage) / 100))
+          : (producto.price / (1 - (producto.discountPercentage / 100))))
+        : producto.price);
+      precioSinIva = isDiscountAvalidable
+        ? producto.calculardescuentos
+          ? Math.round(producto.priceWithoutTax - ((producto.priceWithoutTax * producto.discountPercentage) / 100))
+          : producto.priceWithoutTax
+        : producto.priceWithoutTax;
+
+
+      /*console.log(producto)
+      if (producto.calculardescuentos && isDiscountAvalidable) {
+        precio = Math.round(producto.priceWithTax - ((producto.priceWithTax * producto.discountPercentage) / 100));
+        precioSinIva = Math.round(producto.priceWithoutTax - ((producto.priceWithoutTax * producto.discountPercentage) / 100));
+      }
+      if (isNaN(precio) || isNaN(precioSinIva)) {
+        console.log(precio, precioSinIva);
+      }*/
+
       // retorno los datos que voy a necesitar para cada detalle
       return {
         quantity: detail.quantity,
         name: productInstance.name,
         size: productInstance.size,
         color: productInstance.color,
-        price: productInstance.priceWithTax,
+        price: precio,
+        priceWithTax: productInstance.price,
         description: productInstance.description,
         image: imageUrl,
-        taxes: productInstance.priceWithTax - productInstance.priceWithoutTax,
+        taxes: precio - precioSinIva,
         sku: productInstance.sku,
         productCategory: await ProductCategory.findById(productInstance.productCategoryId),
-        productVariations: await ProductVariation.find({ where: { productId: productInstance.id } }),
+        productVariations: await ProductVariation.find({where: {productId: productInstance.id}}),
         requiredInstalation: productInstance.installation,
         productId: productInstance.id,
         productStock: productInstance.stock,
-        subTotal: (productInstance.priceWithTax - (productInstance.priceWithTax - productInstance.priceWithoutTax)) * detail.quantity,
-        total: detail.quantity * productInstance.priceWithTax,
+        subTotal: (precio - (precio - precioSinIva)) * detail.quantity,
+        total: detail.quantity * precio,
         createAt: moment().format(),
         updateAt: moment().format(),
         discountPercentage: productInstance.discountPercentage,
         initDateDiscount: productInstance.initDateDiscount,
-        endDateDiscount: productInstance.endDateDiscount
+        endDateDiscount: productInstance.endDateDiscount,
+        calculardescuentos: productInstance.calculardescuentos
       }
-    })
+    });
     const resolvedPromises = await Promise.all(promises)
     let errors = resolvedPromises.filter(item => item instanceof Error)
     // valido
@@ -936,13 +969,14 @@ module.exports = function (Order, OrderDetail) {
     // obtengo los valores de la orden
     let orderValues
     try {
-      orderValues = await getOrderValues({ orderId: orderInstace ? orderInstace.id : null, details: filteredDetails })
+      orderValues = await getOrderValues({orderId: orderInstace ? orderInstace.id : null, details: filteredDetails})
     } catch (error) {
       throw error
     }
 
     // actualizo la orden
     if (orderInstace && !wantRead) {
+      console.log(orderInstace);
       try {
         await orderInstace.updateAttributes({
           total: orderValues ? orderValues.orderValue + orderValues.tccRate : null,
@@ -1038,7 +1072,9 @@ module.exports = function (Order, OrderDetail) {
     obj.clientIp = clientIp
 
     let i = function ip2int(ip) {
-      return ip.split('.').reduce(function (ipInt, octet) { return (ipInt << 8) + parseInt(octet, 10) }, 0) >>> 0;
+      return ip.split('.').reduce(function (ipInt, octet) {
+        return (ipInt << 8) + parseInt(octet, 10)
+      }, 0) >>> 0;
     }
 
     if (!obj.userId) {
@@ -1246,7 +1282,7 @@ module.exports = function (Order, OrderDetail) {
       orders = await orderParam.find({
         where: {
           orderStatusId: 1,
-          updatedAt: { gt: date.setDate(date.getDate() - 1) }
+          updatedAt: {gt: date.setDate(date.getDate() - 1)}
         }
       })
     } catch (error) {
@@ -1254,25 +1290,25 @@ module.exports = function (Order, OrderDetail) {
     }
 
     const car = await Promise.all(orders.map(async (order) => {
-      try {
-        return {
-          car: await OrderDetail.find({
-            where: {
-              orderId: order.id
-            }
-          }),
+        try {
+          return {
+            car: await OrderDetail.find({
+              where: {
+                orderId: order.id
+              }
+            }),
 
-          user: await MyUser.findOne({
-            where: {
-              id: order.userId
-            }
-          })
+            user: await MyUser.findOne({
+              where: {
+                id: order.userId
+              }
+            })
 
+          }
+        } catch (error) {
+          throw error
         }
-      } catch (error) {
-        throw error
-      }
-    })
+      })
     )
 
     const eventName = (brandId) => {
@@ -1303,7 +1339,7 @@ module.exports = function (Order, OrderDetail) {
         eventName: eventName(item.user.brandId),
         attributes: {
           event_items:
-            products
+          products
         }
       }
       if (products.length > 0) {
@@ -1311,7 +1347,7 @@ module.exports = function (Order, OrderDetail) {
       }
     })
 
-    return { ok: "abandoned ok" }
+    return {ok: "abandoned ok"}
   }
 
   orderParam.remoteMethod('abandoned', {

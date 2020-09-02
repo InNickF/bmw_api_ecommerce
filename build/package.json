@@ -13,7 +13,7 @@
     "start": "npm-run-all --parallel start:**",
     "test:full": "npm run lint && NODE_ENV=test ../../node_modules/.bin/mocha --no-deprecation --compilers js:babel-core/register test/**/*.js",
     "test": "npm run lint",
-    "dev": "./node_modules/.bin/nodemon ./server/server.js --config ./nodemon.json",
+    "dev": "env-cmd ./node_modules/.bin/nodemon ./server/server.js --config ./nodemon.json",
     "seed": "babel-node ./server/seeder.js",
     "migrate": "babel-node ./server/migrate.js",
     "migrate:seed": "yarn migrate && yarn seed"
@@ -68,6 +68,7 @@
     "yiwn-slug": "0.0.1"
   },
   "devDependencies": {
+    "env-cmd": "^10.1.0",
     "eslint-config-loopback": "10.0.0",
     "nodemon": "^1.19.4",
     "nsp": "^2.1.0",

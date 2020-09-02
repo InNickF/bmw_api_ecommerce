@@ -18,6 +18,7 @@ function request(path, body = {}, type = 'GET') {
 }
 
 function inicioPago(preference) {
+  console.log(preference)
   return request('https://api.mercadopago.com/checkout/preferences?access_token=', preference, 'POST')
 }
 
