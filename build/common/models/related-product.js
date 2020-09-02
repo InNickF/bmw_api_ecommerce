@@ -18,26 +18,28 @@ module.exports = function (Relatedproduct) {
       Product
     } = relatedproductParam.app.models
     let payload = req.body;
-    payload.complements.map(async (item) => {
+    payload.forEach(async (item) => {
       console.log(item)
-      let productInstace = await Product.findOne({
+      let productInstance = await Product.findOne({
         where: {
           sku: item.sku
         }
       })
-      item.complements.map(async (complement) => {
-        console.log(complement)
-        let productInstaceProduct = await Product.findOne({
-          where: {
-            sku: complement.sku
-          }
+      if (productInstance) {
+        item.complements.forEach(async (complement) => {
+          console.log(complement)
+          let productInstanceProduct = await Product.findOne({
+            where: {
+              sku: complement.sku
+            }
+          })
+          await relatedproductParam.create({
+            relatedProductId: productInstanceProduct.id,
+            productId: productInstance.id
+          })
         })
-        await relatedproductParam.create({
-          relatedProductId: productInstaceProduct.id,
-          productId: productInstace.id
-        })
-      })
-      console.log(productInstace.id)
+        console.log(productInstance.id)
+      }
     })
     return "Ok"
   }

@@ -1123,6 +1123,17 @@ module.exports = function (Order, OrderDetail) {
       MyUser
     } = orderParam.app.models
 
+    let order = null
+    try {
+      order = await orderParam.findOne({
+        where: {
+          id: body.orderId
+        }
+      })
+    } catch (error) {
+      throw error
+    }
+
     let code = null
     try {
       code = await CodeCoupon.findOne({
@@ -1131,17 +1142,25 @@ module.exports = function (Order, OrderDetail) {
           active: true
         }
       })
-    } catch (error) {
-      throw error
-    }
-
-    let order = null
-    try {
-      order = await orderParam.findOne({
-        where: {
-          id: body.orderId
-        }
-      })
+      
+      let usersOwnerOfCouponCode = null;
+      try {
+        usersOwnerOfCouponCode = await code.users.find();
+      } catch (error) {
+        throw error;
+      }
+      if (code && usersOwnerOfCouponCode.length > 0) {
+        let userCanUseCoupon = false;
+        usersOwnerOfCouponCode.forEach(user => {
+            if(user.id == order.userId) {
+                userCanUseCoupon = true              
+            }
+        })
+        code = userCanUseCoupon ? code : null
+        if(!code) {
+          throw new Error('Código no disponible');
+        } 
+      }
     } catch (error) {
       throw error
     }
