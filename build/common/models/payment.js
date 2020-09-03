@@ -270,7 +270,6 @@ module.exports = function (Payment) {
     console.log('-----------------Mercado pago--------------------------')
     return result;
   };
-
   paymentParam.remoteMethod("inicioPago", {
     accepts: {
       arg: "body",
@@ -865,7 +864,7 @@ module.exports = function (Payment) {
 
       // Ejecuto la integracion
       let responseTcc;
-      console.log(ordeVerificarPagorInstace, incadeaOrder, "final test");
+      console.log(orderInstace, incadeaOrder, "final test");
       if (orderInstace && orderInstace.incadeaOrderId != 0) {
         console.log(
           "---- Confirmacion de pago Solo si no tiene --------------"
@@ -1131,7 +1130,6 @@ module.exports = function (Payment) {
 
     return orderInstace;
   };
-
   paymentParam.remoteMethod("paymentConfirmation", {
     accepts: [{
       arg: "req",

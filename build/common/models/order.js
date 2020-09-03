@@ -407,7 +407,7 @@ module.exports = function (Order, OrderDetail) {
           }
         }, orderDetailObj)
       } catch (error) {
-        console.log(error)
+        //console.log(error)
         throw error
       }
 
@@ -915,11 +915,13 @@ module.exports = function (Order, OrderDetail) {
         name: productInstance.name,
         size: productInstance.size,
         color: productInstance.color,
-        price: precio,
+        price: productInstance.price,
         priceWithTax: productInstance.price,
         description: productInstance.description,
         image: imageUrl,
-        taxes: precio - precioSinIva,
+        precio,
+        iva: precio - precioSinIva,
+        taxes: productInstance.price - productInstance.priceWithoutTax,
         sku: productInstance.sku,
         productCategory: await ProductCategory.findById(productInstance.productCategoryId),
         productVariations: await ProductVariation.find({where: {productId: productInstance.id}}),
@@ -976,7 +978,6 @@ module.exports = function (Order, OrderDetail) {
 
     // actualizo la orden
     if (orderInstace && !wantRead) {
-      console.log(orderInstace);
       try {
         await orderInstace.updateAttributes({
           total: orderValues ? orderValues.orderValue + orderValues.tccRate : null,
@@ -1142,7 +1143,7 @@ module.exports = function (Order, OrderDetail) {
           active: true
         }
       })
-      
+
       let usersOwnerOfCouponCode = null;
       try {
         usersOwnerOfCouponCode = await code.users.find();
@@ -1153,13 +1154,13 @@ module.exports = function (Order, OrderDetail) {
         let userCanUseCoupon = false;
         usersOwnerOfCouponCode.forEach(user => {
             if(user.id == order.userId) {
-                userCanUseCoupon = true              
+                userCanUseCoupon = true
             }
         })
         code = userCanUseCoupon ? code : null
         if(!code) {
           throw new Error('Código no disponible');
-        } 
+        }
       }
     } catch (error) {
       throw error
@@ -1343,8 +1344,6 @@ module.exports = function (Order, OrderDetail) {
       }
     }
 
-    console.log(car);
-
     car.map(async (item) => {
       let products = item.car.map(product => {
         return {
@@ -1368,7 +1367,6 @@ module.exports = function (Order, OrderDetail) {
 
     return {ok: "abandoned ok"}
   }
-
   orderParam.remoteMethod('abandoned', {
     accepts: {
       arg: 'body',
