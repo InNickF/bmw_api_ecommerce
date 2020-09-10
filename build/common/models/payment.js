@@ -287,7 +287,9 @@ module.exports = function (Payment) {
   });
 
   paymentParam.paymentConfirmation = async (req, res, next) => {
+    console.log('---------------Confirmacion de pago----------------------')
     const {body} = req;
+    console.log(body);
     const {data, topic} = body;
     const id = data && data.id ? data.id : 0;
     let responseMercadoPago;
@@ -306,6 +308,9 @@ module.exports = function (Payment) {
       res.status(404);
       return {result: "pin"};
     }
+
+    console.log('-----------respuesta mercado pago---------------')
+    console.log(responseMercadoPago);
 
     /* const { id_pago: paymentUuid, detalle_estado: detalleEstado, estado_pago: estadoPago } = query */
     // busco el pago
@@ -409,6 +414,9 @@ module.exports = function (Payment) {
       productInstances.push(productInstance);
     }
 
+    console.log('-------productos del pedido------------------');
+    console.log(productInstances)
+
     let codeCoupon;
     try {
       codeCoupon = await orderInstace.codeCoupon.get();
@@ -448,6 +456,9 @@ module.exports = function (Payment) {
       priceWithoutTax: orderInstace.priceDelivery,
       imageUrl: "tcc.png",
     });
+
+    console.log('----------productos incadea--------------------')
+    console.log(productsToIncadea)
 
     /*    if (orderInstace.codeCouponId) {
          if (!codeCoupon.isPercentage) {
@@ -604,7 +615,10 @@ module.exports = function (Payment) {
           orderStatusId: orderStatusInstanceFromZV.id,
         });
         try {
+          console.log('----------------datos enviados a incadea-----------------')
+          console.log(incadeOrderObj)
           incadeaOrder = await autogermanaIntegration.createdOrder(incadeOrderObj);
+          console.log('-----------------respuesta incadea---------------')
           console.log(incadeaOrder);
           if (incadeaOrder) {
             try {
@@ -890,7 +904,11 @@ module.exports = function (Payment) {
           throw error;
         }
 
-        if (orderInstace.incadeaOrderId == 0 && incadeaOrder && incadeaOrder.respuesta_TSQL.split("-")[0] !== "PVRE") {
+        console.log('Enviar notificacion si incadea no crea el pedido')
+        console.log((orderInstace.incadeaOrderId == 0 && incadeaOrder) || incadeaOrder.respuesta_TSQL.split("-")[0] !== "PVRE")
+
+        // Enviar notificacion si incadea no crea el pedido
+        if ((orderInstace.incadeaOrderId == 0 && incadeaOrder) || incadeaOrder.respuesta_TSQL.split("-")[0] !== "PVRE") {
 
           const parametersEmailIncadea = {
             user: userInstance,
@@ -918,6 +936,7 @@ module.exports = function (Payment) {
               orderIncadeaID: orderInstace.incadeaOrderId,
             },
           };
+          console.log('Enviar reporte error pedido a emblue')
           console.log(await incadeaError(data))
 
           // const htmlIncadea = generateHtmlByEmailtemplate('incadea-error', parametersEmailIncadea)
