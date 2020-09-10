@@ -1,12 +1,13 @@
-import { generateHtmlByEmailtemplate } from "../../server/functions/generate-html-by-email-template";
-import { Mailer } from "../../server/services/mailer";
+import {generateHtmlByEmailtemplate} from "../../server/functions/generate-html-by-email-template";
+import {Mailer} from "../../server/services/mailer";
 import * as autogermanaIntegration from "../../integrations/autogermana";
 // import moment from 'moment'
 import moment from 'moment-timezone'
 import getParameterValue from '../../server/functions/get-parameter-value'
-import { obtenerValorGrabarRemesa } from '../../integrations/tcc'
-import { inicioPago, verificarPago } from '../../integrations/mercadoPago';
-import { priceFormatter } from '../../server/utils'
+import {obtenerValorGrabarRemesa} from '../../integrations/tcc'
+import {inicioPago, verificarPago} from '../../integrations/mercadoPago';
+import {priceFormatter} from '../../server/utils'
+
 moment.tz('America/Bogota')
 const passTcc = process.env.PASSW_TCC
 const integrationZonaPago = require('../../integrations/zona_virtual')
@@ -16,7 +17,7 @@ const idTiendaZonaVirtual = process.env.ZONA_VIRTUAL_API_ID_TIENDA
 const claveZonaVirtual = process.env.ZONA_VIRTUAL_API_CLAVE
 const emailIncadeaError = process.env.EMAIL_INCADEA_ERROR
 const app = require('../../server/server')
-import { incadeaError, orderSucces, form } from '../../integrations/mail/index';
+import {incadeaError, orderSucces, form} from '../../integrations/mail/index';
 
 module.exports = function (Payment) {
   const paymentParam = Payment;
@@ -38,11 +39,13 @@ module.exports = function (Payment) {
 
   // Ver un producto en el servicio y en la base para consultas del front
   paymentParam.inicioPago = async (body) => {
-    const { Order } = paymentParam.app.models;
+    console.log('-----------------Mercado pago--------------------------')
+    console.log(body);
+    const {Order} = paymentParam.app.models;
     // Consulto la orden de compra
     let orderInstace = null;
     try {
-      orderInstace = await Order.findOne({ where: { id: body.orderId } });
+      orderInstace = await Order.findOne({where: {id: body.orderId}});
     } catch (error) {
       throw error;
     }
@@ -96,22 +99,22 @@ module.exports = function (Payment) {
       back_urls: {
         success:
           orderInstace.brandId == 3
-            ? "https://bmwshop.com.co/payment-confirmation"
+            ? "http://staging.bmwshop.com.co/payment-confirmation"
             : orderInstace.brandId == 2
-              ? "https://minishop.com.co/payment-confirmation"
-              : "https://bmwmotorradshop.com.co/payment-confirmation",
+            ? "http://staging.minishop.com.co/payment-confirmation"
+            : "http://staging.bmwmotorradshop.com.co/payment-confirmation",
         pending:
           orderInstace.brandId == 3
-            ? "https://bmwshop.com.co/payment-confirmation"
+            ? "http://staging.bmwshop.com.co/payment-confirmation"
             : orderInstace.brandId == 2
-              ? "https://minishop.com.co/payment-confirmation"
-              : "https://bmwmotorradshop.com.co/confirmacion-pago",
+            ? "http://staging.minishop.com.co/payment-confirmation"
+            : "http://staging.bmwmotorradshop.com.co/confirmacion-pago",
         failure:
           orderInstace.brandId == 3
-            ? "https://bmwshop.com.co/payment-confimation?state=failed"
+            ? "http://staging.bmwshop.com.co/payment-confimation?state=failed"
             : orderInstace.brandId == 2
-              ? "https://minishop.com.co/payment-confimation?state=failed"
-              : "https://bmwmotorradshop.com.co/payment-confimation?state=failed",
+            ? "http://staging.minishop.com.co/payment-confimation?state=failed"
+            : "http://staging.bmwmotorradshop.com.co/payment-confimation?state=failed",
       },
       items: [
         {
@@ -157,7 +160,7 @@ module.exports = function (Payment) {
     let payment = null;
     try {
       let detailInOrder = await orderInstace.orderDetails.find();
-      const { Product } = paymentParam.app.models;
+      const {Product} = paymentParam.app.models;
       const today = new Date();
 
       /*     preferenceMercadoPago.items = preferenceMercadoPago.items.concat(await Promise.all(detailInOrder.map(async (product) => {
@@ -176,6 +179,7 @@ module.exports = function (Payment) {
             }
           }))) */
 
+      let totalOrden = 0 + orderInstace.priceDelivery;
       preferenceMercadoPago.items = preferenceMercadoPago.items.concat(
         await Promise.all(
           detailInOrder.map(async (product) => {
@@ -186,40 +190,34 @@ module.exports = function (Payment) {
             const endDis = new Date(productInstanceOrder.endDateDiscount);
             const isDiscountAvalidable = today >= initDis && today <= endDis;
             const priceAvalidable = isDiscountAvalidable
-              ? productInstanceOrder.price -
-              (productInstanceOrder.price *
-                productInstanceOrder.discountPercentage) /
-              100
+              ? productInstanceOrder.calculardescuentos
+                ? Math.round(productInstanceOrder.price - ((productInstanceOrder.price * productInstanceOrder.discountPercentage) / 100))
+                : productInstanceOrder.price
               : productInstanceOrder.price;
+            totalOrden = totalOrden + (priceAvalidable * product.quantity);
             return {
-              title: product.name,
+              title: `${product.name}${isDiscountAvalidable && productInstanceOrder.calculardescuentos ? ` - (Desc ${productInstanceOrder.discountPercentage}%)` : ''}`,
               description: product.description,
               quantity: product.quantity,
-              unit_price: parseInt(productInstanceOrder.price),
+              unit_price: parseInt(priceAvalidable),
               picture_url: product.image,
             };
           })
         )
       );
-      if (
-        orderInstace.codeCouponId &&
-        !couponInstance.isPercentage
-      ) {
+      console.log(totalOrden);
+      // Aplicar descuentos para el pago
+      if (orderInstace.codeCouponId && !couponInstance.isPercentage) {
         preferenceMercadoPago.items.push({
           title: "descuent",
           quantity: 1,
           unit_price: parseInt(couponInstance.value * -1),
         });
-      } else if (
-        orderInstace.codeCouponId &&
-        couponInstance.isPercentage
-      ) {
+      } else if (orderInstace.codeCouponId && couponInstance.isPercentage) {
         preferenceMercadoPago.items.push({
           title: `Descuento con porcentaje de ${couponInstance.discount}`,
           quantity: 1,
-          unit_price: parseInt(
-            ((orderInstace.total * couponInstance.discount) / 100) * -1
-          ),
+          unit_price: parseInt(((/*orderInstace.total*/ totalOrden * couponInstance.discount) / 100) * -1),
         });
       }
 
@@ -251,7 +249,7 @@ module.exports = function (Payment) {
         } catch (error) {
           throw error
         }
-    
+
         // valido
         if (!orderStatusInstance) {
           throw new Error(`No existe el estado de la orden con el codigo ${orderStatusCode}`)
@@ -268,9 +266,10 @@ module.exports = function (Payment) {
     result.url = payment.init_point;
     /* console.log(preferenceMercadoPago.items, "ooooooooo"); */
     result.order = orderInstace;
+
+    console.log('-----------------Mercado pago--------------------------')
     return result;
   };
-
   paymentParam.remoteMethod("inicioPago", {
     accepts: {
       arg: "body",
@@ -288,8 +287,10 @@ module.exports = function (Payment) {
   });
 
   paymentParam.paymentConfirmation = async (req, res, next) => {
-    const { body } = req;
-    const { data, topic } = body;
+    console.log('---------------Confirmacion de pago----------------------')
+    const {body} = req;
+    console.log(body);
+    const {data, topic} = body;
     const id = data && data.id ? data.id : 0;
     let responseMercadoPago;
     if (id) {
@@ -298,22 +299,25 @@ module.exports = function (Payment) {
       } catch (error) {
         res.status(404);
         console.log(error.response.body.message)
-        return { menssage: error.response.body.message };
+        return {menssage: error.response.body.message};
         /* res.status(400).send("unable to update the database") */
       }
       /* console.log(responseMercadoPago, "=========="); */
     } else {
       console.log("Pin MercadoPago")
       res.status(404);
-      return { result: "pin" };
+      return {result: "pin"};
     }
+
+    console.log('-----------respuesta mercado pago---------------')
+    console.log(responseMercadoPago);
 
     /* const { id_pago: paymentUuid, detalle_estado: detalleEstado, estado_pago: estadoPago } = query */
     // busco el pago
     let paymentInstance;
     try {
       paymentInstance = await paymentParam.findOne({
-        where: { orderId: responseMercadoPago.external_reference },
+        where: {orderId: responseMercadoPago.external_reference},
       });
     } catch (error) {
       throw error;
@@ -329,7 +333,7 @@ module.exports = function (Payment) {
     // encuentro la orden
 
     let orderInstace;
-    const { Order } = paymentParam.app.models;
+    const {Order} = paymentParam.app.models;
     try {
       orderInstace = await Order.findById(
         responseMercadoPago.external_reference
@@ -410,6 +414,9 @@ module.exports = function (Payment) {
       productInstances.push(productInstance);
     }
 
+    console.log('-------productos del pedido------------------');
+    console.log(productInstances)
+
     let codeCoupon;
     try {
       codeCoupon = await orderInstace.codeCoupon.get();
@@ -449,6 +456,9 @@ module.exports = function (Payment) {
       priceWithoutTax: orderInstace.priceDelivery,
       imageUrl: "tcc.png",
     });
+
+    console.log('----------productos incadea--------------------')
+    console.log(productsToIncadea)
 
     /*    if (orderInstace.codeCouponId) {
          if (!codeCoupon.isPercentage) {
@@ -514,7 +524,7 @@ module.exports = function (Payment) {
         str_id_pago: paymentInstance.uuid,
         int_id_tienda: idTiendaZonaVirtual,
         str_id_clave: claveZonaVirtual,
-      }; /* 
+      }; /*
                                                                                                      if (!response.res_pagos_v3[0]) {
                                                                                                        throw new Error('response.res_pagos_v3[0] no existe en response')
                                                                                                      } */ // obtengo el estado del pago verificado
@@ -526,13 +536,14 @@ module.exports = function (Payment) {
          } catch (error) {
            throw error
          }
-   
+
          console.log('response: ', response) */
 
       /*   if (!response.res_pagos_v3) {
           throw new Error('res_pagos_v3 no existe en response')
         }
-   */ let estadoPagoVerificado =
+   */
+      let estadoPagoVerificado =
         responseMercadoPago.status == "approved"
           ? "PAGO_APROBADO"
           : responseMercadoPago.status == "in_process" ? "PENDIENTE_PAGO" : "PAGO_RECHAZADO";
@@ -541,11 +552,11 @@ module.exports = function (Payment) {
       const transactionCode = responseMercadoPago.id;
 
       // obtengo la instancia
-      const { OrderStatus } = app.models;
+      const {OrderStatus} = app.models;
       let orderStatusInstanceFromZV;
       try {
         orderStatusInstanceFromZV = await OrderStatus.findOne({
-          where: { code: estadoPagoVerificado },
+          where: {code: estadoPagoVerificado},
         });
       } catch (error) {
         throw error;
@@ -604,9 +615,11 @@ module.exports = function (Payment) {
           orderStatusId: orderStatusInstanceFromZV.id,
         });
         try {
-          incadeaOrder = await autogermanaIntegration.createdOrder(
-            incadeOrderObj
-          );
+          console.log('----------------datos enviados a incadea-----------------')
+          console.log(incadeOrderObj)
+          incadeaOrder = await autogermanaIntegration.createdOrder(incadeOrderObj);
+          console.log('-----------------respuesta incadea---------------')
+          console.log(incadeaOrder);
           if (incadeaOrder) {
             try {
               await orderInstace.updateAttributes({
@@ -886,12 +899,16 @@ module.exports = function (Payment) {
         // Actualizo la instancia
         try {
           // await orderInstace.updateAttributes({ orderStatusId: orderStatusInstanceFromZV.id, incadeaOrderId: incadeaOrder.respuesta_TSQL, delivery: responseTcc.remesa, transactionCode: transactionCode })
-          await orderInstace.updateAttributes({ delivery: responseTcc.remesa });
+          await orderInstace.updateAttributes({delivery: responseTcc.remesa});
         } catch (error) {
           throw error;
         }
 
-        if (orderInstace.incadeaOrderId == 0 && incadeaOrder && incadeaOrder.respuesta_TSQL.split("-")[0] !== "PVRE") {
+        console.log('Enviar notificacion si incadea no crea el pedido')
+        console.log((orderInstace.incadeaOrderId == 0 && incadeaOrder) || incadeaOrder.respuesta_TSQL.split("-")[0] !== "PVRE")
+
+        // Enviar notificacion si incadea no crea el pedido
+        if ((orderInstace.incadeaOrderId == 0 && incadeaOrder) || incadeaOrder.respuesta_TSQL.split("-")[0] !== "PVRE") {
 
           const parametersEmailIncadea = {
             user: userInstance,
@@ -919,6 +936,7 @@ module.exports = function (Payment) {
               orderIncadeaID: orderInstace.incadeaOrderId,
             },
           };
+          console.log('Enviar reporte error pedido a emblue')
           console.log(await incadeaError(data))
 
           // const htmlIncadea = generateHtmlByEmailtemplate('incadea-error', parametersEmailIncadea)
@@ -960,10 +978,10 @@ module.exports = function (Payment) {
             value: priceFormatter(
               codeCoupon
                 ? codeCoupon.isPercentage
-                  ? ((orderInstace.subtotal * codeCoupon.value) /
-                    (100 - codeCoupon.value)) *
-                  -1
-                  : codeCoupon.value
+                ? ((orderInstace.subtotal * codeCoupon.value) /
+                (100 - codeCoupon.value)) *
+                -1
+                : codeCoupon.value
                 : 0
             ),
           },
@@ -989,10 +1007,10 @@ module.exports = function (Payment) {
             descuentos_envio: priceFormatter(
               codeCoupon
                 ? codeCoupon.isPercentage
-                  ? ((orderInstace.subtotal * codeCoupon.value) /
-                    (100 - codeCoupon.value)) *
-                  -1
-                  : codeCoupon.value
+                ? ((orderInstace.subtotal * codeCoupon.value) /
+                (100 - codeCoupon.value)) *
+                -1
+                : codeCoupon.value
                 : 0
             ),
             subTotal_envio: priceFormatter(orderInstace.subtotal),
@@ -1076,15 +1094,15 @@ module.exports = function (Payment) {
         responseMercadoPago.status === "approved"
           ? "PAGO_APROBADO"
           : responseMercadoPago.status === "in_process"
-            ? "PENDIENTE_PAGO"
-            : "CANCELADA";
+          ? "PENDIENTE_PAGO"
+          : "CANCELADA";
 
       // obtengo la instancia
-      const { OrderStatus } = app.models;
+      const {OrderStatus} = app.models;
       let orderStatusInstanceFromZV;
       try {
         orderStatusInstanceFromZV = await OrderStatus.findOne({
-          where: { paymentPlatformCode: estadoPagoVerificado },
+          where: {paymentPlatformCode: estadoPagoVerificado},
         });
       } catch (error) {
         throw error;
@@ -1131,7 +1149,6 @@ module.exports = function (Payment) {
 
     return orderInstace;
   };
-
   paymentParam.remoteMethod("paymentConfirmation", {
     accepts: [{
       arg: "req",

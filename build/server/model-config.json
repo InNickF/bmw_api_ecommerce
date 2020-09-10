@@ -275,6 +275,10 @@
   "AuditTerms": {
     "dataSource": "db",
     "public": true
+  },
+  "CodeCouponMyUser": {
+    "dataSource": "db",
+    "public": true
   }
 
 }

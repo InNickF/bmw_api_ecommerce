@@ -1,0 +1,34 @@
+{
+  "name": "CodeCouponMyUser",
+  "plural": "coupon-user-relations",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "codeCouponId": {
+      "type": "number",
+      "required": true
+    },
+    "myUserId": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "codeCoupon": {
+      "type": "belongsTo",
+      "model": "CodeCoupon",
+      "foreignKey": "codeCouponId"
+    },
+    "myUsers": {
+      "type": "belongsTo",
+      "model": "MyUser",
+      "foreignKey": "myUserId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

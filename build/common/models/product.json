@@ -168,6 +168,10 @@
     },
     "material": {
       "type": "string"
+    },
+    "calculardescuentos": {
+      "type": "boolean",
+      "default": false
     }
   },
   "validations": [],

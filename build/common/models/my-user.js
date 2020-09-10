@@ -112,11 +112,11 @@ module.exports = function (MyUser) {
       let url = {};
       try {
         if (body.brandId === 1) {
-          url.url = "https://bmwmotorradshop.com.co/mi-perfil";
+          url.url = "http://staging.bmwmotorradshop.com.co/mi-perfil";
         } else if (body.brandId === 2) {
-          url.url = "https://minishop.com.co/mi-perfil";
+          url.url = "http://staging.minishop.com.co/mi-perfil";
         } else if (body.brandId === 3) {
-          url.url = "https://bmwshop.com.co/mi-perfil";
+          url.url = "http://staging.bmwshop.com.co/mi-perfil";
         }
       } catch (error) {
         throw error;
@@ -150,13 +150,13 @@ module.exports = function (MyUser) {
           const linkProfile = (brandId) => {
             switch (brandId) {
               case 1:
-                return 'https://bmwmotorradshop.com.co/mi-perfil'
+                return 'http://staging.bmwmotorradshop.com.co/mi-perfil'
 
               case 2:
-                return 'https://minishop.com.co/mi-perfil'
+                return 'http://staging.minishop.com.co/mi-perfil'
 
               case 3:
-                return 'https://bmwshop.com.co/mi-perfil'
+                return 'http://staging.bmwshop.com.co/mi-perfil'
             }
           }
 

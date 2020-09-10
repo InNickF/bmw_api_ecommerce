@@ -12,6 +12,7 @@ dotenv.config()
 app.start = function () {
   // start the web server
   return app.listen(() => {
+    console.log(process.env.NODE_ENV, process.env.MERCADOPAGO_HOOKS)
     app.emit('started')
     const baseUrl = app.get('url').replace(/\/$/, '')
     console.log('Web server listening at: %s', baseUrl)

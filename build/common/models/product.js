@@ -1,18 +1,19 @@
 import slug from "slug";
 import * as autogermanaIntegration from "../../integrations/autogermana";
 import getParameterValue from "../../server/functions/get-parameter-value";
-import { model } from "../constans/models";
-import { promises } from "dns";
-import { rest } from "loopback";
+import {model} from "../constans/models";
+import {promises} from "dns";
+import {rest} from "loopback";
+
 const integrationMail = require("../../integrations/mail");
 const throat = require("throat");
 const s3tree = require("s3-tree");
 const aws = require("aws-sdk");
 const fs = require("fs");
 
-const s3 = new aws.S3({ apiVersion: "2006-03-01" });
+const s3 = new aws.S3({apiVersion: "2006-03-01"});
 
-const generator = s3tree({ bucket: "autogermana", s3 });
+const generator = s3tree({bucket: "autogermana", s3});
 
 aws.config.update({
   region: process.env.AWS_REGION,
@@ -320,7 +321,7 @@ module.exports = function (Product) {
           };
 
           // encuentro o creo la tienda
-          const { Store } = productParam.app.models;
+          const {Store} = productParam.app.models;
           try {
             await Store.findOrCreate(
               {
@@ -563,7 +564,7 @@ module.exports = function (Product) {
                     sku: children.ReferenciaVariacion,
                     slug: slug(
                       `${children.NombrePadre.toLowerCase()}-${
-                      children.ReferenciaVariacion
+                        children.ReferenciaVariacion
                       }`
                     ),
                     warrantyYear: product.Garantia,
@@ -731,8 +732,9 @@ module.exports = function (Product) {
 
   // Ver un producto en el servicio y en la base para consultas del front
   productParam.getProduct = async function (req, sku) {
+    console.log(sku);
     req.setTimeout(0);
-    const { Store, StoreProduct } = Product.app.models;
+    const {Store, StoreProduct} = Product.app.models;
 
     let product = null;
     try {
@@ -787,7 +789,8 @@ module.exports = function (Product) {
               price: item.PrecioUnitarioIva,
               stock: item.Disponible,
             },
-            () => { }
+            () => {
+            }
           );
         } else {
           await StoreProduct.create(
@@ -799,7 +802,8 @@ module.exports = function (Product) {
               priceWithoutTax: product.PrecioUnitario,
               stock: item.Disponible,
             },
-            () => { }
+            () => {
+            }
           );
         }
       } catch (error) {
@@ -842,7 +846,7 @@ module.exports = function (Product) {
   // Crea los productos de la lista
   productParam.createdProducts = async (req, body) => {
     req.setTimeout(0);
-    const { ProductCategory, VehicleType, Brand } = productParam.app.models;
+    const {ProductCategory, VehicleType, Brand} = productParam.app.models;
 
     let products = [];
     try {
@@ -1087,7 +1091,7 @@ module.exports = function (Product) {
 
   // Buscar producto con motivadores del usuario
   productParam.searchMotivatorProduct = async (body) => {
-    const { MyUser } = productParam.app.models;
+    const {MyUser} = productParam.app.models;
 
     let user;
     try {
@@ -1179,7 +1183,7 @@ module.exports = function (Product) {
 
   // Validar compactibilidad del vehiculo con la parte
   productParam.compatibility = async (body) => {
-    const { Vehicle } = Product.app.models;
+    const {Vehicle} = Product.app.models;
 
     let product = null;
     try {
@@ -1293,7 +1297,7 @@ module.exports = function (Product) {
 
   // Validar compactibilidad del vehiculo con la parte
   productParam.vehicleAvailability = async (req) => {
-    const { body } = req;
+    const {body} = req;
 
     let productInstance = null;
     try {
@@ -1373,7 +1377,7 @@ module.exports = function (Product) {
 
   // Validar compactibilidad de los items con la parte
   productParam.itemsAvailability = async (req) => {
-    const { Order, OrderDetail } = productParam.app.models;
+    const {Order, OrderDetail} = productParam.app.models;
 
     let orderInstance = null;
     try {
@@ -1484,9 +1488,9 @@ module.exports = function (Product) {
 
   // Variacion de color
   productParam.colorVariations = async (req) => {
-    const { body } = req;
+    const {body} = req;
 
-    const { SkuVariation } = productParam.app.models;
+    const {SkuVariation} = productParam.app.models;
 
     let productInstance = null;
     try {
@@ -1524,7 +1528,7 @@ module.exports = function (Product) {
 
       try {
         sizes = await SkuVariation.find({
-          where: { color: item, productId: productInstance.id },
+          where: {color: item, productId: productInstance.id},
         });
       } catch (error) {
         throw error;
@@ -1546,6 +1550,16 @@ module.exports = function (Product) {
           throw error;
         }
 
+        /*const today = new Date();
+        const initDis = new Date(productSku.initDateDiscount);
+        const endDis = new Date(productSku.endDateDiscount);
+        const isDiscountAvalidable = today >= initDis && today <= endDis;
+        const priceAvalidable = Math.round(isDiscountAvalidable
+          ? (productSku.calculardescuentos
+            ? (productSku.price - ((productSku.price * productSku.discountPercentage) / 100))
+            : (productSku.price / (1 - (productSku.discountPercentage / 100))))
+          : productSku.price);*/
+
         const objColorIem = size;
         objColorIem.skuFather = productInstance.sku;
         objColorIem.sku = size.skuChildren;
@@ -1553,9 +1567,11 @@ module.exports = function (Product) {
         objColorIem.stock = productSku.stock;
         objColorIem.images = productSkuImage;
         objColorIem.price = productSku.price;
-        objColorIem.discountPercentage = productSku.discountPercentage;
-        objColorIem.initDateDiscount = productSku.initDateDiscount;
-        objColorIem.endDateDiscount = productSku.endDateDiscount;
+        objColorIem.priceWithTax = productSku.priceWithTax;
+        objColorIem.discountPercentage = /*productSku.calculardescuentos ? null :*/ productSku.discountPercentage;
+        objColorIem.initDateDiscount = /*productSku.calculardescuentos ? null :*/ productSku.initDateDiscount;
+        objColorIem.endDateDiscount = /*productSku.calculardescuentos ? null :*/ productSku.endDateDiscount;
+        objColorIem.calculardescuentos = productSku.calculardescuentos;
         return objColorIem;
       });
 
@@ -1587,7 +1603,6 @@ module.exports = function (Product) {
     result.colorVariations = await Promise.all(arrayProducts);
     return result;
   };
-
   productParam.remoteMethod("colorVariations", {
     description: "Colores y variaciones {sku: 34402240174, id: 1 }",
     accepts: {
@@ -1658,7 +1673,7 @@ module.exports = function (Product) {
 
   // Validar compactibilidad de los items con la parte del resumen de la orden
   productParam.productsAvailability = async (req) => {
-    const { Order, OrderDetail, OrderStatus } = productParam.app.models;
+    const {Order, OrderDetail, OrderStatus} = productParam.app.models;
 
     // Orden
     let orderInstance = null;
@@ -1697,7 +1712,7 @@ module.exports = function (Product) {
       orderInstances = await Order.find({
         where: {
           orderStatusId: orderStatusInstance.id,
-          id: { neq: orderInstance.id },
+          id: {neq: orderInstance.id},
         },
       });
     } catch (error) {
@@ -1768,7 +1783,7 @@ module.exports = function (Product) {
     let productsInstance = null;
     try {
       productsInstance = await productParam.find({
-        where: { totalStock: { gt: 0 } },
+        where: {totalStock: {gt: 0}},
         include: "imageProducts",
       });
     } catch (error) {
@@ -1847,7 +1862,6 @@ module.exports = function (Product) {
     }
     return "Exit 1";
   };
-
   productParam.remoteMethod("discount", {
     accepts: {
       arg: "req",
@@ -1952,7 +1966,7 @@ module.exports = function (Product) {
                 /*     console.log(productInstance); */
                 if (productInstance && isCategory) {
                   let productVariationUdate = await productParam.updateAll(
-                    { sku: productVariation.skuchildren },
+                    {sku: productVariation.skuchildren},
                     {
                       ...productVariation,
                       price: productVariation.priceWithTax,
@@ -2089,7 +2103,7 @@ module.exports = function (Product) {
 
                 if (result != null) {
                   let t = await SkuVariation.updateAll(
-                    { skuChildren: productVariation.skuchildren },
+                    {skuChildren: productVariation.skuchildren},
                     {
                       color: productVariation.color,
                       skuChildren: productVariation.skuchildren,
@@ -2559,7 +2573,7 @@ module.exports = function (Product) {
                        vehicleModelId: vehicleModelInstance[0].id,
                        vehicleBodyWorkId: 0,
                      };
-     
+
                      console.log("productVariationObject");
       */
                 /*               try {
@@ -2624,14 +2638,14 @@ module.exports = function (Product) {
         })
         if (active && temp.imageProducts.length > 0) {
           await productParam.updateAll(
-            { sku: product.sku },
+            {sku: product.sku},
             {
               active: true,
             }
           );
           if (product.price == 0) {
             await productParam.updateAll(
-              { sku: product.sku },
+              {sku: product.sku},
               {
                 price: tempPrice,
               }
@@ -2646,7 +2660,6 @@ module.exports = function (Product) {
 
     return response;
   };
-
   productParam.remoteMethod("ProductsLoad", {
     accepts: {
       arg: "req",

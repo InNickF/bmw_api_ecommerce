@@ -48,8 +48,25 @@
     "userCoupons": {
       "type": "hasMany",
       "model": "UserCoupon"
+    },
+    "users": {
+      "type": "hasMany",
+      "model": "MyUser",
+      "foreignKey": "codeCouponId",
+      "options": {
+        "nestRemoting": true
+      },
+      "through": "CodeCouponMyUser"
     }
   },
-  "acls": [],
-  "methods": {}
-}
+  "scope": {
+    "include": {
+      "relation": "users", 
+      "scope": {
+        "fields": ["id"]
+      }
+    }
+  },
+    "acls": [],
+    "methods": {}
+  }
