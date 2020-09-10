@@ -1,6 +1,7 @@
 const rp = require('request-promise')
 const urlBase = process.env.AUTO_APP_API_URL
 const urlBasePvre = process.env.AUTO_APP_API_URL_PUVRE
+const apiKeyPvre = process.env.AUTO_APP_API_KEY_PUVRE
 
 const request = (url = '', body = {}, type = 'GET') => {
   const options = {
@@ -24,7 +25,7 @@ const requestPve = (url = '', body = {}, type = 'GET') => {
       'Content-Type': 'application/json; charset=utf-8',
       Accept: 'application/json',
       'Accept-language': 'es',
-      'api-key': '1dnv0mI.f7301a8621b088238fed3b23ca09aadbaa80cf9d25f627bf8a353aee'
+      'api-key': apiKeyPvre
     },
     body: body,
     json: true
