@@ -424,25 +424,40 @@ module.exports = function (Payment) {
       throw error;
     }
 
-    const productsToIncadea = productInstances.map((product) => ({
-      id: product.id,
-      sku: product.sku,
-      name: product.name,
-      storeId: orderInstace.storeId,
-      description: product.description,
-      storeName: "ECOMM-BO",
-      quantity: product.quantity,
-      /* priceWithTax: orderInstace.codeCouponId ? codeCoupon.isPercentage ? product.priceWithTax - ((product.priceWithTax * codeCoupon.value) / 100) : product.priceWithTax : product.priceWithTax, */
-      priceWithTax: product.priceWithTax,
-      /* priceWithoutTax: orderInstace.codeCouponId ? codeCoupon.isPercentage ? product.priceWithoutTax - ((product.priceWithoutTax * codeCoupon.value) / 100) : product.priceWithoutTax : product.priceWithoutTax, */
-      priceWithoutTax: product.priceWithoutTax,
-      imageUrl: product.imageUrl,
-      price:
-        product.priceWithTax - (product.priceWithTax - product.priceWithoutTax),
-      color: product.color,
-      size: product.size,
-      isLifeStyle: product.isLifeStyle,
-    }));
+    const productsToIncadea = productInstances.map((product) => {
+
+      const today = new Date();
+      const initDis = new Date(product.initDateDiscount);
+      const endDis = new Date(product.endDateDiscount);
+      const isDiscountAvalidable = today >= initDis && today <= endDis;
+
+      let atributos = {
+        id: product.id,
+        sku: `${product.sku}`,
+        name: product.name,
+        storeId: orderInstace.storeId,
+        description: product.description,
+        storeName: "ECOMM-BO",
+        quantity: product.quantity,
+        /* priceWithTax: orderInstace.codeCouponId ? codeCoupon.isPercentage ? product.priceWithTax - ((product.priceWithTax * codeCoupon.value) / 100) : product.priceWithTax : product.priceWithTax, */
+        priceWithTax: product.priceWithTax,
+        /* priceWithoutTax: orderInstace.codeCouponId ? codeCoupon.isPercentage ? product.priceWithoutTax - ((product.priceWithoutTax * codeCoupon.value) / 100) : product.priceWithoutTax : product.priceWithoutTax, */
+        priceWithoutTax: product.priceWithoutTax,
+        imageUrl: product.imageUrl,
+        price:
+          product.priceWithTax - (product.priceWithTax - product.priceWithoutTax),
+        color: product.color,
+        size: product.size,
+        isLifeStyle: product.isLifeStyle,
+      }
+
+      if (isDiscountAvalidable) {
+        atributos.descuento = product.discountPercentage;
+      }
+
+      return atributos;
+
+    });
 
     // Precio del servicio tcc
     productsToIncadea.push({
