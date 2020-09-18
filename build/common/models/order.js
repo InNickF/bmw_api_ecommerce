@@ -105,7 +105,9 @@ module.exports = function (Order, OrderDetail) {
     }
   })
 
+  let tccRateError;
   const getTccRate = async orderId => {
+    tccRateError = false;
     // obtengo la orden
     let orderInstace
     try {
@@ -312,6 +314,10 @@ module.exports = function (Order, OrderDetail) {
       response = await obtenerValorLiquidacion(parameters)
     } catch (error) {
       response = error
+    }
+    // valido
+    if (response.consultarliquidacionResult.respuesta.codigo === '-1') {
+      tccRateError = true
     }
 
     // valido
@@ -1027,7 +1033,8 @@ module.exports = function (Order, OrderDetail) {
         },
         coupon: couponInstance || null,
         shipping: {
-          TCC: orderValues ? orderValues.tccRate : null
+          TCC: orderValues ? orderValues.tccRate : null,
+          TCCError: tccRateError
         },
         // CUPON
         resultCoupon: couponInstance ? couponInstance.isPercentage ? ((orderValues.orderValue - orderValues.orderIva) * couponInstance.discount) / 100 : couponInstance.value : null
