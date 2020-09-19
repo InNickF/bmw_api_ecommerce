@@ -438,6 +438,7 @@ module.exports = function (Payment) {
         storeId: orderInstace.storeId,
         description: product.description,
         storeName: "ECOMM-BO",
+        calculardescuentos: product.calculardescuentos,
         quantity: product.quantity,
         /* priceWithTax: orderInstace.codeCouponId ? codeCoupon.isPercentage ? product.priceWithTax - ((product.priceWithTax * codeCoupon.value) / 100) : product.priceWithTax : product.priceWithTax, */
         priceWithTax: product.priceWithTax,

@@ -2630,9 +2630,13 @@ module.exports = function (Product) {
       products.map(async product => {
         let temp = product.toJSON()
         let tempPrice = 0;
+        let calculardescuentos = false;
+        let precioSinIva = 0;
         let active = temp.skuVariations.some(temp => {
           if (temp.productChildren.active) {
             tempPrice = temp.productChildren.price;
+            calculardescuentos =temp.productChildren.calculardescuentos;
+            precioSinIva = Math.round(temp.productChildren.price / 1.19)
           }
           return temp && temp.productChildren && temp.productChildren.stock > 0
         })
@@ -2648,6 +2652,9 @@ module.exports = function (Product) {
               {sku: product.sku},
               {
                 price: tempPrice,
+                priceWithTax: tempPrice,
+                priceWithoutTax: precioSinIva,
+                calculardescuentos,
               }
             )
           }
