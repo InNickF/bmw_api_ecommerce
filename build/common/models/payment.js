@@ -921,7 +921,6 @@ module.exports = function (Payment) {
         }
 
         console.log('Enviar notificacion si incadea no crea el pedido')
-        console.log((orderInstace.incadeaOrderId == 0 && incadeaOrder) || incadeaOrder.respuesta_TSQL.split("-")[0] !== "PVRE")
 
         // Enviar notificacion si incadea no crea el pedido
         if ((orderInstace.incadeaOrderId == 0 && incadeaOrder) || incadeaOrder.respuesta_TSQL.split("-")[0] !== "PVRE") {
