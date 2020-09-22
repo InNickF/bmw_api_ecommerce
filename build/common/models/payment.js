@@ -438,6 +438,7 @@ module.exports = function (Payment) {
         storeId: orderInstace.storeId,
         description: product.description,
         storeName: "ECOMM-BO",
+        calculardescuentos: product.calculardescuentos,
         quantity: product.quantity,
         /* priceWithTax: orderInstace.codeCouponId ? codeCoupon.isPercentage ? product.priceWithTax - ((product.priceWithTax * codeCoupon.value) / 100) : product.priceWithTax : product.priceWithTax, */
         priceWithTax: product.priceWithTax,
@@ -920,7 +921,6 @@ module.exports = function (Payment) {
         }
 
         console.log('Enviar notificacion si incadea no crea el pedido')
-        console.log((orderInstace.incadeaOrderId == 0 && incadeaOrder) || incadeaOrder.respuesta_TSQL.split("-")[0] !== "PVRE")
 
         // Enviar notificacion si incadea no crea el pedido
         if ((orderInstace.incadeaOrderId == 0 && incadeaOrder) || incadeaOrder.respuesta_TSQL.split("-")[0] !== "PVRE") {
