@@ -466,6 +466,7 @@ module.exports = function (Payment) {
       sku: "280505001",
       name: "Envio Ecommerce",
       storeId: 1,
+      calculardescuentos: false,
       storeName: "ECOMM-BO",
       quantity: 1,
       priceWithTax: orderInstace.priceDelivery,
@@ -631,8 +632,7 @@ module.exports = function (Payment) {
           orderStatusId: orderStatusInstanceFromZV.id,
         });
         try {
-          console.log('----------------datos enviados a incadea-----------------')
-          console.log(incadeOrderObj)
+          console.log(incadeOrderObj.producto);
           incadeaOrder = await autogermanaIntegration.createdOrder(incadeOrderObj);
           console.log('-----------------respuesta incadea---------------')
           console.log(incadeaOrder);
