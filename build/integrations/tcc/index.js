@@ -87,7 +87,7 @@ export const obtenerValorLiquidacion = async parameters => {
   // ejecuto la integracion
   let result
   try {
-    result = await client.consultarliquidacionAsync(objToSend)
+    result = await client.consultarliquidacion2Async(objToSend)
   } catch (error) {
     throw error
   }

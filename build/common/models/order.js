@@ -272,10 +272,10 @@ module.exports = function (Order, OrderDetail) {
     if (weightVolume == 0 && isTire) {
       return 0
     } else {
-      if (weightVolumeK < 5 && total <= 1185000) {
+      if (weightVolumeK < 5.1 && total <= 3511208) {
         unidadDeNEgocio = 2
         cuentaAut = 5132001
-      } else if (weightVolumeK >= 5 && weightVolumeK < 15.0) {
+      } else if (weightVolumeK >= 5.1 && weightVolumeK < 15.0) {
         unidadDeNEgocio = 1
         cuentaAut = 1759405
       } else {
@@ -316,18 +316,18 @@ module.exports = function (Order, OrderDetail) {
       response = error
     }
     // valido
-    if (response.consultarliquidacionResult.respuesta.codigo === '-1') {
+    if (response.consultarliquidacion2Result.respuesta.codigo === '-1') {
       tccRateError = true
     }
 
     // valido
-    if (!response.consultarliquidacionResult.idliquidacion) {
-      /*  throw returnError(`${response.consultarliquidacionResult.respuesta.codigo}: ${response.consultarliquidacionResult.respuesta.mensaje}`, 500) */
+    if (!response.consultarliquidacion2Result.idliquidacion) {
+      /*  throw returnError(`${response.consultarliquidacion2Result.respuesta.codigo}: ${response.consultarliquidacion2Result.respuesta.mensaje}`, 500) */
       /* console.log(response) */
       return parseInt(0)
     }
 
-    return parseInt(response.consultarliquidacionResult.total.totaldespacho, 0)
+    return parseInt(response.consultarliquidacion2Result.total.totaldespacho, 0)
   }
 
   /**

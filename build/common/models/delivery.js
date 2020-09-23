@@ -183,10 +183,10 @@ module.exports = function (Delivery) {
 
       let unidadDeNEgocio = null
       let cuentaAut = null
-      if (weightVolumeK < 2.4 && total <= 1185000) {
+      if (weightVolumeK < 5.1 && total <= 3511208) {
         unidadDeNEgocio = 2
         cuentaAut = 5132001
-      } else if (weightVolumeK >= 2.5 && weightVolumeK < 15.0) {
+      } else if (weightVolumeK >= 5.1 && weightVolumeK < 15.0) {
         unidadDeNEgocio = 1
         cuentaAut = 1759405
       } else {

@@ -216,9 +216,9 @@ module.exports = app => {
       const weightVolumeK = weightVolume / 1000.0
 
       let unidadDeNEgocio = null
-      if (weightVolumeK < 2.4 && order.total <= 1185000) {
+      if (weightVolumeK < 5.1 && order.total <= 3511208) {
         unidadDeNEgocio = 2
-      } else if (weightVolumeK >= 2.5) {
+      } else if (weightVolumeK >= 5.1) {
         unidadDeNEgocio = 1
       } else {
         unidadDeNEgocio = 1
@@ -793,10 +793,10 @@ module.exports = app => {
 
           let unidadDeNEgocio = null
           let cuentaAut = null
-          if (weightVolumeK < 2.4 && order.total <= 1185000) {
+          if (weightVolumeK < 5.1 && order.total <= 1185000) {
             unidadDeNEgocio = 2
             cuentaAut = 5132001
-          } else if (weightVolumeK >= 2.5 && weightVolumeK < 15.0) {
+          } else if (weightVolumeK >= 5.1 && weightVolumeK < 15.0) {
             unidadDeNEgocio = 1
             cuentaAut = 1759405
           } else {
@@ -1609,10 +1609,10 @@ module.exports = app => {
 
           let unidadDeNEgocio = null
           let cuentaAut = null
-          if (weightVolumeK < 2.4 && order.total <= 1185000) {
+          if (weightVolumeK < 5.1 && order.total <= 3511208) {
             unidadDeNEgocio = 2
             cuentaAut = 5132001
-          } else if (weightVolumeK >= 2.5 && weightVolumeK < 15.0) {
+          } else if (weightVolumeK >= 5.1 && weightVolumeK < 15.0) {
             unidadDeNEgocio = 1
             cuentaAut = 1759405
           } else {
