@@ -1153,12 +1153,12 @@ module.exports = function (Order, OrderDetail) {
       if (code && usersOwnerOfCouponCode.length > 0) {
         let userCanUseCoupon = false;
         usersOwnerOfCouponCode.forEach(user => {
-            if(user.id == order.userId) {
-                userCanUseCoupon = true
-            }
+          if (user.id == order.userId) {
+            userCanUseCoupon = true
+          }
         })
         code = userCanUseCoupon ? code : null
-        if(!code) {
+        if (!code) {
           throw new Error('Código no disponible');
         }
       }
@@ -1346,10 +1346,16 @@ module.exports = function (Order, OrderDetail) {
 
     car.map(async (item) => {
       let products = item.car.map(product => {
+
+        const today = new Date();
+        const initDis = new Date(product.initDateDiscount);
+        const endDis = new Date(product.endDateDiscount);
+        const isDiscountAvalidable = today >= initDis && today <= endDis;
+
         return {
           image: product.image,
           productName: product.name.toUpperCase(),
-          productPrice: priceFormatter(product.price)
+          productPrice: priceFormatter(isDiscountAvalidable ? (product.calculardescuentos ? (product.price - ((product.price * product.discountPercentage) / 100)) : product.price) : product.price)
         }
       })
       const data = {
