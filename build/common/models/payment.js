@@ -1037,7 +1037,7 @@ module.exports = function (Payment) {
               return {
                 nombre_producto: product.name.toUpperCase(),
                 cantidad_producto: product.quantity,
-                precio_producto: priceFormatter((product.calculardescuentos && product.descuento) ? (product.priceWithTax - (product.priceWithTax * product.descuento) / 100) : product.priceWithTax),
+                precio_producto: priceFormatter((product.calculardescuentos && product.descuento) ? Math.round(product.priceWithTax - (product.priceWithTax * product.descuento) / 100) : product.priceWithTax),
               }
 
             }),

@@ -1355,7 +1355,7 @@ module.exports = function (Order, OrderDetail) {
         return {
           image: product.image,
           productName: product.name.toUpperCase(),
-          productPrice: priceFormatter(isDiscountAvalidable ? (product.calculardescuentos ? (product.price - ((product.price * product.discountPercentage) / 100)) : product.price) : product.price)
+          productPrice: priceFormatter(isDiscountAvalidable ? (product.calculardescuentos ? Math.round(product.price - ((product.price * product.discountPercentage) / 100)) : product.price) : product.price)
         }
       })
       const data = {
