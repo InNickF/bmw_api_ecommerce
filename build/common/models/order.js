@@ -1160,12 +1160,12 @@ module.exports = function (Order, OrderDetail) {
       if (code && usersOwnerOfCouponCode.length > 0) {
         let userCanUseCoupon = false;
         usersOwnerOfCouponCode.forEach(user => {
-            if(user.id == order.userId) {
-                userCanUseCoupon = true
-            }
+          if (user.id == order.userId) {
+            userCanUseCoupon = true
+          }
         })
         code = userCanUseCoupon ? code : null
-        if(!code) {
+        if (!code) {
           throw new Error('Código no disponible');
         }
       }
@@ -1300,12 +1300,14 @@ module.exports = function (Order, OrderDetail) {
       CodeCoupon,
       UserCoupon,
       MyUser,
+      Product,
       OrderDetail
     } = orderParam.app.models
 
     var date = new Date();
     let orders = null
     try {
+      console.log(date.setDate(date.getDate() - 1))
       orders = await orderParam.find({
         where: {
           orderStatusId: 1,
@@ -1352,13 +1354,26 @@ module.exports = function (Order, OrderDetail) {
     }
 
     car.map(async (item) => {
-      let products = item.car.map(product => {
+      let products = await Promise.all (item.car.map(async product => {
+
+        const producto = await Product.findOne({
+          where: {
+            sku: product.sku
+          }
+        })
+
+        const today = new Date();
+        const initDis = new Date(product.initDateDiscount);
+        const endDis = new Date(product.endDateDiscount);
+        const isDiscountAvalidable = today >= initDis && today <= endDis;
+
         return {
           image: product.image,
           productName: product.name.toUpperCase(),
-          productPrice: priceFormatter(product.price)
+          productPrice: priceFormatter(isDiscountAvalidable ? (producto.calculardescuentos ? Math.round(producto.price - ((producto.price * producto.discountPercentage) / 100)) : producto.price) : producto.price)
         }
-      })
+      }))
+      console.log(products);
       const data = {
         email: item.user.email,
         eventName: eventName(item.user.brandId),

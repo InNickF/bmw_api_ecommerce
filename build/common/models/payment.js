@@ -1033,11 +1033,14 @@ module.exports = function (Payment) {
             envio: priceFormatter(orderInstace.priceDelivery),
             rastrea_tu_orden: "https://sisenoragencia.com",
             total: priceFormatter(orderInstace.total),
-            event_items: productsToIncadea.map((product) => ({
-              nombre_producto: product.name.toUpperCase(),
-              cantidad_producto: product.quantity,
-              precio_producto: priceFormatter(product.price),
-            })),
+            event_items: productsToIncadea.map((product) => {
+              return {
+                nombre_producto: product.name.toUpperCase(),
+                cantidad_producto: product.quantity,
+                precio_producto: priceFormatter((product.calculardescuentos && product.descuento) ? Math.round(product.priceWithTax - (product.priceWithTax * product.descuento) / 100) : product.priceWithTax),
+              }
+
+            }),
           },
         };
         // const eventName3 = (brandId) => {
