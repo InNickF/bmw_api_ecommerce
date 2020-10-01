@@ -854,28 +854,32 @@ module.exports = function (Order, OrderDetail) {
       if (!productInstance) {
         return new Error(`El producto con el id ${detail.productId}, no existe.`)
       } else {
-        /* let availabilityAutogermana = await autogermanaIntegration.getAvailabilityPrice(
-          productInstance.sku
-        )
-        let partes = await autogermanaIntegration.getProduct(
-          productInstance.sku
-        )
-        productInstance.updateAttributes({
-          price: availabilityAutogermana[0].PrecioUnitarioIVA,
-          stock: availabilityAutogermana[0].Disponible,
-          weightVolume: partes.length > 0 ? partes[0].PesoVolumen : 0,
-          weight: partes.length > 0 ? partes[0].Peso : 0,
-          priceWithTax: availabilityAutogermana[0].PrecioUnitarioIVA,
-          priceWithoutTax: availabilityAutogermana[0].PrecioUnitario
-        }) */
+        if(productInstance.stock <= 10) {
+          console.log('------------- Consulting product availability and updating product instance with AG web service -------------')
+          let availabilityAutogermana = await autogermanaIntegration.getAvailabilityPrice(
+            productInstance.sku
+          )
+          let partes = await autogermanaIntegration.getProduct(
+            productInstance.sku
+          )
+          productInstance = await productInstance.updateAttributes({
+            price: availabilityAutogermana[0].PrecioUnitarioIVA,
+            stock: availabilityAutogermana[0].Disponible,
+            weightVolume: partes.length > 0 ? partes[0].PesoVolumen : 0,
+            weight: partes.length > 0 ? partes[0].Peso : 0,
+            priceWithTax: availabilityAutogermana[0].PrecioUnitarioIVA,
+            priceWithoutTax: availabilityAutogermana[0].PrecioUnitario
+          })
+          console.log('--------- END of: Consulting product availability and updating product instance with AG web service ---------')
+        }
       }
 
       // Valido
-      /*  if (productInstance.priceWithTax < 1 || productInstance.stock < 1 || detail.quantity > productInstance.stock) {
+       if (productInstance.stock < 1 || detail.quantity > productInstance.stock) {
          noAvaliableProducts += 1
          return null
        }
-  */
+
       // obtengo la imagen
       let imageUrl
       try {
