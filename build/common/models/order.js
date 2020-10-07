@@ -870,6 +870,8 @@ module.exports = function (Order, OrderDetail) {
       } else {
         if(productInstance.stock <= minStock) {
           console.log('------------- Consulting product availability and updating product instance with AG web service -------------')
+          console.log(productInstance.sku)
+          console.log('-------------')
           let availabilityAutogermana = await autogermanaIntegration.getAvailabilityPrice(
             productInstance.sku
           )
@@ -885,6 +887,8 @@ module.exports = function (Order, OrderDetail) {
             priceWithoutTax: availabilityAutogermana[0].PrecioUnitario
           })
           console.log('--------- END of: Consulting product availability and updating product instance with AG web service ---------')
+          console.log(productInstance.sku)
+          console.log('-------------')
         }
       }
 
