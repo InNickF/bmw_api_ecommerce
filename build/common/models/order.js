@@ -836,6 +836,20 @@ module.exports = function (Order, OrderDetail) {
     const {Product, SkuVariation, ProductCategory, ProductVariation} = app.models
     let noAvaliableProducts = 0
     let productsNumber = 0
+
+    /* Taking configuration for set the min stock */
+    let minStock;
+    try {
+    const { Config } = app.models;
+    const configKey = 'MIN_STOCK_TO_CHECK';
+    const minStockConfig = await Config.findOne({where: {key: configKey}});
+    minStock = minStockConfig ? JSON.parse(minStockConfig.value) : null;
+    minStock = minStock ? minStock.minStock : 10;
+    } catch (error) {
+      return error
+    }
+    /* End of: Taking configuration for set the min stock */
+
     const promises = groupDetails.map(async detail => {
       // obtengo el producto del detalle
       let productInstance;
@@ -854,7 +868,7 @@ module.exports = function (Order, OrderDetail) {
       if (!productInstance) {
         return new Error(`El producto con el id ${detail.productId}, no existe.`)
       } else {
-        if(productInstance.stock <= 10) {
+        if(productInstance.stock <= minStock) {
           console.log('------------- Consulting product availability and updating product instance with AG web service -------------')
           let availabilityAutogermana = await autogermanaIntegration.getAvailabilityPrice(
             productInstance.sku

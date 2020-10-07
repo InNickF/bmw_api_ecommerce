@@ -9,6 +9,7 @@ const promises = [];
 const User = app.models.MyUser;
 const Role = app.models.Role;
 const RoleMapping = app.models.RoleMapping;
+const Config = app.models.Config
 
 // admin
 promises.push(
@@ -58,6 +59,23 @@ promises.push(
             );
           }
         );
+      }
+    );
+    console.log('Creando configuraciones iniciales...');
+    Config.findOrCreate(
+      {
+        where: {
+          key: 'MIN_STOCK_TO_CHECK'
+        }
+      },
+      {
+        key: 'MIN_STOCK_TO_CHECK',
+        value: `{"minStock": 10}`,
+      },
+      (err, config) => {
+        console.log('Configuración creada.');
+        console.log(config)
+        resolve();
       }
     );
   })

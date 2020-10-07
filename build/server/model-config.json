@@ -279,6 +279,9 @@
   "CodeCouponMyUser": {
     "dataSource": "db",
     "public": true
+  },
+  "Config": {
+    "dataSource": "db",
+    "public": true
   }
-
 }
