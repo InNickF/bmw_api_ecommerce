@@ -16,7 +16,7 @@ const idTiendaZonaVirtual = process.env.ZONA_VIRTUAL_API_ID_TIENDA
 const claveZonaVirtual = process.env.ZONA_VIRTUAL_API_CLAVE
 const passTcc = process.env.PASSW_TCC
 const emailIncadeaError = process.env.EMAIL_INCADEA_ERROR
-import { incadeaError } from '../../integrations/mail/index';
+import { incadeaError, smsOrderOnRoute, smsOrderDelivered } from '../../integrations/mail/index';
 
 module.exports = app => {
   app.use(
@@ -140,9 +140,12 @@ module.exports = app => {
 
   // -----------------------------------------------------------------------
 
-  app.put('/api/order-tracking', async (req, res, next) => {
+  app.get('/api/order-tracking', async (req, res, next) => {
     req.setTimeout(0)
+    console.log('-------------------- order-tracking started ------------------------')
 
+    let countMessagesSended = 0
+    let countOrdersStatusUpdated = 0
     // obtengo los codigos para consultar los estados
     const parameterName = 'CODIGOS_ESTADOS_ORDEN_TRACKING'
     let codesOrderStaus
@@ -212,7 +215,9 @@ module.exports = app => {
         return product
       }))
 
-      const weightVolume = productsVolumes.map(item => item.weightVolume).reduce((pre, cur) => pre + cur, 0)
+      const weightVolume = productsVolumes.map(item => {
+        return item ? item.weightVolume : 0
+      }).reduce((pre, cur) => pre + cur, 0)
       const weightVolumeK = weightVolume / 1000.0
 
       let unidadDeNEgocio = null
@@ -252,8 +257,17 @@ module.exports = app => {
       }
 
       // obtengo el estado de tcc
-      const arrayLength = response.remesasrespuesta.RemesaEstados[0].listaestados.Estado.length
-      const tccStatus = response.remesasrespuesta.RemesaEstados[0].listaestados.Estado[arrayLength - 1].codigo
+      let tccStatus;
+      try {
+        const arrayLength = response.remesasrespuesta.RemesaEstados[0].listaestados.Estado.length
+        tccStatus = response.remesasrespuesta.RemesaEstados[0].listaestados.Estado[arrayLength - 1].codigo
+      } catch (error) {
+        return new Error(`Order: ${order.id}
+         Error:
+         ${error}
+         Response by TCC:
+         ${JSON.stringify(response)}`)
+      }
 
       // obtengo los estados de las ordenes para validar
       let orderStatusesToValidate = []
@@ -273,77 +287,119 @@ module.exports = app => {
         }
       }
 
-      if (orderStatusToUpdate.id === 6) {
-        let userInstance = null
-        try {
-          userInstance = await order.user.get()
-        } catch (error) {
-          throw error
-        }
-
-        const parametersEmailIncadea = {
-          user: userInstance,
-          order: order
-        }
-
-        const htmlIncadea = generateHtmlByEmailtemplate('order-route', parametersEmailIncadea)
-
-        // send the email
-        const mailerObject = new Mailer()
-        try {
-          await mailerObject.sendMail([userInstance.email], htmlIncadea, 'Su orden fue despachada!')
-        } catch (error) {
-          throw error
-        }
-      }
-
-      if (orderStatusToUpdate.id === 7) {
-        let userInstance = null
-        try {
-          userInstance = await order.user.get()
-        } catch (error) {
-          throw error
-        }
-
-        const parametersEmailIncadea = {
-          user: userInstance,
-          order: order
-        }
-
-        const htmlIncadea = generateHtmlByEmailtemplate('order-delivered', parametersEmailIncadea)
-
-        // send the email
-        const mailerObject = new Mailer()
-        try {
-          await mailerObject.sendMail([userInstance.email], htmlIncadea, 'Su orden fue entregada!')
-        } catch (error) {
-          throw error
-        }
-      }
-
       // valido
       if (!orderStatusToUpdate) {
         return new Error(`Para la orden ${order.id}-${order.delivery}, El estado de TCC ${tccStatus}, no se encuentra controlado`)
       }
 
-      // actualizo el estado de la orden
-      try {
-        await order.updateAttributes({ orderStatusId: orderStatusToUpdate.id })
-      } catch (error) {
-        return error
+      if (orderStatusToUpdate.id === 6 && order.orderStatusId !== 6) {
+        let userInstance = null
+        try {
+          userInstance = await order.user.get()
+        } catch (error) {
+          throw error
+        }
+        
+        const smsOrderOnRouteEventName = (brandId) => {
+          switch (brandId) {
+            case 1:
+              return "sms_numero_guia_motorrad";
+
+            case 2:
+              return "sms_numero_guia_mini";
+
+            case 3:
+              return "sms_numero_guia_bmw";
+          }
+        }
+
+        const smsOrderOnRouteData = {
+          email: userInstance.email,
+          eventName: smsOrderOnRouteEventName(userInstance.brandId),
+          attributes: {
+            email: userInstance.email,
+            smsGuideNumber: order.delivery
+          }
+        };
+        // try {
+          // console.log(await smsOrderOnRoute(smsOrderOnRouteData))
+        // } catch (error) {
+          // console.log(error)
+        // }
+        countMessagesSended += 1
+        console.log('------------------ SMS order on Route ------------------------------')
+        console.log(order.id)
+        console.log('--------------------------------------------------------------------')
+
       }
 
-      return true
+      if (orderStatusToUpdate.id === 7 && order.orderStatusId !== 7) {
+        let userInstance = null
+        try {
+          userInstance = await order.user.get()
+        } catch (error) {
+          throw error
+        }
+
+        const smsOrderDeliveredEventName = (brandId) => {
+          switch (brandId) {
+            case 1:
+              return "encuesta_motorrad";
+
+            case 2:
+              return "encuesta_bmw";
+
+            case 3:
+              return "encuesta_bmw";
+          }
+        }
+
+        const smsOrderDeliveredData = {
+          email: userInstance.email,
+          eventName: smsOrderDeliveredEventName(userInstance.brandId),
+          attributes: {
+            email: userInstance.email,
+          }
+        };
+        // try {
+          // console.log(await smsOrderDelivered(smsOrderDeliveredData))
+        // } catch (error) {
+          // console.log(error)
+        // }
+        countMessagesSended += 1
+        console.log('------------------ SMS order delivered -----------------------------')
+        console.log(order.id)
+        console.log('--------------------------------------------------------------------')
+      }
+
+      // actualizo el estado de la orden
+      if (orderStatusToUpdate.id !== order.orderStatusId) {
+        try {
+          // await order.updateAttributes({ orderStatusId: orderStatusToUpdate.id })
+          countOrdersStatusUpdated += 1
+          console.log('--------------------- Order status updated -------------------------')
+          console.log(order.id)
+          console.log('--------------------------------------------------------------------')
+        } catch (error) {
+          return error
+        }
+      }
+      return order
     }))
 
-    const instances = results.filter(item => !(item instanceof Error)).map(item => item.sku)
-    const erros = results.filter(item => item instanceof Error).map(item => item.message)
+    const instances = results.filter(item => !(item instanceof Error)).map(item => item.id)
+    const errors = results.filter(item => item instanceof Error).map(error => error.message)
 
     const response = {
-      processed: instances.length,
-      erros
+      messagesStatus: countMessagesSended ? `${countMessagesSended} message(s) was sended` : 'Any message was sended',
+      ordersStatus: countOrdersStatusUpdated ? `${countOrdersStatusUpdated} order(s) status was updated` : 'Any order status was updated',
+      ordersProcessed: instances,
+      errors
     }
 
+    countMessagesSended ? console.log(`${countMessagesSended} message(s) was sended`) : console.log('Any message was sended')
+    countOrdersStatusUpdated ? console.log(`${countOrdersStatusUpdated} order(s) status was updated`) : console.log('Any order status was updated')
+    console.log('-------------------- order-tracking finished -----------------------')
     return res.status(200).send(response)
   })
 

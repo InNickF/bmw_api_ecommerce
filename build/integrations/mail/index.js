@@ -207,6 +207,14 @@ function abandoned(data) {
   return request(data, 'POST')
 }
 
+function smsOrderOnRoute(data) {
+  return request(data, 'POST')
+}
+
+function smsOrderDelivered(data) {
+  return request(data, 'POST')
+}
+
 module.exports = {
   suscriptorMail,
   articleMail,
@@ -223,5 +231,7 @@ module.exports = {
   orderSucces,
   form,
   userSucces,
-  abandoned
+  abandoned,
+  smsOrderDelivered,
+  smsOrderOnRoute
 }
