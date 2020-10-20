@@ -895,7 +895,8 @@ module.exports = function (Payment) {
       // Ejecuto la integracion
       let responseTcc;
       console.log(orderInstace, incadeaOrder, "final test");
-      if (orderInstace && orderInstace.incadeaOrderId != 0) {
+      if ((orderInstace && orderInstace.incadeaOrderId != 0 && !orderInstace.delivery) ||
+        (orderInstace && orderInstace.incadeaOrderId != 0 && orderInstace.delivery === '0')) {
         console.log(
           "---- Confirmacion de pago Solo si no tiene --------------"
         );

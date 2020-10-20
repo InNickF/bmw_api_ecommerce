@@ -266,7 +266,9 @@ module.exports = app => {
          Error:
          ${error}
          Response by TCC:
-         ${JSON.stringify(response)}`)
+         ${JSON.stringify(response)}
+         Parameters: ${JSON.stringify(parameters)}
+         `)
       }
 
       // obtengo los estados de las ordenes para validar
