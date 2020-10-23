@@ -146,6 +146,7 @@ module.exports = app => {
 
     let countMessagesSended = 0
     let countOrdersStatusUpdated = 0
+    let ordersWasUpdatedToCancelled = 0
     // obtengo los codigos para consultar los estados
     const parameterName = 'CODIGOS_ESTADOS_ORDEN_TRACKING'
     let codesOrderStaus
@@ -172,6 +173,20 @@ module.exports = app => {
       ordersToValidate = await Order.find({ where: { orderStatusId: { inq: orderStatusIds } } })
     } catch (error) {
       return next(error)
+    }
+
+    let minDaysToCancelOrderOnTCCError;
+    let statusCancelledId;
+    try {
+      const { Config } = app.models;
+      const configKey = 'MIN_DAYS_TO_CANCEL_ORDER_ON_TCC_ERROR';
+      const minDaysConfig = await Config.findOne({ where: { key: configKey } });
+      minDaysToCancelOrderOnTCCError = minDaysConfig ? JSON.parse(minDaysConfig.value) : null;
+      minDaysToCancelOrderOnTCCError = minDaysToCancelOrderOnTCCError ? minDaysToCancelOrderOnTCCError.minDays : -10;
+      const statusCancelled = await OrderStatus.findOne({ where: { code: 'CANCELADA' } })
+      statusCancelledId = statusCancelled.id
+    } catch (error) {
+      return error
     }
 
     const results = await Promise.all(ordersToValidate.map(async order => {
@@ -258,16 +273,36 @@ module.exports = app => {
 
       // obtengo el estado de tcc
       let tccStatus;
+      let difference;
       try {
         const arrayLength = response.remesasrespuesta.RemesaEstados[0].listaestados.Estado.length
         tccStatus = response.remesasrespuesta.RemesaEstados[0].listaestados.Estado[arrayLength - 1].codigo
       } catch (error) {
+        let wasUpdated = false;
+        if (order.sendDate) {
+          // Verify if we need to updated to cancelled this order
+          let sendDate = moment(order.sendDate, "YYYY-MM-DD HH:mm:ss");
+          let today = moment().format("YYYY-MM-DD HH:mm:ss");
+          difference = sendDate.diff(today, "days");
+          if (difference < minDaysToCancelOrderOnTCCError) {
+            ordersWasUpdatedToCancelled += 1
+            console.log(difference);
+            // await order.updateAttributes({ orderStatusId: statusCancelledId })
+            console.log('---------------- Order updated to status cancelled ----------------')
+            console.log(order.id)
+            console.log('--------------------------------------------------------------------')
+            wasUpdated = true
+          }
+        }
+
         return new Error(`Order: ${order.id}
          Error:
          ${error}
          Response by TCC:
          ${JSON.stringify(response)}
          Parameters: ${JSON.stringify(parameters)}
+         ${wasUpdated ? 'This order was updated to status cancelled' : 'This order was not updated to status cancelled'}
+         ${difference ? `Difference after send day is: ${difference}` : `This order don't have send date.`}
          `)
       }
 
@@ -301,7 +336,7 @@ module.exports = app => {
         } catch (error) {
           throw error
         }
-        
+
         const smsOrderOnRouteEventName = (brandId) => {
           switch (brandId) {
             case 1:
@@ -381,6 +416,7 @@ module.exports = app => {
           countOrdersStatusUpdated += 1
           console.log('--------------------- Order status updated -------------------------')
           console.log(order.id)
+          console.log(orderStatusToUpdate.code)
           console.log('--------------------------------------------------------------------')
         } catch (error) {
           return error
@@ -393,10 +429,12 @@ module.exports = app => {
     const errors = results.filter(item => item instanceof Error).map(error => error.message)
 
     const response = {
-      messagesStatus: countMessagesSended ? `${countMessagesSended} message(s) was sended` : 'Any message was sended',
-      ordersStatus: countOrdersStatusUpdated ? `${countOrdersStatusUpdated} order(s) status was updated` : 'Any order status was updated',
-      ordersProcessed: instances,
-      errors
+      messagesStatus: countMessagesSended ? `${countMessagesSended} message(s) was sended` : 'No messages were sent',
+      ordersStatus: countOrdersStatusUpdated ? `${countOrdersStatusUpdated} order(s) status was updated` : 'No orders status were update',
+      orderStatusUpdatedToCancelled: ordersWasUpdatedToCancelled ? `${ordersWasUpdatedToCancelled} order(s) was updated to cancelled` : 'No orders were updated to status cancelled',
+      ordersProcessed: instances ? instances : 'No orders were processed',
+      errorsQuantity: errors.length,
+      errors: errors ? errors : 'No errors were throw'
     }
 
     countMessagesSended ? console.log(`${countMessagesSended} message(s) was sended`) : console.log('Any message was sended')
