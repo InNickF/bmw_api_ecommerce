@@ -48,6 +48,9 @@
     "provider": {
       "type": "string"
     },
+    "taxPayer": {
+      "type": "string"
+    },
     "brandId": {
       "type": "number",
       "required": true,

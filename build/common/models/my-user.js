@@ -4,7 +4,7 @@ import * as requestIp from 'request-ip'
 import { generateHtmlByEmailtemplate } from "../../server/functions/generate-html-by-email-template";
 import { userSucces } from '../../integrations/mail/index';
 import { Mailer } from "../../server/services/mailer";
-
+import moment from 'moment'
 import { uploadFile } from "../../server/functions/upload-file";
 
 const Auth = require("../../server/services/auth");
@@ -294,7 +294,9 @@ module.exports = function (MyUser) {
             firstName: body.firstName,
             docType: body.docType,
             phone: body.phone,
+            birth: body.birth ? body.birth : null, 
             identification: body.identification,
+            taxPayer: body.taxPayer,
           });
         } catch (error) {
           throw error;
@@ -322,6 +324,7 @@ module.exports = function (MyUser) {
               email: body.email,
               phone: body.phone,
               identification: body.identification,
+              taxPayer: body.taxPayer,
             });
           } catch (error) {
             throw error;
