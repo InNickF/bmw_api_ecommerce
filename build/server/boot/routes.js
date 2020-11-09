@@ -358,11 +358,11 @@ module.exports = app => {
             smsGuideNumber: order.delivery
           }
         };
-        // try {
-          // console.log(await smsOrderOnRoute(smsOrderOnRouteData))
-        // } catch (error) {
-          // console.log(error)
-        // }
+        try {
+          console.log(await smsOrderOnRoute(smsOrderOnRouteData))
+        } catch (error) {
+          console.log(error)
+        }
         countMessagesSended += 1
         console.log('------------------ SMS order on Route ------------------------------')
         console.log(order.id)
@@ -398,11 +398,11 @@ module.exports = app => {
             email: userInstance.email,
           }
         };
-        // try {
-          // console.log(await smsOrderDelivered(smsOrderDeliveredData))
-        // } catch (error) {
-          // console.log(error)
-        // }
+        try {
+          console.log(await smsOrderDelivered(smsOrderDeliveredData))
+        } catch (error) {
+          console.log(error)
+        }
         countMessagesSended += 1
         console.log('------------------ SMS order delivered -----------------------------')
         console.log(order.id)
