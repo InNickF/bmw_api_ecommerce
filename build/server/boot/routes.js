@@ -287,7 +287,7 @@ module.exports = app => {
           if (difference < minDaysToCancelOrderOnTCCError) {
             ordersWasUpdatedToCancelled += 1
             console.log(difference);
-            // await order.updateAttributes({ orderStatusId: statusCancelledId })
+            await order.updateAttributes({ orderStatusId: statusCancelledId })
             console.log('---------------- Order updated to status cancelled ----------------')
             console.log(order.id)
             console.log('--------------------------------------------------------------------')
@@ -412,7 +412,7 @@ module.exports = app => {
       // actualizo el estado de la orden
       if (orderStatusToUpdate.id !== order.orderStatusId) {
         try {
-          // await order.updateAttributes({ orderStatusId: orderStatusToUpdate.id })
+          await order.updateAttributes({ orderStatusId: orderStatusToUpdate.id })
           countOrdersStatusUpdated += 1
           console.log('--------------------- Order status updated -------------------------')
           console.log(order.id)
