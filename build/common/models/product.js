@@ -2600,7 +2600,7 @@ module.exports = function (Product) {
         })
       );
     } else {
-
+      let newFathers = []
       let products = await productParam.find({
         where: {
           isFather: true,
@@ -2627,19 +2627,21 @@ module.exports = function (Product) {
         ],
       });
 
-      products.map(async product => {
+      let productsProcessed = await Promise.all(products.map(async product => {
         let temp = product.toJSON()
         let tempPrice = 0;
         let calculardescuentos = false;
         let precioSinIva = 0;
-        let active = temp.skuVariations.some(temp => {
+        let productChildrenActive = temp.skuVariations.find(temp => {
           if (temp.productChildren.active) {
             tempPrice = temp.productChildren.price;
-            calculardescuentos =temp.productChildren.calculardescuentos;
+            calculardescuentos = temp.productChildren.calculardescuentos;
             precioSinIva = Math.round(temp.productChildren.price / 1.19)
           }
-          return temp && temp.productChildren && temp.productChildren.stock > 0
+          return temp && temp.productChildren && temp.productChildren.stock > 0 && temp.productChildren.active
         })
+        let active = productChildrenActive ? true : false;
+
         if (active && temp.imageProducts.length > 0) {
           await productParam.updateAll(
             {sku: product.sku},
@@ -2659,10 +2661,44 @@ module.exports = function (Product) {
             )
           }
         }
-      })
 
-      return products;
-
+        if (product.isFather && product.stock < 1 && productChildrenActive && productChildrenActive.productChildren.stock > 0) {
+          try {
+            let skuVariations = product.skuVariations.find()
+            skuVariations.map(async skuVariation => {
+              await skuVariation.updateAttributes({
+                productId: productChildrenActive.productChildren.id
+              })
+            })
+          } catch (error) {
+            throw error;
+          }
+          try {
+            await product.updateAttributes({
+              isFather: false
+            });
+          } catch (error) {
+            throw error;
+          }
+          try {
+            await productParam.updateAll(
+              {sku: productChildrenActive.productChildren.sku},
+              {
+                isFather: true
+              }
+            );
+          } catch (error) {
+            throw error;
+          }
+          newFathers.push(productChildrenActive)
+        }
+        return product
+      }))
+      let updateResponse = {
+        newFathers,
+        products: productsProcessed
+      }
+      return updateResponse;
     }
 
     return response;
